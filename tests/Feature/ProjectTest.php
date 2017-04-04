@@ -25,4 +25,34 @@ class ProjectTest extends TestCase
                 'name' => $projects->all()[0]->name,
             ]);
     }
+
+    /** @test */
+    public function user_can_create_project()
+    {
+        $response = $this->json('POST', '/projects/create', [
+          'name' => 'Example Project'
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'created' => true
+            ]);
+    }
+
+    /** @test */
+    public function user_cannot_create_project_without_providing_a_name()
+    {
+        $response = $this->json('POST', '/projects/create', [
+          '' => ''
+        ]);
+
+        $response
+            ->assertStatus(422)
+            ->assertJsonFragment([
+                [
+                  'name' => ['The name field is required.']
+                ]
+            ]);
+    }
 }
