@@ -16,14 +16,18 @@ class ProjectTest extends TestCase
     /** @test */
     public function user_can_view_project_overview()
     {
-        $projects = factory(Project::class, 5)->create();
+        $projects = factory(Project::class, 2)->create();
 
         $response = $this->json('GET', '/projects');
 
         $response->assertStatus(200)
             ->assertJsonFragment([
                 'name' => $projects->all()[0]->name,
-            ]);
+            ],
+            [
+            'name' => $projects->all()[1]->name,
+            ]
+        );
     }
 
     /** @test */
