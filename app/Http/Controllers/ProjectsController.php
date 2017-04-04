@@ -15,11 +15,11 @@ class ProjectsController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-        'name' => 'required',
+            'name' => 'required',
         ]);
 
         $project = Project::create([
-          'name' => $request->name,
+            'name' => $request->name,
         ]);
 
         if ($project) {
