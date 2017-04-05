@@ -18,7 +18,7 @@ class ProjectTest extends TestCase
     {
         $projects = factory(Project::class, 2)->create();
 
-        $response = $this->json('GET', '/projects');
+        $response = $this->json('GET', '/project');
 
         $response->assertStatus(200)
             ->assertJsonFragment([
@@ -33,7 +33,7 @@ class ProjectTest extends TestCase
     /** @test */
     public function user_can_create_project()
     {
-        $response = $this->json('POST', '/projects/create', [
+        $response = $this->json('POST', '/project', [
             'name' => 'Example Project'
         ]);
 
@@ -47,7 +47,7 @@ class ProjectTest extends TestCase
     /** @test */
     public function user_cannot_create_project_without_providing_a_name()
     {
-        $response = $this->json('POST', '/projects/create', [
+        $response = $this->json('POST', '/project', [
             '' => ''
         ]);
 
