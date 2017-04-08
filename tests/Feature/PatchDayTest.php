@@ -15,39 +15,44 @@ class PatchDayTest extends TestCase
     use DatabaseMigrations;
     use DatabaseTransactions;
 
-    /** @test */
-    public function user_can_see_a_patchday()
-    {
-        $project = factory(Project::class)->create();
+    protected $project;
+    protected $patchDay;
 
-        $patchDay = PatchDay::create([
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->project = factory(Project::class)->create();
+        $this->patchDay = PatchDay::create([
             'cost' => 200,
             'start_date' => new Carbon('now +2 weeks'),
             'active' => true,
         ]);
-        $patchDay->project()->associate($project);
-        $patchDay->save();
+        $this->patchDay->project()->associate($this->project);
+        $this->patchDay->save();
+    }
 
-        $response = $this->json('GET', 'patch-day/'.$patchDay->id);
+    /** @test */
+    public function user_can_see_a_patchday()
+    {
+        $response = $this->json('GET', 'patch-day/'.$this->patchDay->id);
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
                 'cost' => "200",
                 'active' => "1",
-                'project_id' => (string) $project->id,
+                'project_id' => (string) $this->project->id,
             ]);
     }
 
     /** @test */
     public function user_can_create_a_patchday()
     {
-        $project = factory(Project::class)->create();
-
         $response = $this->json('POST', 'patch-day', [
             'cost' => 200,
             'start_date' => (new Carbon('now +2 weeks'))->toDateString(),
             'active' => true,
-            'project_id' => (string) $project->id,
+            'project_id' => (string) $this->project->id,
         ]);
 
         $response
