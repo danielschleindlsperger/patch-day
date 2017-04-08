@@ -23,7 +23,7 @@ class PatchDayTest extends TestCase
         parent::setUp();
 
         $this->project = factory(Project::class)->create();
-        $this->patchDay = PatchDay::create([
+        $this->patchDay = factory(PatchDay::class)->create([
             'cost' => 200,
             'start_date' => new Carbon('now +2 weeks'),
             'active' => true,
@@ -60,5 +60,30 @@ class PatchDayTest extends TestCase
             ->assertJsonFragment([
                 'created' => true,
             ]);
+    }
+
+    /** @test */
+    public function user_can_edit_a_patchday()
+    {
+        // response with invalid data
+        $response = $this->json('PUT', 'patch-day/'.$this->patchDay->id, [
+            'cost' => false,
+        ]);
+        $response
+            ->assertStatus(422);
+
+
+        // response with valid data
+        $response = $this->json('PUT', 'patch-day/'.$this->patchDay->id, [
+            'cost' => 500,
+        ]);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'updated' => true,
+            ]);
+        $patchDay = PatchDay::find($this->patchDay->id);
+
+        $this->assertEquals(500, $patchDay->cost);
     }
 }

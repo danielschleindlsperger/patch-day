@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PatchDay\CreatePatchDay;
+use App\Http\Requests\PatchDay\UpdatePatchDay;
 use App\PatchDay;
 use App\Project;
 use Illuminate\Http\Request;
@@ -24,15 +26,8 @@ class PatchDayController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreatePatchDay $request)
     {
-        $this->validate($request, [
-            'cost' => 'numeric',
-            'active' => 'boolean',
-            'start_date' => 'required|date',
-            'project_id' => 'required|numeric',
-        ]);
-
         $project = Project::find($request->project_id);
 
         if ($project) {
@@ -74,9 +69,12 @@ class PatchDayController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePatchDay $request, $id)
     {
-        //
+        $patchDay = PatchDay::find($id);
+        $patchDay->update($request->all());
+
+        return ['updated' => true];
     }
 
     /**
