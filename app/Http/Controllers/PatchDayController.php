@@ -85,6 +85,9 @@ class PatchDayController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $patchDay = PatchDay::find($id);
+        $patchDay->delete();
+
+        return ['success' => true];
     }
 }

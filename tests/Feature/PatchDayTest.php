@@ -86,4 +86,26 @@ class PatchDayTest extends TestCase
 
         $this->assertEquals(500, $patchDay->cost);
     }
+
+    /** @test */
+    public function user_can_delete_a_patchday()
+    {
+        $patchDay = factory(PatchDay::class)->create([
+            'cost' => 200,
+            'start_date' => new Carbon('now +2 weeks'),
+            'active' => true,
+        ]);
+        $patchDay->project()->associate($this->project);
+        $patchDay->save();
+
+        $this->assertNotNull($patchDay);
+        $this->assertInstanceOf(PatchDay::class, $patchDay);
+
+        $response = $this->json('DELETE', '/patch-day/'.$patchDay->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'success' => true
+        ]);
+    }
 }
