@@ -84,4 +84,22 @@ class CompanyTest extends TestCase
             ->assertSee('Fake Project')
             ->assertSee('Fake Project 2');
     }
+
+    /** @test */
+    public function user_can_edit_a_company()
+    {
+        $company = factory(Company::class)->create(['name' => 'Fake Company']);
+
+        $response = $this->json('PUT', '/companies/' . $company->id, [
+            'name' => 'Test Firm',
+        ]);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'success' => true
+            ]);
+
+        $editedCompany = Company::find($company->id);
+        $this->assertEquals('Test Firm', $editedCompany->name);
+    }
 }

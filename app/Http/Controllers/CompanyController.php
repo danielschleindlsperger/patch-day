@@ -86,7 +86,17 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //TODO: only return the Projects when the user is an admin or
+        // when they belong to the user's company
+
+        $company = Company::find($id);
+
+        if ($company) {
+            $company->update($request->all());
+            return ['success' => true];
+        } else {
+            abort(404, 'Specified company not found');
+        }
     }
 
     /**
