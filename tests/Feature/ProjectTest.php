@@ -18,7 +18,7 @@ class ProjectTest extends TestCase
     {
         $projects = factory(Project::class, 2)->create();
 
-        $response = $this->json('GET', '/project');
+        $response = $this->json('GET', '/projects');
 
         $response->assertStatus(200)
             ->assertJsonFragment([
@@ -33,7 +33,7 @@ class ProjectTest extends TestCase
     /** @test */
     public function user_can_create_project()
     {
-        $response = $this->json('POST', '/project', [
+        $response = $this->json('POST', '/projects', [
             'name' => 'Example Project'
         ]);
 
@@ -47,7 +47,7 @@ class ProjectTest extends TestCase
     /** @test */
     public function user_cannot_create_project_without_providing_a_name()
     {
-        $response = $this->json('POST', '/project', [
+        $response = $this->json('POST', '/projects', [
             '' => ''
         ]);
 
@@ -69,7 +69,7 @@ class ProjectTest extends TestCase
 
         $this->assertEquals('Test Project', $project->name);
 
-        $response = $this->json('PUT', '/project/' . $project->id, [
+        $response = $this->json('PUT', '/projects/' . $project->id, [
             'name' => 'Updated Project'
         ]);
 
@@ -89,7 +89,7 @@ class ProjectTest extends TestCase
             'name' => 'Test Project',
         ]);
 
-        $response = $this->json('GET', '/project/' . $project->id);
+        $response = $this->json('GET', '/projects/' . $project->id);
 
         $response->assertStatus(200)
             ->assertJsonFragment([
@@ -106,7 +106,7 @@ class ProjectTest extends TestCase
 
         $this->assertEquals('Test Project', $project->name);
 
-        $response = $this->json('DELETE', '/project/' . $project->id);
+        $response = $this->json('DELETE', '/projects/' . $project->id);
 
         $response
             ->assertStatus(200)
@@ -116,7 +116,7 @@ class ProjectTest extends TestCase
                 ]
             ]);
 
-        $response = $this->json('GET', '/project/' . $project->id);
+        $response = $this->json('GET', '/projects/' . $project->id);
 
         $response->assertStatus(404);
     }

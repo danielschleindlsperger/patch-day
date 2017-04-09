@@ -16,7 +16,7 @@ class CompanyTest extends TestCase
     /** @test */
     public function user_can_create_company()
     {
-        $response = $this->json('POST', '/company', [
+        $response = $this->json('POST', '/companies', [
             'name' => 'Example Company'
         ]);
 
@@ -32,7 +32,7 @@ class CompanyTest extends TestCase
     {
         $companies = factory(Company::class, 2)->create();
 
-        $response = $this->json('GET', '/company');
+        $response = $this->json('GET', '/companies');
 
         $response
             ->assertStatus(200)

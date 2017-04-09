@@ -35,7 +35,7 @@ class PatchDayTest extends TestCase
     /** @test */
     public function user_can_see_a_patchday()
     {
-        $response = $this->json('GET', 'patch-day/'.$this->patchDay->id);
+        $response = $this->json('GET', 'patch-days/'.$this->patchDay->id);
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
@@ -48,7 +48,7 @@ class PatchDayTest extends TestCase
     /** @test */
     public function user_can_create_a_patchday()
     {
-        $response = $this->json('POST', 'patch-day', [
+        $response = $this->json('POST', 'patch-days', [
             'cost' => 200,
             'start_date' => (new Carbon('now +2 weeks'))->toDateString(),
             'active' => true,
@@ -66,7 +66,7 @@ class PatchDayTest extends TestCase
     public function user_can_edit_a_patchday()
     {
         // response with invalid data
-        $response = $this->json('PUT', 'patch-day/'.$this->patchDay->id, [
+        $response = $this->json('PUT', 'patch-days/'.$this->patchDay->id, [
             'cost' => false,
         ]);
         $response
@@ -74,7 +74,7 @@ class PatchDayTest extends TestCase
 
 
         // response with valid data
-        $response = $this->json('PUT', 'patch-day/'.$this->patchDay->id, [
+        $response = $this->json('PUT', 'patch-days/'.$this->patchDay->id, [
             'cost' => 500,
         ]);
         $response
@@ -101,7 +101,7 @@ class PatchDayTest extends TestCase
         $this->assertNotNull($patchDay);
         $this->assertInstanceOf(PatchDay::class, $patchDay);
 
-        $response = $this->json('DELETE', '/patch-day/'.$patchDay->id);
+        $response = $this->json('DELETE', '/patch-days/'.$patchDay->id);
 
         $response->assertStatus(200);
         $response->assertJsonFragment([
