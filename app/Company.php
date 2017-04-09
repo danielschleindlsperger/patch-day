@@ -19,4 +19,14 @@ class Company extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *
+     * return the companies projects
+     */
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
 }

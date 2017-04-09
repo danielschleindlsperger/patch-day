@@ -11,7 +11,7 @@ class Project extends Model
     use SoftDeletes;
 
     protected $fillable = [
-      'name',
+        'name',
     ];
 
     /**
@@ -29,5 +29,15 @@ class Project extends Model
     public function patchDays()
     {
         return $this->hasMany(PatchDay::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     *
+     * return the company the project belongs to
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 }
