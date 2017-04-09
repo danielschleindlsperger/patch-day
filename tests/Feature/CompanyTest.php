@@ -39,9 +39,28 @@ class CompanyTest extends TestCase
             ->assertJsonFragment([
                 'name' => $companies->all()[0]->name,
             ],
-            [
-                'name' => $companies->all()[1]->name,
-            ]
+                [
+                    'name' => $companies->all()[1]->name,
+                ]
+            );
+    }
+
+    /** @test */
+    public function user_can_see_a_company()
+    {
+        $company = factory(Company::class)->create();
+
+        $response = $this->json('GET', '/companies/9543');
+        $response
+            ->assertStatus(404)
+            ->assertSee('Specified company was not found.');
+
+        $response = $this->json('GET', '/companies/' . $company->id);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                    'name' => $company->name,
+                ]
             );
     }
 }

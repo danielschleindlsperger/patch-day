@@ -47,7 +47,13 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        //
+        $company = Company::find($id);
+
+        if ($company) {
+            return $company;
+        } else {
+            abort(404, 'Specified company was not found.');
+        }
     }
 
     /**
