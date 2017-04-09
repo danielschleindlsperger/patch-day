@@ -118,7 +118,6 @@ class ProjectTest extends TestCase
             ]);
 
         $response = $this->json('GET', '/projects/' . $project->id);
-
         $response->assertStatus(404);
     }
 

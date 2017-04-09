@@ -102,4 +102,23 @@ class CompanyTest extends TestCase
         $editedCompany = Company::find($company->id);
         $this->assertEquals('Test Firm', $editedCompany->name);
     }
+
+    /** @test */
+    public function user_can_delete_a_company()
+    {
+        $company = factory(Company::class)->create(['name' => 'Fake Company']);
+
+        $this->assertNotNull($company);
+        $this->assertInstanceOf(Company::class, $company);
+
+        $response = $this->json('DELETE', '/companies/' . $company->id);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'success' => true
+            ]);
+
+        $response = $this->json('GET', '/companies/' . $company->id);
+        $response->assertStatus(404);
+    }
 }
