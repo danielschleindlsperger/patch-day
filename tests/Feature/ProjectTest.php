@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\PatchDay;
 use App\Project;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -119,5 +120,25 @@ class ProjectTest extends TestCase
         $response = $this->json('GET', '/projects/' . $project->id);
 
         $response->assertStatus(404);
+    }
+
+    /** @test */
+    public function user_can_see_projects_patch_days()
+    {
+        $project = factory(Project::class)->create();
+        $patchDay = factory(PatchDay::class)->create(['cost' => 300]);
+        $patchDay2 = factory(PatchDay::class)->create(['cost' => 800]);
+
+        $patchDay->project()->associate($project);
+        $patchDay2->project()->associate($project);
+
+        $patchDay->save();
+        $patchDay2->save();
+
+        $response = $this->json('GET', '/projects/' . $project->id . '/patch-days');
+        $response
+            ->assertStatus(200)
+            ->assertSee('"cost":"300"')
+            ->assertSee('"cost":"800"');
     }
 }

@@ -17,7 +17,8 @@ class PatchDayController extends Controller
      */
     public function index()
     {
-        //
+        //TODO: only return PatchDays if user is an admin
+        return PatchDay::all();
     }
 
     /**

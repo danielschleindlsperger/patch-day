@@ -7,9 +7,10 @@ Route::resource('companies', 'CompanyController', [
 Route::get('companies/{companyId}/projects', 'CompanyController@showCompanysProjects');
 
 // Project resource
-Route::resource('projects', 'ProjectsController', [
+Route::resource('projects', 'ProjectController', [
     'only' => ['index', 'store', 'show', 'update', 'destroy']
 ]);
+Route::get('projects/{projectId}/patch-days', 'ProjectController@showProjectsPatchDays');
 
 // PatchDay resource
 Route::resource('patch-days', 'PatchDayController', [

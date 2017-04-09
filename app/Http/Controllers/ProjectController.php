@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Project;
 use Illuminate\Http\Request;
 
-class ProjectsController extends Controller
+class ProjectController extends Controller
 {
     /**
      * @return \Illuminate\Database\Eloquent\Collection|static[]
@@ -17,6 +17,27 @@ class ProjectsController extends Controller
         //TODO: only return all projects when the user is an admin or
         // only return the users company's projects
         return Project::all();
+    }
+
+    /**
+     * @param $projectId
+     * @return mixed
+     *
+     * return all PatchDays for the specified Project
+     */
+    public function showProjectsPatchDays($projectId)
+    {
+        //TODO: only return the PatchDays when the user is an admin or
+        // when the project belongs to the user's company
+
+        $project = Project::find($projectId);
+
+        if ($project) {
+            $patchDays = $project->patchDays;
+            return $patchDays;
+        } else {
+            abort(404, 'Specified project not found');
+        }
     }
 
     /**
