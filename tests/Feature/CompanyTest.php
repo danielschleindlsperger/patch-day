@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Company;
+use App\Project;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -62,5 +63,25 @@ class CompanyTest extends TestCase
                     'name' => $company->name,
                 ]
             );
+    }
+
+    /** @test */
+    public function user_can_see_a_companies_projects()
+    {
+        $company = factory(Company::class)->create();
+        $project = factory(Project::class)->create(['name' => 'Fake Project']);
+        $project2 = factory(Project::class)->create(['name' => 'Fake Project 2']);
+
+        $project->company()->associate($company);
+        $project2->company()->associate($company);
+
+        $project->save();
+        $project2->save();
+
+        $response = $this->json('GET', '/companies/' . $company->id . '/projects');
+        $response
+            ->assertStatus(200)
+            ->assertSee('Fake Project')
+            ->assertSee('Fake Project 2');
     }
 }

@@ -57,6 +57,27 @@ class CompanyController extends Controller
     }
 
     /**
+     * @param $companyId
+     * @return mixed
+     *
+     * return all Projects for the specified Company
+     */
+    public function showCompanysProjects($companyId)
+    {
+        //TODO: only return the Projects when the user is an admin or
+        // when they belong to the user's company
+
+        $company = Company::find($companyId);
+
+        if ($company) {
+            $projects = $company->projects;
+            return $projects;
+        } else {
+            abort(404, 'Specified company not found');
+        }
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

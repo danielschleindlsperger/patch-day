@@ -1,13 +1,19 @@
 <?php
 
-Route::resource('project', 'ProjectsController', [
+// Company resource
+Route::resource('companies', 'CompanyController', [
+    'only' => ['index', 'store', 'show', 'update', 'destroy']
+]);
+Route::get('companies/{companyId}/projects', 'CompanyController@showCompanysProjects');
+
+// Project resource
+Route::resource('projects', 'ProjectsController', [
     'only' => ['index', 'store', 'show', 'update', 'destroy']
 ]);
 
-Route::resource('patch-day', 'PatchDayController', [
+// PatchDay resource
+Route::resource('patch-days', 'PatchDayController', [
     'only' => ['index', 'store', 'show', 'update', 'destroy']
 ]);
 
-Route::resource('company', 'CompanyController', [
-    'only' => ['index', 'store', 'show', 'update', 'destroy']
-]);
+
