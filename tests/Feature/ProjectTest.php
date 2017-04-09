@@ -24,9 +24,9 @@ class ProjectTest extends TestCase
             ->assertJsonFragment([
                 'name' => $projects->all()[0]->name,
             ],
-                [
-                    'name' => $projects->all()[1]->name,
-                ]
+            [
+                'name' => $projects->all()[1]->name,
+            ]
             );
     }
 
@@ -106,7 +106,7 @@ class ProjectTest extends TestCase
 
         $this->assertEquals('Test Project', $project->name);
 
-        $response = $this->json('DELETE', '/project/'.$project->id);
+        $response = $this->json('DELETE', '/project/' . $project->id);
 
         $response
             ->assertStatus(200)

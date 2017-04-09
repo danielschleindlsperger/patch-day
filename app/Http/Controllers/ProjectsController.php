@@ -14,6 +14,8 @@ class ProjectsController extends Controller
      */
     public function index()
     {
+        //TODO: only return all projects when the user is an admin or
+        // only return the users company's projects
         return Project::all();
     }
 
