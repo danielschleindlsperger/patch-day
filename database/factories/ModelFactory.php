@@ -27,3 +27,9 @@ $factory->define(App\PatchDay::class, function (Faker\Generator $faker) {
         'active' => true,
     ];
 });
+
+$factory->define(App\Company::class, function (Faker\Generator $faker) {
+    return [
+        'name' => 'Fake Company',
+    ];
+});

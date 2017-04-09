@@ -14,7 +14,8 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        //TODO: only return companies if user is an admin
+        return Company::all();
     }
 
     /**

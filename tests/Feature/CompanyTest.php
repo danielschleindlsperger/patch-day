@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Company;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -24,5 +25,23 @@ class CompanyTest extends TestCase
             ->assertJsonFragment([
                 'created' => true,
             ]);
+    }
+
+    /** @test */
+    public function user_can_see_all_companies()
+    {
+        $companies = factory(Company::class, 2)->create();
+
+        $response = $this->json('GET', '/company');
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'name' => $companies->all()[0]->name,
+            ],
+            [
+                'name' => $companies->all()[1]->name,
+            ]
+            );
     }
 }
