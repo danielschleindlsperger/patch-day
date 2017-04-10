@@ -17,4 +17,9 @@ Route::resource('patch-days', 'PatchDayController', [
     'only' => ['index', 'store', 'show', 'update', 'destroy']
 ]);
 
+// Protocol resource
+Route::resource('protocol', 'ProtocolController', [
+    'only' => ['index', 'store', 'show', 'update', 'destroy']
+]);
+
 
