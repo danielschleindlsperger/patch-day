@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Protocol extends Model
 {
+    protected $attributes = [
+        'done' => false,
+    ];
+
     protected $fillable = [
         'comment', 'done', 'due_date',
     ];

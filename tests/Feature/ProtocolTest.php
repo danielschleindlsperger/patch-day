@@ -69,4 +69,30 @@ class ProtocolTest extends TestCase
                 'success' => true
             ]);
     }
+
+    /** @test */
+    public function user_can_edit_a_protocol()
+    {
+        $protocol = factory(Protocol::class)->create([
+            'due_date' => Carbon::now()->toDateTimeString()
+        ]);
+
+        $this->assertFalse($protocol->done);
+        $this->assertNull($protocol->comment);
+
+        $response = $this->json('PUT', '/protocol/'.$protocol->id, [
+            'comment' => '<p>It was good.</p>',
+            'done' => true,
+        ]);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'updated' => true
+            ]);
+
+        $updatedProtocol = Protocol::find($protocol->id);
+
+        $this->assertEquals('<p>It was good.</p>', $updatedProtocol->comment);
+        $this->assertTrue($updatedProtocol->done);
+    }
 }

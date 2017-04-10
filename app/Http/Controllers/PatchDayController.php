@@ -32,11 +32,8 @@ class PatchDayController extends Controller
         $project = Project::find($request->project_id);
 
         if ($project) {
-            $patchDay = PatchDay::create([
-                'cost' => $request->cost,
-                'start_date' => $request->start_date,
-                'active' => $request->active,
-            ]);
+
+            $patchDay = PatchDay::create($request->all());
             $patchDay->project()->associate($project);
             $patchDay->save();
 

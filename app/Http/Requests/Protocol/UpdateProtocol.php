@@ -4,7 +4,7 @@ namespace App\Http\Requests\Protocol;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateProtocol extends FormRequest
+class UpdateProtocol extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class CreateProtocol extends FormRequest
     public function rules()
     {
         return [
-            'due_date' => 'required|date',
+            'due_date' => 'date',
             'done' => 'boolean',
             'comment' => 'string|nullable'
         ];

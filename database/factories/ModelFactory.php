@@ -37,8 +37,6 @@ $factory->define(App\Company::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Protocol::class, function (Faker\Generator $faker) {
     return [
-        'comment' => 'Fake protocol comment. <br> It can also contain HTML.',
-        'done' => false,
         'due_date' => (new Carbon('now +1 week'))->toDateTimeString()
     ];
 });

@@ -15,8 +15,8 @@ class CreateProtocolsTable extends Migration
     {
         Schema::create('protocols', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('comment');
-            $table->boolean('done');
+            $table->text('comment')->nullable();
+            $table->boolean('done')->default(false);
             $table->date('due_date');
             $table->timestamps();
         });

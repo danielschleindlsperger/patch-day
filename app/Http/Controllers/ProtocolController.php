@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Protocol\CreateProtocol;
+use App\Http\Requests\Protocol\UpdateProtocol;
 use App\Protocol;
 use Illuminate\Http\Request;
 
@@ -57,9 +58,12 @@ class ProtocolController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateProtocol $request, $id)
     {
-        //
+        $protocol = Protocol::find($id);
+        $protocol->update($request->all());
+
+        return ['updated' => true];
     }
 
     /**
