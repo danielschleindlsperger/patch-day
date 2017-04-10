@@ -25,13 +25,13 @@ class ProtocolTest extends TestCase
         ]);
 
         // request to non existing id
-        $response = $this->json('GET', '/protocol/9543');
+        $response = $this->json('GET', '/protocols/9543');
         $response
             ->assertStatus(404)
             ->assertSee('Specified protocol not found.');
 
         // request to actual id
-        $response = $this->json('GET', '/protocol/' . $protocol->id);
+        $response = $this->json('GET', '/protocols/' . $protocol->id);
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
@@ -43,7 +43,7 @@ class ProtocolTest extends TestCase
     /** @test */
     public function user_can_create_a_protocol()
     {
-        $response = $this->json('POST', '/protocol', [
+        $response = $this->json('POST', '/protocols', [
             'done' => 'yes',
             'due_date' => 'never'
         ]);
@@ -58,7 +58,7 @@ class ProtocolTest extends TestCase
                 ]
             ]);
 
-        $response = $this->json('POST', '/protocol', [
+        $response = $this->json('POST', '/protocols', [
             'comment' => 'It was good.',
             'done' => true,
             'due_date' => (new Carbon('now + 21 days'))->toDateTimeString()
@@ -80,7 +80,7 @@ class ProtocolTest extends TestCase
         $this->assertFalse($protocol->done);
         $this->assertNull($protocol->comment);
 
-        $response = $this->json('PUT', '/protocol/'.$protocol->id, [
+        $response = $this->json('PUT', '/protocols/'.$protocol->id, [
             'comment' => '<p>It was good.</p>',
             'done' => true,
         ]);
