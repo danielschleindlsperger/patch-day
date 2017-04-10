@@ -88,4 +88,25 @@ class PatchDayController extends Controller
 
         return ['success' => true];
     }
+
+    /**
+     * @param $patchDayId
+     * @return mixed
+     *
+     * show the PatchDay's protocols
+     */
+    public function showPatchDaysProtocols($patchDayId)
+    {
+        //TODO: only return the protocols when the user is an admin or
+        // when the patchDay belongs to the user's company
+
+        $patchDay = PatchDay::find($patchDayId);
+
+        if ($patchDay) {
+            $protocols = $patchDay->protocols;
+            return $protocols;
+        } else {
+            abort(404, 'Specified PatchDay not found.');
+        }
+    }
 }

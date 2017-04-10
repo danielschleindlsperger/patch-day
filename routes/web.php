@@ -16,6 +16,7 @@ Route::get('projects/{projectId}/patch-days', 'ProjectController@showProjectsPat
 Route::resource('patch-days', 'PatchDayController', [
     'only' => ['index', 'store', 'show', 'update', 'destroy']
 ]);
+Route::get('patch-days/{patchDayId}/protocols', 'PatchDayController@showPatchDaysProtocols');
 
 // Protocol resource
 Route::resource('protocols', 'ProtocolController', [
