@@ -2,21 +2,34 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use App\Protocol;
 use Carbon\Carbon;
+use Laravel\Passport\Passport;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ProtocolTest extends TestCase
+class ProtocolAdminTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        // Auth
+        $admin = factory(User::class)->create([
+            'role' => 'admin',
+        ]);
+        Passport::actingAs($admin);
+    }
+
     /** @test */
-    public function user_can_see_a_protocol()
+    public function admin_can_see_a_protocol()
     {
         $protocol = factory(Protocol::class)->create([
             'comment' => 'It was good.',
@@ -41,7 +54,7 @@ class ProtocolTest extends TestCase
     }
 
     /** @test */
-    public function user_can_create_a_protocol()
+    public function admin_can_create_a_protocol()
     {
         $response = $this->json('POST', '/protocols', [
             'done' => 'yes',
@@ -71,7 +84,7 @@ class ProtocolTest extends TestCase
     }
 
     /** @test */
-    public function user_can_edit_a_protocol()
+    public function admin_can_edit_a_protocol()
     {
         $protocol = factory(Protocol::class)->create([
             'due_date' => Carbon::now()->toDateTimeString()

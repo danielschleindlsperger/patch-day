@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
@@ -14,8 +15,11 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //TODO: only return companies if user is an admin
-        return Company::all();
+        if (Auth::user() && Auth::user()->isAdmin()) {
+            return Company::all();
+        } else {
+            abort(403, 'Not authorized.');
+        }
     }
 
     /**
@@ -26,6 +30,8 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Company::class);
+
         $this->validate($request, [
             'name' => 'required',
         ]);
@@ -50,6 +56,7 @@ class CompanyController extends Controller
         $company = Company::find($id);
 
         if ($company) {
+            $this->authorize('view', $company);
             return $company;
         } else {
             abort(404, 'Specified company was not found.');
@@ -64,12 +71,10 @@ class CompanyController extends Controller
      */
     public function showCompanysProjects($companyId)
     {
-        //TODO: only return the Projects when the user is an admin or
-        // when they belong to the user's company
-
         $company = Company::find($companyId);
 
         if ($company) {
+            $this->authorize('view', $company);
             $projects = $company->projects;
             return $projects;
         } else {
@@ -86,12 +91,10 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //TODO: only return the Projects when the user is an admin or
-        // when they belong to the user's company
-
         $company = Company::find($id);
 
         if ($company) {
+            $this->authorize('update', $company);
             $company->update($request->all());
             return ['success' => true];
         } else {
@@ -110,6 +113,7 @@ class CompanyController extends Controller
         $company = Company::find($id);
 
         if ($company) {
+            $this->authorize('delete', $company);
             $company->delete();
             return ['success' => true];
         } else {

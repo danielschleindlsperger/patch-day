@@ -1,21 +1,34 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Project;
 
+use App\User;
 use App\PatchDay;
 use App\Project;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ProjectTest extends TestCase
+class ProjectAdminTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        // Auth
+        $admin = factory(User::class)->create([
+            'role' => 'admin',
+        ]);
+        Passport::actingAs($admin);
+    }
+
     /** @test */
-    public function user_can_view_project_overview()
+    public function admin_can_view_project_overview()
     {
         $projects = factory(Project::class, 2)->create();
 
@@ -32,7 +45,7 @@ class ProjectTest extends TestCase
     }
 
     /** @test */
-    public function user_can_create_project()
+    public function admin_can_create_project()
     {
         $response = $this->json('POST', '/projects', [
             'name' => 'Example Project'
@@ -46,7 +59,7 @@ class ProjectTest extends TestCase
     }
 
     /** @test */
-    public function user_cannot_create_project_without_providing_a_name()
+    public function admin_cannot_create_project_without_providing_a_name()
     {
         $response = $this->json('POST', '/projects', [
             '' => ''
@@ -62,7 +75,7 @@ class ProjectTest extends TestCase
     }
 
     /** @test */
-    public function user_can_upate_a_project()
+    public function admin_can_upate_a_project()
     {
         $project = factory(Project::class)->create([
             'name' => 'Test Project',
@@ -84,7 +97,7 @@ class ProjectTest extends TestCase
     }
 
     /** @test */
-    public function user_can_view_specific_project()
+    public function admin_can_view_specific_project()
     {
         $project = factory(Project::class)->create([
             'name' => 'Test Project',
@@ -99,7 +112,7 @@ class ProjectTest extends TestCase
     }
 
     /** @test */
-    public function user_can_delete_a_project()
+    public function admin_can_delete_a_project()
     {
         $project = factory(Project::class)->create([
             'name' => 'Test Project',
@@ -122,7 +135,7 @@ class ProjectTest extends TestCase
     }
 
     /** @test */
-    public function user_can_see_projects_patch_days()
+    public function admin_can_see_projects_patch_days()
     {
         $project = factory(Project::class)->create();
         $patchDay = factory(PatchDay::class)->create(['cost' => 300]);

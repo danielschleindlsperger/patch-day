@@ -29,4 +29,15 @@ class Company extends Model
     {
         return $this->hasMany(Project::class);
     }
+
+    /**
+     * Return all users that belong to the company.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
 }

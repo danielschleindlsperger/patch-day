@@ -1,17 +1,19 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\PatchDay;
 
+use App\User;
 use App\Protocol;
 use App\Project;
 use App\PatchDay;
 use Carbon\Carbon;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class PatchDayTest extends TestCase
+class PatchDayAdminTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
@@ -31,10 +33,16 @@ class PatchDayTest extends TestCase
         ]);
         $this->patchDay->project()->associate($this->project);
         $this->patchDay->save();
+
+        // Auth
+        $admin = factory(User::class)->create([
+            'role' => 'admin',
+        ]);
+        Passport::actingAs($admin);
     }
 
     /** @test */
-    public function user_can_see_a_patchday()
+    public function admin_can_see_a_patchday()
     {
         $response = $this->json('GET', 'patch-days/'.$this->patchDay->id);
         $response
@@ -47,7 +55,7 @@ class PatchDayTest extends TestCase
     }
 
     /** @test */
-    public function user_can_create_a_patchday()
+    public function admin_can_create_a_patchday()
     {
         $response = $this->json('POST', 'patch-days', [
             'cost' => 200,
@@ -64,7 +72,7 @@ class PatchDayTest extends TestCase
     }
 
     /** @test */
-    public function user_can_edit_a_patchday()
+    public function admin_can_edit_a_patchday()
     {
         // response with invalid data
         $response = $this->json('PUT', 'patch-days/'.$this->patchDay->id, [
@@ -89,7 +97,7 @@ class PatchDayTest extends TestCase
     }
 
     /** @test */
-    public function user_can_delete_a_patchday()
+    public function admin_can_delete_a_patchday()
     {
         $patchDay = factory(PatchDay::class)->create([
             'cost' => 200,
@@ -111,7 +119,7 @@ class PatchDayTest extends TestCase
     }
 
     /** @test */
-    public function user_can_see_a_patchdays_protocols()
+    public function admin_can_see_a_patchdays_protocols()
     {
         $protocol = factory(Protocol::class)->create();
         $protocol2 = factory(Protocol::class)->create();

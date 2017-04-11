@@ -1,26 +1,37 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Company;
 
+use App\User;
 use App\Company;
 use App\Project;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class CompanyTest extends TestCase
+class CompanyAdminTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $admin = factory(User::class)->create([
+            'role' => 'admin',
+        ]);
+        Passport::actingAs($admin);
+    }
+
     /** @test */
-    public function user_can_create_company()
+    public function can_create_company()
     {
         $response = $this->json('POST', '/companies', [
             'name' => 'Example Company'
         ]);
-
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
@@ -29,12 +40,11 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function user_can_see_all_companies()
+    public function can_see_all_companies()
     {
         $companies = factory(Company::class, 2)->create();
 
         $response = $this->json('GET', '/companies');
-
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
@@ -47,7 +57,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function user_can_see_a_company()
+    public function can_see_a_company()
     {
         $company = factory(Company::class)->create();
 
@@ -66,7 +76,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function user_can_see_a_companies_projects()
+    public function can_see_a_companies_projects()
     {
         $company = factory(Company::class)->create();
         $project = factory(Project::class)->create(['name' => 'Fake Project']);
@@ -86,7 +96,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function user_can_edit_a_company()
+    public function can_edit_a_company()
     {
         $company = factory(Company::class)->create(['name' => 'Fake Company']);
 
@@ -104,7 +114,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function user_can_delete_a_company()
+    public function can_delete_a_company()
     {
         $company = factory(Company::class)->create(['name' => 'Fake Company']);
 
