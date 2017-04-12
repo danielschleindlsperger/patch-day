@@ -29,6 +29,7 @@ class PatchDayController extends Controller
      */
     public function store(CreatePatchDay $request)
     {
+        $this->authorize('store');
         $project = Project::find($request->project_id);
 
         if ($project) {
@@ -54,6 +55,7 @@ class PatchDayController extends Controller
         $patchDay = PatchDay::find($id);
 
         if ($patchDay) {
+            $this->authorize('view', $patchDay);
             return $patchDay;
         } else {
             abort(404, 'PatchDay not found.');
@@ -70,6 +72,7 @@ class PatchDayController extends Controller
     public function update(UpdatePatchDay $request, $id)
     {
         $patchDay = PatchDay::find($id);
+        $this->authorize('update', $patchDay);
         $patchDay->update($request->all());
 
         return ['updated' => true];
@@ -84,6 +87,7 @@ class PatchDayController extends Controller
     public function destroy($id)
     {
         $patchDay = PatchDay::find($id);
+        $this->authorize('delete', $patchDay);
         $patchDay->delete();
 
         return ['success' => true];
@@ -103,6 +107,7 @@ class PatchDayController extends Controller
         $patchDay = PatchDay::find($patchDayId);
 
         if ($patchDay) {
+            $this->authorize('view', $patchDay);
             $protocols = $patchDay->protocols;
             return $protocols;
         } else {
