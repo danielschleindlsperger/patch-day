@@ -4,10 +4,10 @@ Platform for management of periodic updates of software projects.
 
 ### Install & Setup
 - clone this project
-- `$ cd patchday`
+- `$ cd patch-day`
 - `$ composer install`
 - `$ mv .env.example .env`
-- set database credentials
+- set database credentials in the `.env` file
 - `$ php artisan key:generate`
 - `$ php artisan migrate`
 - `$ php artisan passport:install` to generate the keys for OAuth Authentication
