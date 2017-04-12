@@ -17,8 +17,11 @@ class PatchDayController extends Controller
      */
     public function index()
     {
-        //TODO: only return PatchDays if user is an admin
-        return PatchDay::all();
+        if (Auth::user() && Auth::user()->isAdmin()) {
+            return PatchDay::all();
+        } else {
+            abort(403, 'Not authorized.');
+        }
     }
 
     /**
@@ -101,9 +104,6 @@ class PatchDayController extends Controller
      */
     public function showPatchDaysProtocols($patchDayId)
     {
-        //TODO: only return the protocols when the user is an admin or
-        // when the patchDay belongs to the user's company
-
         $patchDay = PatchDay::find($patchDayId);
 
         if ($patchDay) {
