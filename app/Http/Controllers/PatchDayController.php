@@ -32,7 +32,7 @@ class PatchDayController extends Controller
      */
     public function store(CreatePatchDay $request)
     {
-        $this->authorize('store');
+        $this->authorize('create', PatchDay::class);
         $project = Project::find($request->project_id);
 
         if ($project) {
