@@ -7,6 +7,7 @@ use App\Http\Requests\PatchDay\UpdatePatchDay;
 use App\PatchDay;
 use App\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PatchDayController extends Controller
 {

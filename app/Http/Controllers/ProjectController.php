@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -14,9 +15,11 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //TODO: only return all projects when the user is an admin or
-        // only return the users company's projects
-        return Project::all();
+        if (Auth::user() && Auth::user()->isAdmin()) {
+            return Project::all();
+        } else {
+            abort(403, 'Not authorized.');
+        }
     }
 
     /**
@@ -27,12 +30,10 @@ class ProjectController extends Controller
      */
     public function showProjectsPatchDays($projectId)
     {
-        //TODO: only return the PatchDays when the user is an admin or
-        // when the project belongs to the user's company
-
         $project = Project::find($projectId);
 
         if ($project) {
+            $this->authorize('view', $project);
             $patchDays = $project->patchDays;
             return $patchDays;
         } else {
@@ -52,6 +53,7 @@ class ProjectController extends Controller
         $project = Project::find($id);
 
         if ($project) {
+            $this->authorize('view', $project);
             return $project;
         } else {
             abort(404, 'Project not found.');
@@ -66,6 +68,8 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Project::class);
+
         $this->validate($request, [
             'name' => 'required',
         ]);
@@ -91,6 +95,7 @@ class ProjectController extends Controller
         $project = Project::find($id);
 
         if ($project) {
+            $this->authorize('update', $project);
             $project->name = $request->name;
             $project->save();
             return ['success' => true];
@@ -109,6 +114,7 @@ class ProjectController extends Controller
     public function destroy(Request $request, $id)
     {
         $project = Project::find($id);
+        $this->authorize('delete', $project);
         $project->delete();
 
         return ['success' => true];
