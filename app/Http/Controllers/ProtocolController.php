@@ -27,6 +27,7 @@ class ProtocolController extends Controller
      */
     public function store(CreateProtocol $request)
     {
+        $this->authorize('create', Protocol::class);
         Protocol::create($request->all());
         return ['success' => true];
     }
@@ -39,12 +40,10 @@ class ProtocolController extends Controller
      */
     public function show($id)
     {
-        //TODO: only return the protocol when the user is an admin or
-        // when the project belongs to the user's company
-
         $protocol = Protocol::find($id);
 
         if ($protocol) {
+            $this->authorize('view', $protocol);
             return $protocol;
         } else {
             abort(404, 'Specified protocol not found.');
@@ -61,6 +60,9 @@ class ProtocolController extends Controller
     public function update(UpdateProtocol $request, $id)
     {
         $protocol = Protocol::find($id);
+
+        $this->authorize('update', $protocol);
+
         $protocol->update($request->all());
 
         return ['updated' => true];
@@ -74,6 +76,10 @@ class ProtocolController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $protocol = Protocol::find($id);
+        $this->authorize('delete', $protocol);
+        $protocol->delete();
+
+        return ['success' => true];
     }
 }
