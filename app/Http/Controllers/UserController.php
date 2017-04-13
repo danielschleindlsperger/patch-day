@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\CreateUser;
+use App\Http\Requests\User\UpdateUser;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -52,9 +53,15 @@ class UserController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUser $request, $id)
     {
-        //
+        $user = User::find($id);
+        if ($user) {
+            $user->update($request->all());
+            return ['updated' => true];
+        } else {
+            abort(404);
+        }
     }
 
     /**

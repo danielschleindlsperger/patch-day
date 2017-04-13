@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\User;
 
+use App\Company;
 use App\User;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
@@ -52,5 +53,50 @@ class UserAdminTest extends TestCase
             ->assertJsonFragment([
                 'created' => true
             ]);
+    }
+
+    /** @test */
+    public function an_admin_can_edit_a_user_account()
+    {
+        $user = factory(User::class)->create([
+            'name' => 'Fake Guy',
+            'email' => 'fake_guy@example.com',
+            'password' => bcrypt('password')
+        ]);
+        $company = factory(Company::class)->create();
+
+        $this->assertNull($user->company);
+
+        // bad request
+        $response = $this->json('PUT', '/users/' . $user->id, [
+            'name' => 'Fake User',
+            'email' => 'test',
+            'password' => '123'
+        ]);
+        $response
+            ->assertStatus(422)
+            ->assertJson([
+                'email' => [],
+                'password' => [],
+            ]);
+
+
+
+        $response = $this->json('PUT', '/users/' . $user->id, [
+            'name' => 'Fake User',
+            'email' => 'hello@example.com',
+            'password' => 'password',
+            'company_id' => $company->id,
+        ]);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'updated' => true
+            ]);
+        
+        $updatedUser = User::find($user->id);
+        $this->assertNotNull($updatedUser->company);
+        $this->assertInstanceOf(Company::class, $updatedUser->company);
+        $this->assertEquals($company->id, $updatedUser->company->id);
     }
 }
