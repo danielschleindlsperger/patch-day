@@ -5,6 +5,8 @@ Route::get('/', function () {
     return view('index');
 });
 
+Auth::routes();
+
 Route::group(['middleware' => ['web', 'auth:api']], function () {
     // Company resource
     Route::resource('companies', 'CompanyController', [

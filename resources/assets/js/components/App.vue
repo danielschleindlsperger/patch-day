@@ -8,7 +8,7 @@
             </v-toolbar-title>
         </v-toolbar>
         <main>
-            <v-sidebar class="primary darken-2" height="100%"
+            <v-sidebar height="100%"
                        drawer v-model="sidebar.open"
                        :close-on-click="sidebar.closeOnClick" fixed>
                 <v-list>
