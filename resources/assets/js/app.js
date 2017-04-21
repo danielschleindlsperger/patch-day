@@ -4,8 +4,10 @@ import Vuetify from 'vuetify'
 import axios from 'axios'
 
 import routes from './routes.js'
+import auth from './auth.js'
 
-axios.defaults.headers.common = {
+window.axios = axios
+window.axios.defaults.headers.common = {
   'X-CSRF-TOKEN': window.Laravel.csrfToken,
   'X-Requested-With': 'XMLHttpRequest'
 };
@@ -20,5 +22,7 @@ const router = new VueRouter({
 })
 
 const app = new Vue({
-  router
+  router,
 }).$mount('#app');
+
+auth(app)
