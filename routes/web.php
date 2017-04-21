@@ -1,5 +1,10 @@
 <?php
 
+// serve app entry point
+Route::get('/', function () {
+    return view('index');
+});
+
 Route::group(['middleware' => ['web', 'auth:api']], function () {
     // Company resource
     Route::resource('companies', 'CompanyController', [

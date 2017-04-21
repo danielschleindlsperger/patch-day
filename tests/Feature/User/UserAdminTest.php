@@ -93,7 +93,7 @@ class UserAdminTest extends TestCase
             ->assertJsonFragment([
                 'updated' => true
             ]);
-        
+
         $updatedUser = User::find($user->id);
         $this->assertNotNull($updatedUser->company);
         $this->assertInstanceOf(Company::class, $updatedUser->company);
