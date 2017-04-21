@@ -13,3 +13,15 @@ Platform for management of periodic updates of software projects.
 - `$ php artisan passport:install` to generate the keys for OAuth Authentication
 - `$ phpunit`
 - Hopefully all green and ready to go :v:
+
+
+### Dependencies
+
+- Backend:
+    - Laravel: https://laravel.com
+    - Laravel Passport: https://laravel.com/docs/5.4/passport
+- Frontend:
+    - vuejs: https://vuejs.org/v2/guide/
+    - vue-router: https://router.vuejs.org/en/
+    - vuetify: https://vuetifyjs.com/
+    - axios: https://github.com/mzabriskie/axios
