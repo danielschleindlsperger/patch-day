@@ -52,7 +52,7 @@
     },
     methods: {
       login() {
-        window.axios.post('/login', {
+        this.$http.post('/login', {
           email: this.email,
           password: this.password,
         })

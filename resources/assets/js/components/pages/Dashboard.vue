@@ -5,7 +5,7 @@
 <script>
   export default {
     mounted() {
-      window.axios.get('/projects')
+      this.$http.get('/projects')
         .then(response => {
           console.log(response.data);
         });

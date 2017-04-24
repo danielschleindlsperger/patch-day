@@ -1,5 +1,5 @@
 function auth(vm) {
-  window.axios.interceptors.response.use(function (response) {
+  vm.$http.interceptors.response.use(function (response) {
     return response;
   }, function (error) {
     // redirect if unauthenticated

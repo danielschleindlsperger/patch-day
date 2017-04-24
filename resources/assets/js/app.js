@@ -6,15 +6,8 @@ import axios from 'axios'
 import routes from './routes.js'
 import auth from './auth.js'
 
-window.axios = axios
-window.axios.defaults.headers.common = {
-  'X-XSRF-TOKEN': window.Laravel.csrfToken,
-  'X-Requested-With': 'XMLHttpRequest',
-  'Accept': 'application/json'
-};
-
+Vue.prototype.$http = axios;
 Vue.component('app', require('./components/App.vue'));
-
 Vue.use(VueRouter)
 Vue.use(Vuetify)
 
@@ -31,4 +24,9 @@ const app = new Vue({
   router,
 }).$mount('#app');
 
+app.$http.defaults.headers.common = {
+  'X-XSRF-TOKEN': window.Laravel.csrfToken,
+  'X-Requested-With': 'XMLHttpRequest',
+  'Accept': 'application/json'
+};
 auth(app)
