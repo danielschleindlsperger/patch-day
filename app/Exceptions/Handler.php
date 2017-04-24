@@ -27,7 +27,7 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $exception
+     * @param  \Exception $exception
      * @return void
      */
     public function report(Exception $exception)
@@ -38,20 +38,51 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Exception $exception
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception)
     {
+        if ($request->ajax() || $request->wantsJson()) {
+
+            // this part is from render function in Illuminate\Foundation\Exceptions\Handler.php
+            // works well for json
+            $exception = $this->prepareException($exception);
+
+            if ($exception instanceof \Illuminate\Http\Exception\HttpResponseException) {
+                return $exception->getResponse();
+            } elseif ($exception instanceof \Illuminate\Auth\AuthenticationException) {
+                return $this->unauthenticated($request, $exception);
+            } elseif ($exception instanceof \Illuminate\Validation\ValidationException) {
+                return $this->convertValidationExceptionToResponse($exception, $request);
+            }
+
+            // we prepare custom response for other situation such as modelnotfound
+            $response = [];
+            $response['error'] = $exception->getMessage();
+
+            if (config('app.debug')) {
+                $response['trace'] = $exception->getTrace();
+                $response['code'] = $exception->getCode();
+            }
+
+            // we look for assigned status code if there isn't we assign 500
+            $statusCode = method_exists($exception, 'getStatusCode')
+                ? $exception->getStatusCode()
+                : 500;
+
+            return response()->json($response, $statusCode);
+        }
+
         return parent::render($request, $exception);
     }
 
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Auth\AuthenticationException $exception
      * @return \Illuminate\Http\Response
      */
     protected function unauthenticated($request, AuthenticationException $exception)
