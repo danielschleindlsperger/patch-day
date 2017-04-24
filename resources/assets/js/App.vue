@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import SideBar from './SideBar'
+  import SideBar from 'components/sidebar/SideBar'
 
   export default {
     data() {

@@ -1,7 +1,7 @@
 // components
-import Login from './components/pages/Login'
-import Dashboard from './components/pages/Dashboard'
-import NotFoundPage from './components/pages/404'
+import Login from 'pages/Login'
+import Dashboard from 'pages/Dashboard'
+import NotFoundPage from 'pages/404'
 
 export default [
   {
