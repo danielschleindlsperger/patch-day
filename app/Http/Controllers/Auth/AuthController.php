@@ -14,7 +14,7 @@ class AuthController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' =>
             $request->password])
         ) {
-            return ['success' => true];
+            return ['success' => true, Auth::user()];
         } else {
             abort(422, 'Credentials do not match our records.');
         }

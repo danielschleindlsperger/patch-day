@@ -13,7 +13,7 @@ class ProjectController extends Controller
      *
      * Return all projects
      */
-    public function index()
+    public function index(Request $request)
     {
         if (Auth::user() && Auth::user()->isAdmin()) {
             return Project::all();

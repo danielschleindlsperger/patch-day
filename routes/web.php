@@ -9,7 +9,8 @@ Route::get('/', function () {
 
 Route::post('/login', ['as' => 'login', 'uses' => 'Auth\AuthController@authenticate']);
 
-Route::group(['middleware' => ['web', 'auth:api']], function () {
+Route::group(['middleware' => ['web', 'auth']], function () {
+
     // Company resource
     Route::resource('companies', 'CompanyController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
