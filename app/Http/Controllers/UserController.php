@@ -6,6 +6,7 @@ use App\Http\Requests\User\CreateUser;
 use App\Http\Requests\User\UpdateUser;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -43,7 +44,19 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        if ($id === 'me') {
+            if ($user = Auth::user()) {
+                return $user;
+            } else {
+                abort(404, 'No authenticated user found.');
+            }
+        } else {
+            if ($user = User::find($id)) {
+                return $user;
+            } else {
+                abort(404, 'User not found.');
+            }
+        }
     }
 
     /**

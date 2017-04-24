@@ -58,7 +58,7 @@
         })
           .then((response) => {
             if (response.data.success === true) {
-              this.$root.auth.loggedIn = true
+              this.$root.user = response.data.user
               this.$router.push('/')
             }
           })

@@ -23,9 +23,23 @@ class UserAdminTest extends TestCase
 
         // Auth
         $this->admin = factory(User::class)->create([
+            'name' => 'Fake Name',
             'role' => 'admin',
         ]);
         Passport::actingAs($this->admin);
+    }
+
+    /** @test */
+    public function a_user_can_see_their_account_details()
+    {
+        $response = $this->json('GET', '/users/me');
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'id' => $this->admin->id,
+            'email' => $this->admin->email,
+            'name' => 'Fake Name',
+            'role' => 'admin',
+        ]);
     }
 
     /** @test */

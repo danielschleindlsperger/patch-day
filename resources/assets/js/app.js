@@ -15,6 +15,7 @@ const router = new VueRouter({
   routes
 })
 
+
 const app = new Vue({
   data() {
     return {
@@ -22,7 +23,7 @@ const app = new Vue({
     }
   },
   router,
-}).$mount('#app');
+})
 
 app.$http.defaults.headers.common = {
   'X-XSRF-TOKEN': window.Laravel.csrfToken,
@@ -30,3 +31,5 @@ app.$http.defaults.headers.common = {
   'Accept': 'application/json'
 };
 auth(app)
+
+app.$mount('#app');

@@ -33,7 +33,6 @@
     data () {
       return {
         items: [
-          {title: 'Login', href: '/login'},
           {title: 'Dashboard', href: '/'},
         ],
         sidebar: {
@@ -41,7 +40,7 @@
           closeOnClick: false,
         }
       }
-    }
+    },
   }
 </script>
 
