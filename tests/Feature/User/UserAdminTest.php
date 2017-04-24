@@ -16,6 +16,7 @@ class UserAdminTest extends TestCase
     use DatabaseTransactions;
 
     protected $admin;
+    protected $company;
 
     public function setUp()
     {
@@ -27,6 +28,10 @@ class UserAdminTest extends TestCase
             'role' => 'admin',
         ]);
         Passport::actingAs($this->admin);
+
+        $this->company = factory(Company::class)->create();
+        $this->admin->company()->associate($this->company);
+        $this->admin->save();
     }
 
     /** @test */
@@ -40,6 +45,9 @@ class UserAdminTest extends TestCase
             'name' => 'Fake Name',
             'role' => 'admin',
         ]);
+        $json = $response->json();
+        $this->assertEquals($this->company->name, $json['company']['name']);
+        $this->assertEquals($this->company->id, $json['company']['id']);
     }
 
     /** @test */
@@ -93,7 +101,6 @@ class UserAdminTest extends TestCase
                 'email' => [],
                 'password' => [],
             ]);
-
 
 
         $response = $this->json('PUT', '/users/' . $user->id, [

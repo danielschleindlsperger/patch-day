@@ -45,18 +45,22 @@ class UserController extends Controller
     public function show($id)
     {
         if ($id === 'me') {
-            if ($user = Auth::user()) {
-                return $user;
-            } else {
+            try {
+                $user = Auth::user();
+            } catch (\Exception $e) {
                 abort(404, 'No authenticated user found.');
             }
         } else {
-            if ($user = User::find($id)) {
-                return $user;
-            } else {
+            try {
+                $user = User::find($id);
+            } catch (\Exception $e) {
                 abort(404, 'User not found.');
             }
         }
+        if ($user->company) {
+            $user->company = $user->company->get();
+        }
+        return $user;
     }
 
     /**

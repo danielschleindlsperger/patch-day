@@ -15,6 +15,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@patch-day.dev',
             'password' => bcrypt('secret'),
+            'company_id' => \App\Company::first()->id
         ]);
     }
 }
