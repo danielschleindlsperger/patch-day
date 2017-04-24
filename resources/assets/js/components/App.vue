@@ -8,17 +8,7 @@
             </v-toolbar-title>
         </v-toolbar>
         <main>
-            <v-sidebar height="100%"
-                       drawer v-model="sidebar.open"
-                       :close-on-click="sidebar.closeOnClick" fixed>
-                <v-list>
-                    <v-list-item v-for="(item,i) in items" :key="i">
-                        <v-list-tile router :href="item.href">
-                            <v-list-tile-title v-text="item.title"/>
-                        </v-list-tile>
-                    </v-list-item>
-                </v-list>
-            </v-sidebar>
+            <side-bar :sidebar="sidebar"></side-bar>
             <v-content>
                 <v-container fluid>
                     <router-view></router-view>
@@ -29,18 +19,20 @@
 </template>
 
 <script>
+  import SideBar from './SideBar'
+
   export default {
-    data () {
+    data() {
       return {
-        items: [
-          {title: 'Dashboard', href: '/'},
-        ],
         sidebar: {
           open: true,
           closeOnClick: false,
         }
       }
     },
+    components: {
+      SideBar
+    }
   }
 </script>
 
