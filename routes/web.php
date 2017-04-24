@@ -5,7 +5,9 @@ Route::get('/', function () {
     return view('index');
 });
 
-Auth::routes();
+//Auth::routes();
+
+Route::post('/login', ['as' => 'login', 'uses' => 'Auth\AuthController@authenticate']);
 
 Route::group(['middleware' => ['web', 'auth:api']], function () {
     // Company resource
