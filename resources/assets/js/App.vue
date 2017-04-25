@@ -15,11 +15,13 @@
                 </v-container>
             </v-content>
         </main>
+        <info-bar></info-bar>
     </v-app>
 </template>
 
 <script>
   import SideBar from 'components/sidebar/SideBar'
+  import InfoBar from 'components/InfoBar'
 
   export default {
     data() {
@@ -31,7 +33,8 @@
       }
     },
     components: {
-      SideBar
+      SideBar,
+      InfoBar,
     }
   }
 </script>
