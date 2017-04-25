@@ -58,7 +58,6 @@
         })
           .then((response) => {
             if (response.data.success === true) {
-              this.$root.user = response.data.user
               this.$router.push('/')
             }
           })
