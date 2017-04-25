@@ -5,6 +5,7 @@ import NotFoundPage from 'pages/404'
 
 // company
 import Companies from 'pages/company/Companies'
+import Company from 'pages/company/Company'
 
 export default [
   {
@@ -15,6 +16,9 @@ export default [
   },
   {
     path: '/companies', component: Companies,
+  },
+  {
+    path: '/companies/:id', component: Company
   },
   {
     path: '*', component: NotFoundPage,
