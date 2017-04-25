@@ -14,7 +14,7 @@
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="isOpen = false">PLs no
                 </v-btn>
-                <v-btn class="green--text darken-1" flat="flat"
+                <v-btn error flat="flat"
                        @click.native="deleteCompany">Delete
                 </v-btn>
             </v-card-row>
