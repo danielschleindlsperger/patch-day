@@ -50,15 +50,16 @@
           .then(response => {
             if (response.status === 200) {
               eventBus.$emit('company.created')
-              // TODO: toast
+              eventBus.$emit('info.snackbar',
+                `${this.company.name} created successfully!`)
+              this.isOpen = false
+              this.company.name = ''
             }
           })
           .catch(error => {
-            // TODO: toast
+            console.log(error.response.data)
+            eventBus.$emit('info.snackbar', error.response.data)
           })
-
-        this.isOpen = false
-        this.company = {}
       }
     }
   }

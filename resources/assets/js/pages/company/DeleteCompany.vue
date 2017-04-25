@@ -45,10 +45,13 @@
           .then(response => {
             if (response.status === 200) {
               eventBus.$emit('company.deleted', [this.company])
+              eventBus.$emit('info.snackbar',
+                `${this.company.name} deleted successfully!`)
             }
           })
           .catch(error => {
-
+            console.log(error.response.data)
+            eventBus.$emit('info.snackbar', error.response.data)
           })
       }
     }
