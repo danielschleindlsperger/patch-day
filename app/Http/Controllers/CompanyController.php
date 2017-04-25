@@ -67,7 +67,7 @@ class CompanyController extends Controller
      * @param $companyId
      * @return mixed
      *
-     * return all Projects for the specified Company
+     * return all Projects for the specified company
      */
     public function showCompanysProjects($companyId)
     {

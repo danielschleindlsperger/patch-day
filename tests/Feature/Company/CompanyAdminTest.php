@@ -30,7 +30,7 @@ class CompanyAdminTest extends TestCase
     public function can_create_company()
     {
         $response = $this->json('POST', '/companies', [
-            'name' => 'Example Company'
+            'name' => 'Example company'
         ]);
         $response
             ->assertStatus(200)
@@ -98,7 +98,7 @@ class CompanyAdminTest extends TestCase
     /** @test */
     public function can_edit_a_company()
     {
-        $company = factory(Company::class)->create(['name' => 'Fake Company']);
+        $company = factory(Company::class)->create(['name' => 'Fake company']);
 
         $response = $this->json('PUT', '/companies/' . $company->id, [
             'name' => 'Test Firm',
@@ -116,7 +116,7 @@ class CompanyAdminTest extends TestCase
     /** @test */
     public function can_delete_a_company()
     {
-        $company = factory(Company::class)->create(['name' => 'Fake Company']);
+        $company = factory(Company::class)->create(['name' => 'Fake company']);
 
         $this->assertNotNull($company);
         $this->assertInstanceOf(Company::class, $company);

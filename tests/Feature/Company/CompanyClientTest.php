@@ -30,7 +30,7 @@ class CompanyClientTest extends TestCase
     public function clients_cannot_create_a_company()
     {
         $response = $this->json('POST', '/companies', [
-            'name' => 'Example Company'
+            'name' => 'Example company'
         ]);
         $response->assertStatus(403);
     }
@@ -64,7 +64,7 @@ class CompanyClientTest extends TestCase
     /** @test */
     public function client_cannot_edit_a_company()
     {
-        $company = factory(Company::class)->create(['name' => 'Fake Company']);
+        $company = factory(Company::class)->create(['name' => 'Fake company']);
 
         $response = $this->json('PUT', '/companies/' . $company->id, [
             'name' => 'Test Firm',
@@ -75,7 +75,7 @@ class CompanyClientTest extends TestCase
     /** @test */
     public function client_cannot_delete_a_company()
     {
-        $company = factory(Company::class)->create(['name' => 'Fake Company']);
+        $company = factory(Company::class)->create(['name' => 'Fake company']);
 
         $this->assertNotNull($company);
         $this->assertInstanceOf(Company::class, $company);

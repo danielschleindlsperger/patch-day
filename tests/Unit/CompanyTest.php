@@ -17,12 +17,12 @@ class CompanyTest extends TestCase
     public function a_company_has_a_name()
     {
         $company = factory(Company::class)->create([
-            'name' => 'Example Company',
+            'name' => 'Example company',
         ]);
 
         $this->assertNotNull($company);
         $this->assertInstanceOf(Company::class, $company);
-        $this->assertEquals('Example Company', $company->name);
+        $this->assertEquals('Example company', $company->name);
     }
 
     /** @test */

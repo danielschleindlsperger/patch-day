@@ -12,7 +12,7 @@ class CompaniesTableSeeder extends Seeder
     public function run()
     {
         DB::table('companies')->insert([
-            'name' => 'XYZ Company',
+            'name' => 'XYZ company',
         ]);
     }
 }

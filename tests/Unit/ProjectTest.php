@@ -17,7 +17,7 @@ class ProjectTest extends TestCase
     public function project_has_a_company()
     {
         $company = Company::create([
-            'name' => 'Fake Company',
+            'name' => 'Fake company',
         ]);
 
         $project = Project::create([

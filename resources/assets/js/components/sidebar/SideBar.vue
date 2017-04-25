@@ -19,6 +19,7 @@
       return {
         items: [
           {title: 'Dashboard', href: '/'},
+          {title: 'Companies', href: '/companies'},
         ],
       }
     },
