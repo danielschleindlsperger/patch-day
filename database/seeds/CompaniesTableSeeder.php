@@ -14,5 +14,6 @@ class CompaniesTableSeeder extends Seeder
         DB::table('companies')->insert([
             'name' => 'XYZ company',
         ]);
+        factory(\App\Company::class, 10)->create();
     }
 }
