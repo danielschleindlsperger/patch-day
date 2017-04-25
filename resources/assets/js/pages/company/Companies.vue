@@ -3,7 +3,8 @@
         <v-card>
             <v-card-text>
                 <div class="button-row">
-                    <v-btn primary dark>
+                    <v-btn primary dark
+                           @click.native="openCreateCompanyModal">
                         <v-icon class="white--text text--darken-2">add_circle
                         </v-icon>
                     </v-btn>
@@ -32,6 +33,7 @@
             </v-card-text>
         </v-card>
         <delete-company></delete-company>
+        <create-company></create-company>
     </div>
 </template>
 
@@ -39,10 +41,12 @@
   import eventBus from 'components/event-bus'
 
   import DeleteCompany from 'pages/company/DeleteCompany'
+  import CreateCompany from 'pages/company/CreateCompany'
 
   export default {
     components: {
       DeleteCompany,
+      CreateCompany,
     },
     data() {
       return {
@@ -52,15 +56,7 @@
       }
     },
     mounted() {
-      this.$http.get('/companies')
-        .then(response => {
-          this.list = response.data
-          this.addLinks()
-          console.log(response.data)
-        })
-        .catch(error => {
-          error.response.data
-        })
+      this.getCompanies()
 
       eventBus.$on('company.deleted', payload => {
         const COMPANY_ID = payload[0].id
@@ -71,8 +67,22 @@
         })
         this.list = newList
       })
+
+      eventBus.$on('company.created', () => {
+        this.getCompanies()
+      })
     },
     methods: {
+      getCompanies() {
+        this.$http.get('/companies')
+          .then(response => {
+            this.list = response.data
+            this.addLinks()
+          })
+          .catch(error => {
+            error.response.data
+          })
+      },
       addLinks() {
         this.list.forEach(item => {
           item.href = `/companies/${item.id}`
@@ -82,6 +92,11 @@
         event.preventDefault()
         event.stopPropagation()
         eventBus.$emit('company.delete.modal', item);
+      },
+      openCreateCompanyModal() {
+        event.preventDefault()
+        event.stopPropagation()
+        eventBus.$emit('company.create.modal')
       }
     }
   }
