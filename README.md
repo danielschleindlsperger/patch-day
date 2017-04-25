@@ -5,15 +5,21 @@ Platform for management of periodic updates of software projects.
 ### Install & Setup
 - clone this project
 - `$ cd patch-day`
-- `$ composer install`
+- `$ composer install && npm install && npm run dev`
 - `$ mv .env.example .env`
 - set database credentials in the `.env` file
 - `$ php artisan key:generate`
 - `$ php artisan migrate`
-- `$ php artisan passport:install` to generate the keys for OAuth Authentication
+- `$ php artisan db:seed` to populate database for testing
 - `$ phpunit`
 - Hopefully all green and ready to go :v:
 
+### Build commands
+- Development build `$ npm run dev`
+- Watcher `$ npm run watch`
+- Combine for frontend development: `$ npm run dev && npm run watch`
+- Build for production (minify, uglify, strip console.log(), ..): `$ npm run 
+production`
 
 ### Dependencies
 
