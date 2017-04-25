@@ -12,13 +12,15 @@
                         <v-text-field name="email" label="Email"
                                       prepend-icon="email"
                                       v-model="email"
-                                      :rules="rules"></v-text-field>
+                                      :rules="rules"
+                                      @keyup.enter.native="login"></v-text-field>
 
                         <v-text-field type="password" name="password"
                                       label="Password"
                                       prepend-icon="security"
                                       v-model="password"
-                                      :rules="rules"></v-text-field>
+                                      :rules="rules"
+                                      @keyup.enter.native="login"></v-text-field>
                         <div class="button-row">
                             <v-btn default primary dark class="white--text"
                                    @click.native="login">
