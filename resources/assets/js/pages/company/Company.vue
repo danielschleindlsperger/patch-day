@@ -1,9 +1,11 @@
 <template>
-    <v-card>
-        <v-card-text>
-            {{ $route.params.id }}
-        </v-card-text>
-    </v-card>
+    <v-container>
+        <v-card>
+            <v-card-text>
+                {{ $route.params.id }}
+            </v-card-text>
+        </v-card>
+    </v-container>
 </template>
 
 <script>
