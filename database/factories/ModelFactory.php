@@ -31,7 +31,7 @@ $factory->define(App\PatchDay::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Company::class, function (Faker\Generator $faker) {
     return [
-        'name' => 'Fake company',
+        'name' => $faker->company,
     ];
 });
 
