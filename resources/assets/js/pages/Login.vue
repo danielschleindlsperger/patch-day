@@ -35,6 +35,7 @@
 </template>
 
 <script>
+  import eventBus from 'components/event-bus'
   export default {
     data() {
       return {
@@ -60,6 +61,7 @@
         })
           .then((response) => {
             if (response.data.success === true) {
+              eventBus.$emit('info.snackbar', 'Login successful!')
               this.$router.push('/')
             }
           })
