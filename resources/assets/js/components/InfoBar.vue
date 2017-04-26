@@ -5,7 +5,7 @@
             v-model="visible"
     >
         {{ message }}
-        <v-btn flat class="pink--text" @click.native="snackbar = false">Close
+        <v-btn flat class="white--text" @click.native="visible = false">Close
         </v-btn>
     </v-snackbar>
 </template>
