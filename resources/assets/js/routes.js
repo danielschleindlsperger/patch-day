@@ -21,6 +21,6 @@ export default [
     path: '/companies/:id', component: Company
   },
   {
-    path: '*', component: NotFoundPage,
+    path: '*', component: NotFoundPage, name: 'not-found'
   },
 ]
