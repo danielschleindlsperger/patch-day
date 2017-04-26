@@ -42,6 +42,7 @@
 <style lang="scss">
     .toolbar {
         z-index: 10;
+        position: fixed;
     }
 
     .content {
