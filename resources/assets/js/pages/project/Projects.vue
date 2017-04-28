@@ -39,7 +39,7 @@
         </v-container>
 
         <delete-project></delete-project>
-        <create-company></create-company>
+        <create-project></create-project>
     </div>
 </template>
 
@@ -47,12 +47,12 @@
   import eventBus from 'components/event-bus'
 
   import DeleteProject from 'pages/project/DeleteProject'
-  import CreateCompany from 'pages/company/CreateCompany'
+  import CreateProject from 'pages/project/CreateProject'
 
   export default {
     components: {
       DeleteProject,
-      CreateCompany,
+      CreateProject,
     },
     data() {
       return {
