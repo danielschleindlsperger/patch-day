@@ -12,20 +12,20 @@
                         </v-btn>
                     </div>
                     <v-list>
-                        <v-list-item v-for="item in list"
-                                     :key="item.id">
+                        <v-list-item v-for="company in companies"
+                                     :key="company.id">
                             <v-list-tile avatar router
-                                         :href="item.href">
+                                         :href="'/companies/' + company.id">
                                 <v-list-tile-avatar>
                                     <v-icon>business</v-icon>
                                 </v-list-tile-avatar>
                                 <v-list-tile-content>
-                                    <v-list-tile-title>{{ item.name }}
+                                    <v-list-tile-title>{{ company.name }}
                                     </v-list-tile-title>
                                 </v-list-tile-content>
                                 <v-list-tile-action>
                                     <v-btn icon ripple
-                                           @click.native="deleteItem($event, item)">
+                                           @click.native="deleteItem($event, company)">
                                         <v-icon class="grey--text">
                                             delete
                                         </v-icon>
@@ -56,7 +56,7 @@
     },
     data() {
       return {
-        list: [],
+        companies: [],
         deleteCompany: {},
         modalOpen: false,
       }
@@ -68,10 +68,10 @@
         const COMPANY_ID = payload[0].id
         console.log(COMPANY_ID)
         // remove deleted item from list
-        let newList = this.list.filter((item) => {
-          return item.id !== COMPANY_ID
+        let newList = this.companies.filter((company) => {
+          return company.id !== COMPANY_ID
         })
-        this.list = newList
+        this.companies = newList
       })
 
       eventBus.$on('company.created', () => {
@@ -82,17 +82,11 @@
       getCompanies() {
         this.$http.get('/companies')
           .then(response => {
-            this.list = response.data
-            this.addLinks()
+            this.companies = response.data
           })
           .catch(error => {
             error.response.data
           })
-      },
-      addLinks() {
-        this.list.forEach(item => {
-          item.href = `/companies/${item.id}`
-        })
       },
       deleteItem(event, item) {
         event.preventDefault()
