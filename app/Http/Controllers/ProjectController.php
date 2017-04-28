@@ -72,6 +72,7 @@ class ProjectController extends Controller
 
         $this->validate($request, [
             'name' => 'required',
+            'company_id' => 'required|exists:companies,id',
         ]);
 
         $project = Project::create([
