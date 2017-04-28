@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Project;
 
+use App\Company;
 use App\User;
 use App\PatchDay;
 use App\Project;
@@ -15,9 +16,13 @@ class ProjectAdminTest extends TestCase
     use DatabaseMigrations;
     use DatabaseTransactions;
 
+    protected $company;
+
     public function setUp()
     {
         parent::setUp();
+
+        $this->company = factory(Company::class)->create();
 
         // Auth
         $admin = factory(User::class)->create([
@@ -37,9 +42,9 @@ class ProjectAdminTest extends TestCase
             ->assertJsonFragment([
                 'name' => $projects->all()[0]->name,
             ],
-            [
-                'name' => $projects->all()[1]->name,
-            ]
+                [
+                    'name' => $projects->all()[1]->name,
+                ]
             );
     }
 
@@ -47,7 +52,8 @@ class ProjectAdminTest extends TestCase
     public function admin_can_create_project()
     {
         $response = $this->json('POST', '/projects', [
-            'name' => 'Example Project'
+            'name' => 'Example Project',
+            'company_id' => $this->company->id,
         ]);
 
         $response
@@ -66,10 +72,8 @@ class ProjectAdminTest extends TestCase
 
         $response
             ->assertStatus(422)
-            ->assertJsonFragment([
-                [
-                    'name' => ['The name field is required.']
-                ]
+            ->assertJsonStructure([
+                'name', 'company_id'
             ]);
     }
 
