@@ -71,7 +71,7 @@ class ProjectClientTest extends TestCase
         $this->client->company()->associate($company);
         $this->client->save();
 
-        // project doesn't belong to user's company, so this should fail
+        // project doesn't belong to users company, so this should fail
         $response = $this->json('GET', '/projects/' . $project->id);
         $response->assertStatus(403);
 
@@ -112,7 +112,7 @@ class ProjectClientTest extends TestCase
         $this->client->company()->associate($company);
         $this->client->save();
 
-        // projects not associated with user's company, should fail
+        // project not associated with users company, should fail
         $response = $this->json('GET', '/projects/' . $project->id . '/patch-days');
         $response->assertStatus(403);
 

@@ -64,7 +64,7 @@ class ProjectController extends Controller
      * @param Request $request
      * @return array
      *
-     * Create new Project
+     * Create new project
      */
     public function store(Request $request)
     {
@@ -88,7 +88,7 @@ class ProjectController extends Controller
      * @param $id
      * @return array
      *
-     * Update specified project's properties
+     * Update specified projects properties
      */
     public function update(Request $request, $id)
     {
@@ -111,7 +111,7 @@ class ProjectController extends Controller
      *
      * Delete specified project
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         $project = Project::find($id);
         $this->authorize('delete', $project);
