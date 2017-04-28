@@ -7,7 +7,8 @@
                         <h2 class="text-xs-center">{{ company.name }}</h2>
                         <div class="button-row">
                             <v-btn flat="flat" icon ripple
-                                   @click.native="editCompany($event, company)">
+                                   @click.native="editCompanyModal($event,
+                                   company)">
                                 <v-icon class="grey--text">
                                     mode_edit
                                 </v-icon>
@@ -49,16 +50,19 @@
             </v-card>
         </v-container>
         <delete-company></delete-company>
+        <edit-company :company="company"></edit-company>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import DeleteCompany from 'pages/company/DeleteCompany'
+  import EditCompany from 'pages/company/EditCompany'
 
   export default {
     components: {
       DeleteCompany,
+      EditCompany,
     },
     data() {
       return {
@@ -72,9 +76,13 @@
         event.stopPropagation()
         eventBus.$emit('company.delete.modal', item);
       },
+      editCompanyModal(event, item) {
+        event.preventDefault()
+        event.stopPropagation()
+        eventBus.$emit('company.edit.modal', item);
+      },
     },
     mounted() {
-
       eventBus.$on('company.deleted', (payload) => {
         // this company was deleted
         if (payload[0].id === this.company.id) {
