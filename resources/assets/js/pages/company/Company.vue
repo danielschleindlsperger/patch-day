@@ -28,7 +28,7 @@
                             <v-list-item v-for="item in projects"
                                          :key="item.id">
                                 <v-list-tile avatar router
-                                             :href="'/projects/' + item.id">
+                                             :href="'/project/' + item.id">
                                     <v-list-tile-content>
                                         <v-list-tile-title>{{ item.name }}
                                         </v-list-tile-title>
