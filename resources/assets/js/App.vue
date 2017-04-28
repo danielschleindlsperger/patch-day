@@ -45,6 +45,10 @@
         position: fixed;
     }
 
+    main {
+        padding-top: 64px;
+    }
+
     .content {
         padding: 1rem;
     }
