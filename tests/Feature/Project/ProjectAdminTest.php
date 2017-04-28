@@ -5,7 +5,6 @@ namespace Tests\Feature\Project;
 use App\User;
 use App\PatchDay;
 use App\Project;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -24,7 +23,7 @@ class ProjectAdminTest extends TestCase
         $admin = factory(User::class)->create([
             'role' => 'admin',
         ]);
-        Passport::actingAs($admin);
+        $this->actingAs($admin);
     }
 
     /** @test */

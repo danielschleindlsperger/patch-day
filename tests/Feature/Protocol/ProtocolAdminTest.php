@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\User;
 use App\Protocol;
 use Carbon\Carbon;
-use Laravel\Passport\Passport;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -25,7 +24,7 @@ class ProtocolAdminTest extends TestCase
         $admin = factory(User::class)->create([
             'role' => 'admin',
         ]);
-        Passport::actingAs($admin);
+        $this->actingAs($admin);
     }
 
     /** @test */

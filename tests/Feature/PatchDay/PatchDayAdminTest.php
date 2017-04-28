@@ -7,7 +7,6 @@ use App\Protocol;
 use App\Project;
 use App\PatchDay;
 use Carbon\Carbon;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -38,7 +37,7 @@ class PatchDayAdminTest extends TestCase
         $admin = factory(User::class)->create([
             'role' => 'admin',
         ]);
-        Passport::actingAs($admin);
+        $this->actingAs($admin);
     }
 
     /** @test */

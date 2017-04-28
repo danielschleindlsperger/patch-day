@@ -8,7 +8,6 @@ use App\Protocol;
 use App\Project;
 use App\PatchDay;
 use Carbon\Carbon;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -38,7 +37,7 @@ class PatchDayClientTest extends TestCase
 
         // Auth
         $this->client = factory(User::class)->create();
-        Passport::actingAs($this->client);
+        $this->actingAs($this->client);
     }
 
     /** @test */

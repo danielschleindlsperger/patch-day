@@ -4,7 +4,6 @@ namespace Tests\Feature\User;
 
 use App\Company;
 use App\User;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -27,7 +26,7 @@ class UserAdminTest extends TestCase
             'name' => 'Fake Name',
             'role' => 'admin',
         ]);
-        Passport::actingAs($this->admin);
+        $this->actingAs($this->admin);
 
         $this->company = factory(Company::class)->create();
         $this->admin->company()->associate($this->company);

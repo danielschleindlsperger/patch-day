@@ -5,7 +5,6 @@ namespace Tests\Feature\Company;
 use App\User;
 use App\Company;
 use App\Project;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -23,7 +22,7 @@ class CompanyClientTest extends TestCase
         parent::setUp();
 
         $this->client = factory(User::class)->create();
-        Passport::actingAs($this->client);
+        $this->actingAs($this->client);
     }
 
     /** @test */

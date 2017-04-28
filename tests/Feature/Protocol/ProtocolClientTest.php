@@ -8,7 +8,6 @@ use App\Project;
 use App\User;
 use App\Protocol;
 use Carbon\Carbon;
-use Laravel\Passport\Passport;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -31,7 +30,7 @@ class ProtocolClientTest extends TestCase
 
         // Auth
         $this->client = factory(User::class)->create();
-        Passport::actingAs($this->client);
+        $this->actingAs($this->client);
 
         $this->company = factory(Company::class)->create();
         $this->project = factory(Project::class)->create();

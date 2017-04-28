@@ -6,7 +6,6 @@ use App\Company;
 use App\User;
 use App\PatchDay;
 use App\Project;
-use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -25,7 +24,7 @@ class ProjectClientTest extends TestCase
 
         // Auth
         $this->client = factory(User::class)->create();
-        Passport::actingAs($this->client);
+        $this->actingAs($this->client);
     }
 
     /** @test */

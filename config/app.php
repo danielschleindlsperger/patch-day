@@ -177,11 +177,6 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        /*
-         * OAuth2 Authentication
-         */
-        Laravel\Passport\PassportServiceProvider::class,
-
     ],
 
     /*
