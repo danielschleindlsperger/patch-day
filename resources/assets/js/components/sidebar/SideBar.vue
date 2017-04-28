@@ -20,9 +20,19 @@
         items: [
           {title: 'Dashboard', href: '/'},
           {title: 'Companies', href: '/companies'},
+          {title: 'Projects', href: '/projects'},
         ],
       }
     },
     props: ['sidebar']
   }
 </script>
+
+<style lang="scss" scoped>
+    .list__tile {
+        color: darken(white, 25%);
+        &.list__tile--active {
+            color: white;
+        }
+    }
+</style>
