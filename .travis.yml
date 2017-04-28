@@ -1,0 +1,21 @@
+os:
+  - linux
+language: php
+php:
+  - 7.1
+before_script:
+  - chmod 777 -R storage
+  - cp .env.travis .env
+  - composer self-update
+  - composer install --no-interaction
+  - php artisan key:generate
+  - nvm install stable
+  - npm install npm@latest -g
+script:
+  - vendor/bin/phpunit
+after_success:
+  - npm install
+  - npm run production
+branches:
+  only:
+    - production
