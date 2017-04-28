@@ -15,10 +15,9 @@
                                 item-value="id"
                                 v-model="project.company"
                                 label="Associated company"
-                                light
-                                required
-                                auto
+                                light required auto
                                 max-height="320"
+                                :rules="rules.company"
                         />
                         <small>*indicates required field</small>
                     </v-container>
@@ -48,6 +47,15 @@
           company: {},
         },
         companies: [],
+        rules: {
+          company: [
+            () => {
+              return this.project.company &&
+                Number.isInteger(this.project.company.id)
+                || 'Please select an entry'
+            },
+          ]
+        }
       }
     },
     mounted () {
