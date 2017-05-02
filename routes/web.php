@@ -21,7 +21,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::resource('projects', 'ProjectController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
-    Route::get('projects/{projectId}/patch-days', 'ProjectController@showProjectsPatchDays');
+    Route::get('projects/{projectId}/patch-day', 'ProjectController@showProjectsPatchDay');
 
     // PatchDay resource
     Route::resource('patch-days', 'PatchDayController', [

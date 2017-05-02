@@ -14,6 +14,10 @@ class Project extends Model
         'name', 'company_id',
     ];
 
+    protected $casts = [
+        'company_id' => 'integer',
+    ];
+
     /**
      * The attributes that should be mutated to dates.
      *
@@ -26,9 +30,9 @@ class Project extends Model
      *
      * return the project's PatchDays
      */
-    public function patchDays()
+    public function patchDay()
     {
-        return $this->hasMany(PatchDay::class);
+        return $this->hasOne(PatchDay::class);
     }
 
     /**

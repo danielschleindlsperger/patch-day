@@ -96,32 +96,30 @@ class ProjectClientTest extends TestCase
     }
 
     /** @test */
-    public function client_can_see_projects_patch_days()
+    public function client_can_see_projects_patch_day()
     {
         $company = factory(Company::class)->create();
         $project = factory(Project::class)->create();
         $patchDay = factory(PatchDay::class)->create(['cost' => 300]);
-        $patchDay2 = factory(PatchDay::class)->create(['cost' => 800]);
 
         $patchDay->project()->associate($project);
         $patchDay->save();
-        $patchDay2->project()->associate($project);
-        $patchDay2->save();
 
         $this->client->company()->associate($company);
         $this->client->save();
 
         // project not associated with users company, should fail
-        $response = $this->json('GET', '/projects/' . $project->id . '/patch-days');
+        $response = $this->json('GET', '/projects/' . $project->id . '/patch-day');
         $response->assertStatus(403);
 
         $project->company()->associate($company);
         $project->save();
 
-        $response = $this->json('GET', '/projects/' . $project->id . '/patch-days');
+        $response = $this->json('GET', '/projects/' . $project->id . '/patch-day');
         $response
             ->assertStatus(200)
-            ->assertSee('"cost":"300"')
-            ->assertSee('"cost":"800"');
+            ->assertJsonFragment([
+                'cost' => 300,
+            ]);
     }
 }

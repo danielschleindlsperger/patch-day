@@ -28,14 +28,14 @@ class ProjectController extends Controller
      *
      * return all PatchDays for the specified Project
      */
-    public function showProjectsPatchDays($projectId)
+    public function showProjectsPatchDay($projectId)
     {
         $project = Project::find($projectId);
 
         if ($project) {
             $this->authorize('view', $project);
-            $patchDays = $project->patchDays;
-            return $patchDays;
+            $patchDay = $project->patchDay;
+            return $patchDay;
         } else {
             abort(404, 'Specified project not found');
         }

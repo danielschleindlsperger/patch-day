@@ -138,22 +138,21 @@ class ProjectAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_see_projects_patch_days()
+    public function admin_can_see_projects_patch_day()
     {
         $project = factory(Project::class)->create();
         $patchDay = factory(PatchDay::class)->create(['cost' => 300]);
-        $patchDay2 = factory(PatchDay::class)->create(['cost' => 800]);
 
         $patchDay->project()->associate($project);
-        $patchDay2->project()->associate($project);
 
         $patchDay->save();
-        $patchDay2->save();
 
-        $response = $this->json('GET', '/projects/' . $project->id . '/patch-days');
+        $response = $this->json('GET', '/projects/' . $project->id . '/patch-day');
         $response
             ->assertStatus(200)
-            ->assertSee('"cost":"300"')
-            ->assertSee('"cost":"800"');
+            ->assertJsonFragment([
+                    'cost' => 300
+                ]
+            );
     }
 }

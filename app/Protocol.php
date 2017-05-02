@@ -11,12 +11,15 @@ class Protocol extends Model
     ];
 
     protected $fillable = [
-        'comment', 'done', 'due_date',
+        'comment', 'done', 'due_date', 'patch_day_id'
     ];
 
     protected $dates = ['due_date'];
 
-    protected $casts = ['done' => 'boolean'];
+    protected $casts = [
+        'done' => 'boolean',
+        'patch_day_id' => 'integer',
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

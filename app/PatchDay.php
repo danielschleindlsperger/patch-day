@@ -8,10 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class PatchDay extends Model
 {
     protected $fillable = [
-      'cost', 'start_date', 'active',
+      'cost', 'start_date', 'active', 'project_id'
     ];
 
     protected $dates = ['start_date'];
+
+    protected $casts = [
+        'cost' => 'integer',
+        'active' => 'boolean',
+        'project_id' => 'integer',
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

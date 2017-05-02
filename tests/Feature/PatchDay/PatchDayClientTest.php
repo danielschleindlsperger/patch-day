@@ -60,9 +60,9 @@ class PatchDayClientTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
-                'cost' => "200",
-                'active' => "1",
-                'project_id' => (string) $this->project->id,
+                'cost' => 200,
+                'active' => true,
+                'project_id' => $this->project->id,
             ]);
     }
 
@@ -73,7 +73,7 @@ class PatchDayClientTest extends TestCase
             'cost' => 200,
             'start_date' => (new Carbon('now +2 weeks'))->toDateString(),
             'active' => true,
-            'project_id' => (string) $this->project->id,
+            'project_id' => $this->project->id,
         ]);
 
         $response->assertStatus(403);
