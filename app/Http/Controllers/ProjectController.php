@@ -50,7 +50,7 @@ class ProjectController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $project = Project::with('company')->find($id);
+        $project = Project::with(['company', 'patchDay'])->find($id);
 
         if ($project) {
             $this->authorize('view', $project);

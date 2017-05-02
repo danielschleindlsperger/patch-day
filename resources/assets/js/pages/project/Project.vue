@@ -73,6 +73,9 @@
         project: {
           company: {
             name: ''
+          },
+          'patch-day': {
+
           }
         },
         patchDays: [],
@@ -110,16 +113,6 @@
           if (error.response.status === 404) {
             this.$router.push({name: 'not-found'})
           }
-        })
-
-      this.$http.get(`/projects/${projectId}/patch-days`)
-        .then(response => {
-          this.patchDays = response.data
-          console.log(response.data)
-        })
-        .catch(error => {
-          console.error(error)
-          eventBus.$emit('info.snackbar', error.response.data.error)
         })
     }
   }
