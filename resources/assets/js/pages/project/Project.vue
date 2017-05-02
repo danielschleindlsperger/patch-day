@@ -28,19 +28,21 @@
                     <hr>
                     <div class="projects">
                         <h3 class="text-xs-center">PatchDays</h3>
-                        <v-list>
-                            <v-list-item v-for="(item, index) in patchDays"
-                                         :key="item.id">
-                                <v-list-tile avatar router
-                                             :href="'/protocols/' + item.id">
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>
-                                            PatchDay #{{ index + 1 }}
-                                        </v-list-tile-title>
-                                    </v-list-tile-content>
-                                </v-list-tile>
-                            </v-list-item>
-                        </v-list>
+                        <v-data-table
+                                :headers="tableHeaders"
+                                v-model="patchDays"
+                                hide-actions
+                                class="elevation-1"
+                        >
+                            <template slot="items" scope="props">
+                                <td>PatchDay #123</td>
+                                <td class="text-xs-right">
+                                    {{ formatDate(props.item.due_date) }}
+                                </td>
+                                <td class="text-xs-right">{{ props.item.done }}
+                                </td>
+                            </template>
+                        </v-data-table>
                     </div>
                 </v-card-text>
             </v-card>
@@ -54,6 +56,8 @@
   import eventBus from 'components/event-bus'
   import DeleteProject from 'pages/project/DeleteProject'
   import EditProject from 'pages/project/EditProject'
+
+  import moment from 'moment'
 
   export default {
     components: {
@@ -69,6 +73,23 @@
           'patch-day': {}
         },
         patchDays: [],
+        tableHeaders: [
+          {
+            text: 'Name',
+            left: true,
+            value: 'name',
+          },
+          {
+            text: 'Due Date',
+            value: 'due_date',
+            sortable: true,
+          },
+          {
+            text: 'Done',
+            value: 'done',
+            sortable: true,
+          },
+        ]
       }
     },
     methods: {
@@ -82,10 +103,13 @@
         event.stopPropagation()
         eventBus.$emit('project.edit.modal', item);
       },
+      formatDate(date) {
+        return moment(date).format('YYYY-MM-DD')
+      },
     },
     mounted() {
       eventBus.$on('project.deleted', item => {
-        // this company was deleted
+        // this project was deleted
         if (item.id === this.project.id) {
           this.$router.push('/projects')
         }
