@@ -13,9 +13,13 @@ class ProjectsTableSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
         $companies = \App\Company::all();
-        factory(\App\Project::class, 200)->create()->each(function ($project) use ($companies) {
-            $project->company_id = $companies->random()->id;
-            $project->save();
-        });
+
+        foreach ($companies as $company) {
+            factory(\App\Project::class, rand(1, 5))->create()->each(function ($project) use ($company, $faker) {
+                $project->name = $faker->words(2, true);
+                $project->company_id = $company->id;
+                $project->save();
+            });
+        }
     }
 }
