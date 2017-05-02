@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class PatchDaySeeder extends Seeder
 {
@@ -18,27 +19,32 @@ class PatchDaySeeder extends Seeder
             $startDate = $faker->dateTimeThisYear;
 
             // create one patch day for each project
-            factory(\App\PatchDay::class)->create([
+            $patchDay = factory(\App\PatchDay::class)->create([
                 'cost' => rand(10000, 50000),
                 'start_date' => $startDate,
                 'interval' => rand(1, 6),
                 'active' => (bool)rand(0, 1),
                 'project_id' => $project->id
-            ])->each(function ($patchDay) use ($startDate, $faker) {
-                // create random amount of protocols (a.k.a. actual patch
-                // days on specific dates)
-                factory(\App\Protocol::class, rand(1, 5))->create([
-                    'comment' => $faker->sentence(10),
-                    'patch_day_id' => $patchDay->id,
-                ])->each(function ($protocol, $key) use (
-                    $patchDay,
-                    $startDate, $faker
-                ) {
-                    $protocol->patch_day_id = $patchDay->id;
-                    $protocol->due_date = \Carbon\Carbon::parse
-                    ($patchDay->start_date)->addMonths($key);
-                    $protocol->save();
-                });
+            ]);
+
+            // create random amount of protocols (a.k.a. actual patch
+            // days on specific dates) for patch-day
+            factory(\App\Protocol::class, rand(1, 5))->create([
+                'patch_day_id' => $patchDay->id,
+            ])->each(function ($protocol, $key) use (
+                $patchDay, $startDate,
+                $faker
+            ) {
+                // patch-day assumed done when it is in the past
+                $dueDate = Carbon::parse($patchDay->start_date)
+                    ->addMonths($key);
+                $done = Carbon::now()->gt($dueDate);
+
+                $protocol->patch_day_id = $patchDay->id;
+                $protocol->done = $done;
+                $protocol->comment = $done ? $faker->sentence(10) : null;
+                $protocol->due_date = $dueDate;
+                $protocol->save();
             });
         }
     }
