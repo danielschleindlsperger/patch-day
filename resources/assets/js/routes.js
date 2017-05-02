@@ -9,6 +9,7 @@ import Company from 'pages/company/Company'
 
 // project
 import Projects from 'pages/project/Projects'
+import Project from 'pages/project/Project'
 
 export default [
   {
@@ -25,6 +26,9 @@ export default [
   },
   {
     path: '/projects', component: Projects,
+  },
+  {
+    path: '/projects/:id', component: Project,
   },
   {
     path: '*', component: NotFoundPage, name: 'not-found'

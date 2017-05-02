@@ -15,7 +15,7 @@
                         <v-list-item v-for="project in projects"
                                      :key="project.id">
                             <v-list-tile avatar router
-                                         :href="'/project/' + project.id">
+                                         :href="'/projects/' + project.id">
                                 <v-list-tile-avatar>
                                     <v-icon>business</v-icon>
                                 </v-list-tile-avatar>

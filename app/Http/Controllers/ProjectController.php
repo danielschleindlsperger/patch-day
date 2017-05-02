@@ -50,7 +50,7 @@ class ProjectController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $project = Project::find($id);
+        $project = Project::with('company')->find($id);
 
         if ($project) {
             $this->authorize('view', $project);
@@ -97,8 +97,7 @@ class ProjectController extends Controller
 
         if ($project) {
             $this->authorize('update', $project);
-            $project->name = $request->name;
-            $project->save();
+            $project->update($request->all());
             return ['success' => true];
         } else {
             abort(404, 'Project not found.');
