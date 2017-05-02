@@ -86,7 +86,9 @@ class ProtocolAdminTest extends TestCase
     public function admin_can_edit_a_protocol()
     {
         $protocol = factory(Protocol::class)->create([
-            'due_date' => Carbon::now()->toDateTimeString()
+            'due_date' => Carbon::now()->toDateTimeString(),
+            'done' => false,
+            'comment' => null,
         ]);
 
         $this->assertFalse($protocol->done);

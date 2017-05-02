@@ -86,7 +86,9 @@ class ProtocolClientTest extends TestCase
     public function client_cannot_edit_a_protocol()
     {
         $protocol = factory(Protocol::class)->create([
-            'due_date' => Carbon::now()->toDateTimeString()
+            'due_date' => Carbon::now()->toDateTimeString(),
+            'comment' => null,
+            'done' => false,
         ]);
 
         $protocol->patchDay()->associate($this->patchDay);

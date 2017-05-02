@@ -3,6 +3,7 @@
 namespace Tests\Feature\Project;
 
 use App\Company;
+use App\Protocol;
 use App\User;
 use App\PatchDay;
 use App\Project;
@@ -96,30 +97,48 @@ class ProjectClientTest extends TestCase
     }
 
     /** @test */
-    public function client_can_see_projects_patch_day()
+    public function client_can_see_projects_protocols()
     {
+        // create company and associate client with it
         $company = factory(Company::class)->create();
-        $project = factory(Project::class)->create();
-        $patchDay = factory(PatchDay::class)->create(['cost' => 300]);
-
-        $patchDay->project()->associate($project);
-        $patchDay->save();
-
         $this->client->company()->associate($company);
         $this->client->save();
 
+        // create project/patch-day and associate
+        $project = factory(Project::class)->create();
+        $patchDay = factory(PatchDay::class)->create(['cost' => 300]);
+        $patchDay->project()->associate($project);
+        $patchDay->save();
+
+        // create protocols and associate
+        $protocol = factory(Protocol::class)->create();
+        $protocol->patchDay()->associate($patchDay);
+        $protocol->save();
+        $protocol2 = factory(Protocol::class)->create();
+        $protocol2->patchDay()->associate($patchDay);
+        $protocol2->save();
+
         // project not associated with users company, should fail
-        $response = $this->json('GET', '/projects/' . $project->id . '/patch-day');
+        $response = $this->json('GET', '/projects/' . $project->id . '/protocols');
         $response->assertStatus(403);
 
+        // associating project with company
         $project->company()->associate($company);
         $project->save();
 
-        $response = $this->json('GET', '/projects/' . $project->id . '/patch-day');
+        // should work now
+        $response = $this->json('GET', '/projects/' . $project->id . '/protocols');
         $response
             ->assertStatus(200)
-            ->assertJsonFragment([
-                'cost' => 300,
-            ]);
+            ->assertJsonStructure(
+                [
+                    [
+                        'id', 'comment', 'done', 'due_date'
+                    ],
+                    [
+                        'id', 'comment', 'done', 'due_date'
+                    ]
+                ]
+            );
     }
 }

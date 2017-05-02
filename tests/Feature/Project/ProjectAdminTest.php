@@ -3,6 +3,7 @@
 namespace Tests\Feature\Project;
 
 use App\Company;
+use App\Protocol;
 use App\User;
 use App\PatchDay;
 use App\Project;
@@ -100,17 +101,31 @@ class ProjectAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_specific_project()
+    public function admin_can_view_specific_project_with_associated_patch_day()
     {
         $project = factory(Project::class)->create([
             'name' => 'Test Project',
         ]);
 
+        // associated patch-day
+        $patchDay = factory(PatchDay::class)->create(['cost' => 300]);
+        $patchDay->project()->associate($project);
+        $patchDay->save();
+
         $response = $this->json('GET', '/projects/' . $project->id);
 
-        $response->assertStatus(200)
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructure(
+                [
+                    'name',
+                    'patch_day' => [
+                        'cost', 'start_date', 'interval', 'active',
+                    ]
+                ]
+            )
             ->assertJsonFragment([
-                'name' => $project->name,
+                'name' => 'Test Project',
             ]);
     }
 
@@ -138,20 +153,33 @@ class ProjectAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_see_projects_patch_day()
+    public function admin_can_see_projects_protocols()
     {
+        // create project/patch-day and associate
         $project = factory(Project::class)->create();
         $patchDay = factory(PatchDay::class)->create(['cost' => 300]);
-
         $patchDay->project()->associate($project);
-
         $patchDay->save();
 
-        $response = $this->json('GET', '/projects/' . $project->id . '/patch-day');
+        // create protocols and associate
+        $protocol = factory(Protocol::class)->create();
+        $protocol->patchDay()->associate($patchDay);
+        $protocol->save();
+        $protocol2 = factory(Protocol::class)->create();
+        $protocol2->patchDay()->associate($patchDay);
+        $protocol2->save();
+
+        $response = $this->json('GET', '/projects/' . $project->id . '/protocols');
         $response
             ->assertStatus(200)
-            ->assertJsonFragment([
-                    'cost' => 300
+            ->assertJsonStructure(
+                [
+                    [
+                        'id', 'comment', 'done', 'due_date'
+                    ],
+                    [
+                        'id', 'comment', 'done', 'due_date'
+                    ]
                 ]
             );
     }

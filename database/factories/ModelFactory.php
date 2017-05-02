@@ -37,6 +37,8 @@ $factory->define(App\Company::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Protocol::class, function (Faker\Generator $faker) {
     return [
+        'comment' => $faker->sentence(10),
+        'done' => (bool)rand(0, 1),
         'due_date' => (new Carbon('now +1 week'))->toDateTimeString()
     ];
 });

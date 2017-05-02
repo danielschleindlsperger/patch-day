@@ -21,13 +21,12 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::resource('projects', 'ProjectController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
-    Route::get('projects/{projectId}/patch-day', 'ProjectController@showProjectsPatchDay');
+    Route::get('projects/{projectId}/protocols', 'ProjectController@showProjectsProtocols');
 
     // PatchDay resource
     Route::resource('patch-days', 'PatchDayController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
-    Route::get('patch-days/{patchDayId}/protocols', 'PatchDayController@showPatchDaysProtocols');
 
     // Protocol resource
     Route::resource('protocols', 'ProtocolController', [

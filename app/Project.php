@@ -26,9 +26,9 @@ class Project extends Model
     protected $dates = ['deleted_at'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      *
-     * return the project's PatchDays
+     * return the project's PatchDay
      */
     public function patchDay()
     {

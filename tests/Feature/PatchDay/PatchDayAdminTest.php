@@ -116,25 +116,4 @@ class PatchDayAdminTest extends TestCase
             'success' => true
         ]);
     }
-
-    /** @test */
-    public function admin_can_see_a_patchdays_protocols()
-    {
-        $protocol = factory(Protocol::class)->create();
-        $protocol2 = factory(Protocol::class)->create();
-
-        $protocol->patchDay()->associate($this->patchDay);
-        $protocol2->patchDay()->associate($this->patchDay);
-        $protocol->save();
-        $protocol2->save();
-
-        $response = $this->json('GET', '/patch-days/'.$this->patchDay->id.'/protocols');
-        $response->assertStatus(200);
-        $response->assertJsonFragment([
-            'id' => $protocol->id
-        ]);
-        $response->assertJsonFragment([
-            'id' => $protocol2->id
-        ]);
-    }
 }

@@ -114,6 +114,16 @@
             this.$router.push({name: 'not-found'})
           }
         })
+
+//      this.$http.get(`/patch-days/${this.project.patch}/projects`)
+//        .then(response => {
+//          this.projects = response.data
+//          console.log(response.data)
+//        })
+//        .catch(error => {
+//          console.log(error.response.data)
+//          eventBus.$emit('info.snackbar', error.response.data.error)
+//        })
     }
   }
 </script>
