@@ -29,23 +29,15 @@
                     <div class="projects">
                         <h3 class="text-xs-center">PatchDays</h3>
                         <v-list>
-                            <v-list-item v-for="item in patchDays"
+                            <v-list-item v-for="(item, index) in patchDays"
                                          :key="item.id">
                                 <v-list-tile avatar router
-                                             :href="'/patch-days/' + item.id">
+                                             :href="'/protocols/' + item.id">
                                     <v-list-tile-content>
-                                        <v-list-tile-title>{{ item.name }}
+                                        <v-list-tile-title>
+                                            PatchDay #{{ index + 1 }}
                                         </v-list-tile-title>
                                     </v-list-tile-content>
-                                    <v-list-tile-action>
-                                        <v-btn icon ripple
-                                               @click.native="deletePatchDay($event,
-                                           item)">
-                                            <v-icon class="grey--text">
-                                                delete
-                                            </v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
                                 </v-list-tile>
                             </v-list-item>
                         </v-list>
@@ -74,9 +66,7 @@
           company: {
             name: ''
           },
-          'patch-day': {
-
-          }
+          'patch-day': {}
         },
         patchDays: [],
       }
@@ -115,15 +105,15 @@
           }
         })
 
-//      this.$http.get(`/patch-days/${this.project.patch}/projects`)
-//        .then(response => {
-//          this.projects = response.data
-//          console.log(response.data)
-//        })
-//        .catch(error => {
-//          console.log(error.response.data)
-//          eventBus.$emit('info.snackbar', error.response.data.error)
-//        })
+      this.$http.get(`/projects/${projectId}/protocols`)
+        .then(response => {
+          this.patchDays = response.data
+          console.log(response.data)
+        })
+        .catch(error => {
+          console.log(error.response.data)
+          eventBus.$emit('info.snackbar', error.response.data.error)
+        })
     }
   }
 </script>
