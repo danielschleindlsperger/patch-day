@@ -17,6 +17,8 @@ class CreatePatchDaysTable extends Migration
             $table->increments('id');
             $table->integer('cost')->nullable();
             $table->date('start_date');
+            // time between patch days in months
+            $table->tinyInteger('interval')->unsigned()->default(1);
             $table->boolean('active')->nullable();
             $table->integer('project_id')->unsigned()->nullable();
             $table->foreign('project_id')->references('id')->on('projects');

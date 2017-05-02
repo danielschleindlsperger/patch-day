@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PatchDay extends Model
 {
     protected $fillable = [
-      'cost', 'start_date', 'active', 'project_id'
+      'cost', 'start_date', 'interval', 'active', 'project_id'
     ];
 
     protected $dates = ['start_date'];

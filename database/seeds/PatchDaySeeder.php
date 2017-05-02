@@ -17,8 +17,9 @@ class PatchDaySeeder extends Seeder
         foreach ($projects as $project) {
             factory(\App\PatchDay::class)->create([
                 'cost' => rand(10000, 50000),
-                'active' => (bool)rand(0, 1),
                 'start_date' => $faker->dateTimeThisYear,
+                'interval' => rand(1, 6),
+                'active' => (bool)rand(0, 1),
                 'project_id' => $project->id
             ]);
         }
