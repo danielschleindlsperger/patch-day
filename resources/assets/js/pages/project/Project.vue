@@ -35,11 +35,15 @@
                                 class="elevation-1"
                         >
                             <template slot="items" scope="props">
-                                <td>PatchDay #123</td>
-                                <td class="text-xs-right">
-                                    {{ formatDate(props.item.due_date) }}
+                                <td>PatchDay #{{ props.item.protocol_number }}
                                 </td>
-                                <td class="text-xs-right">{{ props.item.done }}
+                                <td class="text-xs-right">
+                                    {{ props.item.due_date | Date }}
+                                </td>
+                                <td class="text-xs-right">
+                                    <v-icon>
+                                        {{ props.item.done | doneIcon }}
+                                    </v-icon>
                                 </td>
                             </template>
                         </v-data-table>
@@ -54,16 +58,16 @@
 
 <script>
   import eventBus from 'components/event-bus'
+  import filters from 'mixins/filters'
   import DeleteProject from 'pages/project/DeleteProject'
   import EditProject from 'pages/project/EditProject'
-
-  import moment from 'moment'
 
   export default {
     components: {
       DeleteProject,
       EditProject,
     },
+    mixins: [filters],
     data() {
       return {
         project: {
@@ -102,9 +106,6 @@
         event.preventDefault()
         event.stopPropagation()
         eventBus.$emit('project.edit.modal', item);
-      },
-      formatDate(date) {
-        return moment(date).format('YYYY-MM-DD')
       },
     },
     mounted() {

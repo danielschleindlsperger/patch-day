@@ -1,5 +1,5 @@
 <template>
-    <v-app id="sidebar-example-2" class="elevation-1" top-toolbar
+    <v-app id="patch-day" class="elevation-1" top-toolbar
            left-fixed-sidebar sidebar-under-toolbar>
         <v-toolbar class="primary">
             <v-toolbar-side-icon @click.native.stop="sidebar.open =

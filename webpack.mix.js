@@ -7,6 +7,7 @@ mix.webpackConfig({
     alias: {
       components: path.resolve(__dirname, 'resources/assets/js/components'),
       pages: path.resolve(__dirname, 'resources/assets/js/pages'),
+      mixins: path.resolve(__dirname, 'resources/assets/js/mixins'),
     }
   }
 });
