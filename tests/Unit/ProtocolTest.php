@@ -30,4 +30,17 @@ class ProtocolTest extends TestCase
         $this->assertNotNull($protocol->patchDay);
         $this->assertInstanceOf(PatchDay::class, $protocol->patchDay);
     }
+
+    /** @test */
+    public function it_has_the_correctly_enumerated_number_inside_a_patch_day()
+    {
+        $patchDay = factory(PatchDay::class)->create();
+        $protocols = factory(Protocol::class, 5)->create([
+            'patch_day_id' => $patchDay->id,
+        ]);
+
+        $protocol = $protocols[4];
+        $this->assertNotNull($protocol->protocol_number);
+        $this->assertEquals($protocol->protocol_number, 5);
+    }
 }

@@ -10,14 +10,16 @@ class Protocol extends Model
         'done' => false,
     ];
 
+    // protocol number is set in event listener
     protected $fillable = [
-        'comment', 'done', 'due_date', 'patch_day_id'
+        'comment', 'done', 'due_date', 'protocol_number', 'patch_day_id',
     ];
 
     protected $dates = ['due_date'];
 
     protected $casts = [
         'done' => 'boolean',
+        'protocol_number' => 'integer',
         'patch_day_id' => 'integer',
     ];
 
