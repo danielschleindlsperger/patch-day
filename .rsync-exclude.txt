@@ -1,0 +1,4 @@
+
+
+*.log .git/ .gitignore .gitlab-ci.yml .rsync-exclude.txt *.md storage/app/* storage/framework/* storage/logs/* phpunit.xml .env .env_example tests/ node_modules/
+
