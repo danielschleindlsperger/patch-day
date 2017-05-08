@@ -1,53 +1,49 @@
 <template>
     <div>
         <v-container>
-            <v-card>
-                <v-card-text>
-                    <div class="card-head">
-                        <h2 class="text-xs-center">{{ company.name }}</h2>
-                        <div class="button-row">
-                            <v-btn flat="flat" icon ripple
-                                   @click.native="editCompanyModal($event,
+            <div class="card-head">
+                <h2 class="text-xs-center">{{ company.name }}</h2>
+                <div class="button-row">
+                    <v-btn flat="flat" icon ripple
+                           @click.native="editCompanyModal($event,
                                    company)">
-                                <v-icon class="grey--text">
-                                    mode_edit
-                                </v-icon>
-                            </v-btn>
-                            <v-btn flat="flat" icon ripple
-                                   @click.native="deleteCompany($event, company)">
-                                <v-icon class="grey--text">
-                                    delete
-                                </v-icon>
-                            </v-btn>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="projects">
-                        <h3 class="text-xs-center">Projects</h3>
-                        <v-list>
-                            <v-list-item v-for="item in projects"
-                                         :key="item.id">
-                                <v-list-tile avatar router
-                                             :href="'/projects/' + item.id">
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>{{ item.name }}
-                                        </v-list-tile-title>
-                                    </v-list-tile-content>
-                                    <v-list-tile-action>
-                                        <v-btn icon ripple
-                                               @click.native="deleteProject($event,
+                        <v-icon class="grey--text">
+                            mode_edit
+                        </v-icon>
+                    </v-btn>
+                    <v-btn flat="flat" icon ripple
+                           @click.native="deleteCompany($event, company)">
+                        <v-icon class="grey--text">
+                            delete
+                        </v-icon>
+                    </v-btn>
+                </div>
+            </div>
+            <hr>
+            <div class="projects">
+                <h3 class="text-xs-center">Projects</h3>
+                <v-list>
+                    <v-list-item v-for="item in projects"
+                                 :key="item.id">
+                        <v-list-tile avatar router
+                                     :href="'/projects/' + item.id">
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ item.name }}
+                                </v-list-tile-title>
+                            </v-list-tile-content>
+                            <v-list-tile-action>
+                                <v-btn icon ripple
+                                       @click.native="deleteProject($event,
                                            item)">
-                                            <v-icon class="grey--text">
-                                                delete
-                                            </v-icon>
-                                        </v-btn>
-                                    </v-list-tile-action>
-                                </v-list-tile>
-                            </v-list-item>
-                        </v-list>
-                    </div>
-                </v-card-text>
-            </v-card>
+                                    <v-icon class="grey--text">
+                                        delete
+                                    </v-icon>
+                                </v-btn>
+                            </v-list-tile-action>
+                        </v-list-tile>
+                    </v-list-item>
+                </v-list>
+            </div>
         </v-container>
         <delete-company></delete-company>
         <edit-company :company="company"></edit-company>

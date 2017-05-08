@@ -1,91 +1,87 @@
 <template>
     <div>
         <v-container>
-            <v-card>
-                <v-card-text>
-                    <div class="card-head">
-                        <h2 class="text-xs-center">{{ project.name }}</h2>
-                        <div class="info-wrapper">
-                            <h3>{{ project.company.name }}</h3>
-                            <div class="button-row">
-                                <v-btn flat="flat" icon ripple
-                                       @click.native="editProjectModal($event)">
-                                    <v-icon class="grey--text">
-                                        mode_edit
-                                    </v-icon>
-                                </v-btn>
-                                <v-btn flat="flat" icon ripple
-                                       @click.native="deleteProject($event)">
-                                    <v-icon class="grey--text">
-                                        delete
-                                    </v-icon>
-                                </v-btn>
-                            </div>
-                        </div>
-                        <v-row class="info-wrapper">
-                            <v-col xs12 md4 class="info-item">
-                                <v-icon large
-                                        class="grey--text text--darken-2 pr-3"
-                                >
-                                    attach_money
-                                </v-icon>
-                                <h6 class="ma-0">
-                                    Price/PatchDay: {{ patchDay.cost |
-                                currency('EUR', true) }}
-                                </h6>
-                            </v-col>
-                            <v-col xs12 md4 class="info-item">
-                                <v-icon large
-                                        class="grey--text text--darken-2 pr-3"
-                                >
-                                    access_time
-                                </v-icon>
-                                <h6 class="ma-0">
-                                    Every {{ patchDay.interval }} months
-                                </h6>
-                            </v-col>
-                            <v-col xs12 md4 class="info-item">
-                                <h6 class="ma-0">
-                                    Active:
-                                </h6>
-                                <v-icon large
-                                        class="grey--text text--darken-2 pl-3"
-                                >
-                                    {{ patchDay.active | checkIcon }}
-                                </v-icon>
-                            </v-col>
-                        </v-row>
+            <div class="card-head">
+                <h2 class="text-xs-center">{{ project.name }}</h2>
+                <div class="info-wrapper">
+                    <h3>{{ project.company.name }}</h3>
+                    <div class="button-row">
+                        <v-btn flat="flat" icon ripple
+                               @click.native="editProjectModal($event)">
+                            <v-icon class="grey--text">
+                                mode_edit
+                            </v-icon>
+                        </v-btn>
+                        <v-btn flat="flat" icon ripple
+                               @click.native="deleteProject($event)">
+                            <v-icon class="grey--text">
+                                delete
+                            </v-icon>
+                        </v-btn>
                     </div>
-                    <hr>
-                    <div class="projects">
-                        <h3 class="text-xs-center">PatchDays</h3>
-                        <v-data-table
-                                :headers="tableHeaders"
-                                v-model="patchDays"
-                                hide-actions
-                                class="elevation-1"
+                </div>
+                <v-row class="info-wrapper">
+                    <v-col xs12 md4 class="info-item">
+                        <v-icon large
+                                class="grey--text text--darken-2 pr-3"
                         >
-                            <template slot="items" scope="props">
-                                <td>
-                                    <router-link :to="'/protocols/' +
+                            attach_money
+                        </v-icon>
+                        <h6 class="ma-0">
+                            Price/PatchDay: {{ patchDay.cost |
+                        currency('EUR', true) }}
+                        </h6>
+                    </v-col>
+                    <v-col xs12 md4 class="info-item">
+                        <v-icon large
+                                class="grey--text text--darken-2 pr-3"
+                        >
+                            access_time
+                        </v-icon>
+                        <h6 class="ma-0">
+                            Every {{ patchDay.interval }} months
+                        </h6>
+                    </v-col>
+                    <v-col xs12 md4 class="info-item">
+                        <h6 class="ma-0">
+                            Active:
+                        </h6>
+                        <v-icon large
+                                class="grey--text text--darken-2 pl-3"
+                        >
+                            {{ patchDay.active | checkIcon }}
+                        </v-icon>
+                    </v-col>
+                </v-row>
+            </div>
+            <hr>
+            <div class="projects">
+                <h3 class="text-xs-center">PatchDays</h3>
+                <v-data-table
+                        :headers="tableHeaders"
+                        v-model="patchDays"
+                        hide-actions
+                        class="elevation-1"
+                >
+                    <template slot="items" scope="props">
+                        <td>
+                            <router-link :to="'/protocols/' +
                                     props.item.id">
-                                        PatchDay
-                                        #{{ props.item.protocol_number }}
-                                    </router-link>
-                                </td>
-                                <td class="text-xs-right">
-                                    {{ props.item.due_date | Date }}
-                                </td>
-                                <td class="text-xs-right">
-                                    <v-icon>
-                                        {{ props.item.done | checkIcon }}
-                                    </v-icon>
-                                </td>
-                            </template>
-                        </v-data-table>
-                    </div>
-                </v-card-text>
-            </v-card>
+                                PatchDay
+                                #{{ props.item.protocol_number }}
+                            </router-link>
+                        </td>
+                        <td class="text-xs-right">
+                            {{ props.item.due_date | Date }}
+                        </td>
+                        <td class="text-xs-right">
+                            <v-icon>
+                                {{ props.item.done | checkIcon }}
+                            </v-icon>
+                        </td>
+                    </template>
+                </v-data-table>
+            </div>
         </v-container>
         <delete-project></delete-project>
         <edit-project></edit-project>
