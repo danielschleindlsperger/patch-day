@@ -40,10 +40,6 @@
       return {
         sidebar: {
           open: false,
-          closeOnClick: true,
-          absolute: true,
-//          mobile: true,
-//          drawer: true,
         }
       }
     },
@@ -58,6 +54,7 @@
 
     main {
         position: relative;
+        padding-left: 0 !important;
     }
 
     .content {

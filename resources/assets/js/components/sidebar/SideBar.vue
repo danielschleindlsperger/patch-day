@@ -1,6 +1,6 @@
 <template>
     <v-sidebar drawer v-model="sidebar.open"
-               :close-on-click="sidebar.closeOnClick">
+               :close-on-click="true">
         <v-list>
             <v-list-item v-for="(item,i) in items" :key="i">
                 <v-list-tile router :href="item.href">
