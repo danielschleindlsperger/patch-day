@@ -7,6 +7,7 @@ use App\Protocol;
 use App\User;
 use App\PatchDay;
 use App\Project;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -79,16 +80,31 @@ class ProjectAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_upate_a_project()
+    public function admin_can_upate_a_project_and_associated_patch_day()
     {
         $project = factory(Project::class)->create([
             'name' => 'Test Project',
         ]);
 
+        $patchDay = factory(PatchDay::class)->create([
+            'interval' => 3,
+            'cost' => 30000,
+            'active' => false,
+            'start_date' => Carbon::now()->addWeek(2)->toDateString(),
+        ]);
+        $patchDay->project()->associate($project);
+        $patchDay->save();
+
         $this->assertEquals('Test Project', $project->name);
+        $this->assertInstanceOf(PatchDay::class, $project->patchDay);
 
         $response = $this->json('PUT', '/projects/' . $project->id, [
-            'name' => 'Updated Project'
+            'name' => 'Updated Project',
+            'patch_day' => [
+                'cost' => 20000,
+                'active' => true,
+                'interval' => 4,
+            ]
         ]);
 
         $response
@@ -98,6 +114,14 @@ class ProjectAdminTest extends TestCase
                     'success' => true
                 ]
             ]);
+
+        $updatedProject = Project::with('patchDay')->find($project->id);
+
+        $this->assertEquals('Updated Project', $updatedProject->name);
+        $this->assertEquals($updatedProject->patchDay->id, $patchDay->id);
+        $this->assertEquals($updatedProject->patchDay->cost, 20000);
+        $this->assertEquals($updatedProject->patchDay->active, true);
+        $this->assertEquals($updatedProject->patchDay->interval, 4);
     }
 
     /** @test */

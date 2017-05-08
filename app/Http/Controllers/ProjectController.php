@@ -94,11 +94,19 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $project = Project::find($id);
+        $project = Project::with('patchDay')->find($id);
+
+        $this->authorize('update', $project);
 
         if ($project) {
-            $this->authorize('update', $project);
-            $project->update($request->all());
+
+            $project->update($request->except(['patch_day']));
+
+            if ($project->patchDay && $request->patch_day) {
+                $project->patchDay->update($request->patch_day);
+            } else {
+                abort(404, 'Projects PatchDay not found.');
+            }
             return ['success' => true];
         } else {
             abort(404, 'Project not found.');

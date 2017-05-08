@@ -28,7 +28,7 @@ class Project extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      *
-     * return the project's PatchDay
+     * return the projects PatchDay
      */
     public function patchDay()
     {
