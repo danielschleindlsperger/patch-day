@@ -8,7 +8,7 @@
                 <h3>{{ company.name }}</h3>
                 <div class="button-row">
                     <v-btn flat="flat" icon ripple
-                           @click.native="">
+                           @click.native="editProtocolModal($event)">
                         <v-icon class="grey--text">
                             mode_edit
                         </v-icon>
@@ -41,6 +41,7 @@
             </div>
         </v-container>
         <delete-protocol></delete-protocol>
+        <edit-protocol></edit-protocol>
     </div>
 </template>
 
@@ -49,12 +50,14 @@
   import filters from 'mixins/filters'
 
   import CheckOffProtocol from 'pages/patch-day/CheckOffProtocol'
-  import DeleteProtocol from 'pages/patch-day/DeleteProtocol.vue'
+  import DeleteProtocol from 'pages/patch-day/DeleteProtocol'
+  import EditProtocol from 'pages/patch-day/EditProtocol'
 
   export default {
     components: {
       CheckOffProtocol,
       DeleteProtocol,
+      EditProtocol,
     },
     mixins: [filters],
     data() {
@@ -83,6 +86,11 @@
         event.preventDefault()
         event.stopPropagation()
         eventBus.$emit('protocol.delete.modal', this.protocol)
+      },
+      editProtocolModal(event) {
+        event.preventDefault()
+        event.stopPropagation()
+        eventBus.$emit('protocol.edit.modal', this.protocol)
       },
       getProtocol() {
         const protocolId = this.$route.params.id
@@ -116,6 +124,10 @@
 
       eventBus.$on('protocol.checked-off', () => {
         this.getProtocol()
+      })
+
+      eventBus.$on('protocol.edited', protocol => {
+        this.protocol = Object.assign({}, protocol)
       })
 
       eventBus.$on('protocol.deleted', protocol => {
