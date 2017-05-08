@@ -35,7 +35,12 @@
                                 class="elevation-1"
                         >
                             <template slot="items" scope="props">
-                                <td>PatchDay #{{ props.item.protocol_number }}
+                                <td>
+                                    <router-link :to="'/protocols/' +
+                                    props.item.id">
+                                        PatchDay
+                                        #{{ props.item.protocol_number }}
+                                    </router-link>
                                 </td>
                                 <td class="text-xs-right">
                                     {{ props.item.due_date | Date }}
