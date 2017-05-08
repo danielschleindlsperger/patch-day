@@ -40,7 +40,8 @@ class ProtocolController extends Controller
      */
     public function show($id)
     {
-        $protocol = Protocol::find($id);
+        $protocol = Protocol::with('patchDay', 'patchDay.project', 'patchDay.project.company')->find
+        ($id);
 
         if ($protocol) {
             $this->authorize('view', $protocol);
