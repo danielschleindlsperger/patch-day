@@ -14,7 +14,7 @@
                         </v-icon>
                     </v-btn>
                     <v-btn flat="flat" icon ripple
-                           @click.native="">
+                           @click.native="deleteProtocolModal($event)">
                         <v-icon class="grey--text">
                             delete
                         </v-icon>
@@ -34,12 +34,13 @@
                 Comment: {{ protocol.comment }}
             </div>
             <div v-if="!protocol.done">
-                <v-btn primary @click.native="checkOffModal($event, protocol)">
+                <v-btn primary @click.native="checkOffModal($event)">
                     Check-off
                 </v-btn>
                 <check-off-protocol></check-off-protocol>
             </div>
         </v-container>
+        <delete-protocol></delete-protocol>
     </div>
 </template>
 
@@ -47,11 +48,13 @@
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
 
-  import CheckOffProtocol from './CheckOffProtocol'
+  import CheckOffProtocol from 'pages/patch-day/CheckOffProtocol'
+  import DeleteProtocol from 'pages/patch-day/DeleteProtocol.vue'
 
   export default {
     components: {
       CheckOffProtocol,
+      DeleteProtocol,
     },
     mixins: [filters],
     data() {
@@ -71,10 +74,15 @@
       }
     },
     methods: {
-      checkOffModal(event, protocol) {
+      checkOffModal(event) {
         event.preventDefault()
         event.stopPropagation()
-        eventBus.$emit('protocol.checkoff.modal', protocol)
+        eventBus.$emit('protocol.checkoff.modal', this.protocol)
+      },
+      deleteProtocolModal(event) {
+        event.preventDefault()
+        event.stopPropagation()
+        eventBus.$emit('protocol.delete.modal', this.protocol)
       },
       getProtocol() {
         const protocolId = this.$route.params.id
@@ -108,6 +116,13 @@
 
       eventBus.$on('protocol.checked-off', () => {
         this.getProtocol()
+      })
+
+      eventBus.$on('protocol.deleted', protocol => {
+        // this protocol was deleted
+        if (protocol.id === this.protocol.id) {
+          this.$router.push(`/projects/${this.protocol.patch_day.project_id}`)
+        }
       })
     }
   }
