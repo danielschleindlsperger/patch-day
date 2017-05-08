@@ -24,6 +24,39 @@
                                 </v-btn>
                             </div>
                         </div>
+                        <v-row class="info-wrapper">
+                            <v-col xs12 md4 class="info-item">
+                                <v-icon large
+                                        class="grey--text text--darken-2 pr-3"
+                                >
+                                    attach_money
+                                </v-icon>
+                                <h6 class="ma-0">
+                                    Price/PatchDay: {{ patchDay.cost |
+                                currency('EUR', true) }}
+                                </h6>
+                            </v-col>
+                            <v-col xs12 md4 class="info-item">
+                                <v-icon large
+                                        class="grey--text text--darken-2 pr-3"
+                                >
+                                    access_time
+                                </v-icon>
+                                <h6 class="ma-0">
+                                    Every {{ patchDay.interval }} months
+                                </h6>
+                            </v-col>
+                            <v-col xs12 md4 class="info-item">
+                                <h6 class="ma-0">
+                                    Active:
+                                </h6>
+                                <v-icon large
+                                        class="grey--text text--darken-2 pl-3"
+                                >
+                                    {{ patchDay.active | checkIcon }}
+                                </v-icon>
+                            </v-col>
+                        </v-row>
                     </div>
                     <hr>
                     <div class="projects">
@@ -47,7 +80,7 @@
                                 </td>
                                 <td class="text-xs-right">
                                     <v-icon>
-                                        {{ props.item.done | doneIcon }}
+                                        {{ props.item.done | checkIcon }}
                                     </v-icon>
                                 </td>
                             </template>
@@ -79,7 +112,7 @@
           company: {
             name: ''
           },
-          'patch-day': {}
+          patch_day: {}
         },
         patchDays: [],
         tableHeaders: [
@@ -99,6 +132,11 @@
             sortable: true,
           },
         ]
+      }
+    },
+    computed: {
+      patchDay() {
+        return this.project.patch_day
       }
     },
     methods: {
@@ -155,8 +193,9 @@
     }
 
     .info-wrapper {
+        width: 100%;
         display: flex;
-        flex-flow: row nowrap;
+        flex-flow: row wrap;
         justify-content: space-between;
         h3 {
             font-size: 32px;
@@ -165,6 +204,14 @@
             display: flex;
             flex-flow: row nowrap;
             justify-content: flex-end;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            h6 {
+                display: inline-block;
+            }
         }
     }
 

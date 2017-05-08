@@ -24,7 +24,7 @@
             <div>
                 Done:
                 <v-icon>
-                    {{ protocol.done | doneIcon }}
+                    {{ protocol.done | checkIcon }}
                 </v-icon>
             </div>
             <div>
