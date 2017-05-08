@@ -110,7 +110,9 @@
           company: {
             name: ''
           },
-          patch_day: {}
+          patch_day: {
+            active: false,
+          }
         },
         patchDays: [],
         tableHeaders: [
@@ -155,6 +157,10 @@
         if (item.id === this.project.id) {
           this.$router.push('/projects')
         }
+      })
+
+      eventBus.$on('project.edited', project => {
+        this.project = JSON.parse(JSON.stringify(project))
       })
 
       const projectId = this.$route.params.id

@@ -1,5 +1,6 @@
 <template>
-    <v-dialog v-model="isOpen" width="640" class="create-project-modal">
+    <v-dialog persistent v-model="isOpen" width="640"
+              class="create-project-modal">
         <v-card>
             <v-card-row>
                 <v-card-title>Create Project</v-card-title>
@@ -19,6 +20,31 @@
                                 max-height="320"
                                 :rules="rules.company"
                         />
+                        <div v-if="project.patch_day">
+                            <v-row>
+                                <v-col xs12 md6>
+                                    <v-text-field
+                                            name="cost"
+                                            label="Price/PatchDay in Cents*"
+                                            v-model="project.patch_day.cost"
+                                            type="number"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col xs12 md6>
+                                    <v-switch primary
+                                              success
+                                              hide-details
+                                              label="Active*"
+                                              v-model="project.patch_day.active"/>
+                                </v-col>
+                            </v-row>
+                            <v-subheader>
+                                Every {{ project.patch_day.interval
+                                }} months.* (Between 1 and 12)
+                            </v-subheader>
+                            <v-slider v-model="project.patch_day.interval"
+                                      :min="1" :max="12" :step="1" light/>
+                        </div>
                         <small>*indicates required field</small>
                     </v-container>
                 </v-card-text>
@@ -42,6 +68,11 @@
     data() {
       return {
         isOpen: false,
+        project: {
+          name: '',
+          company_id: null,
+          company: {},
+        },
         companies: [],
         rules: {
           company: [
@@ -58,19 +89,17 @@
       this.getCompanies()
 
       eventBus.$on('project.edit.modal', project => {
-        this.project = Object.assign({}, project)
+        this.project = JSON.parse(JSON.stringify(project))
         this.isOpen = true
       })
     },
     methods: {
       editProject() {
-        this.$http.put(`/projects/${this.project.id}`, {
-          name: this.project.name,
-          company_id: this.project.company.id,
-        })
+        this.project.company_id = this.project.company.id
+        this.$http.put(`/projects/${this.project.id}`, this.project)
           .then(response => {
             if (response.status === 200) {
-              eventBus.$emit('project.edited')
+              eventBus.$emit('project.edited', this.project)
               eventBus.$emit('info.snackbar',
                 `${this.project.name} edited successfully!`)
               this.isOpen = false
@@ -90,7 +119,7 @@
             console.error(error)
           })
       },
-    }
+    },
   }
 </script>
 
