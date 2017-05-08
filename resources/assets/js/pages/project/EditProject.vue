@@ -39,7 +39,6 @@
   import eventBus from 'components/event-bus'
   export default {
     name: 'edit-project',
-    props: ['project'],
     data() {
       return {
         isOpen: false,
@@ -58,7 +57,8 @@
     mounted () {
       this.getCompanies()
 
-      eventBus.$on('project.edit.modal', () => {
+      eventBus.$on('project.edit.modal', project => {
+        this.project = Object.assign({}, project)
         this.isOpen = true
       })
     },

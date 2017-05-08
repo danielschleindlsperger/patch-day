@@ -9,15 +9,13 @@
                             <h3>{{ project.company.name }}</h3>
                             <div class="button-row">
                                 <v-btn flat="flat" icon ripple
-                                       @click.native="editProjectModal($event,
-                                   project)">
+                                       @click.native="editProjectModal($event)">
                                     <v-icon class="grey--text">
                                         mode_edit
                                     </v-icon>
                                 </v-btn>
                                 <v-btn flat="flat" icon ripple
-                                       @click.native="deleteProject($event,
-                                   project)">
+                                       @click.native="deleteProject($event)">
                                     <v-icon class="grey--text">
                                         delete
                                     </v-icon>
@@ -90,7 +88,7 @@
             </v-card>
         </v-container>
         <delete-project></delete-project>
-        <edit-project :project="project"></edit-project>
+        <edit-project></edit-project>
     </div>
 </template>
 
@@ -140,15 +138,15 @@
       }
     },
     methods: {
-      deleteProject(event, item) {
+      deleteProject(event) {
         event.preventDefault()
         event.stopPropagation()
-        eventBus.$emit('project.delete.modal', item);
+        eventBus.$emit('project.delete.modal', this.project);
       },
-      editProjectModal(event, item) {
+      editProjectModal(event) {
         event.preventDefault()
         event.stopPropagation()
-        eventBus.$emit('project.edit.modal', item);
+        eventBus.$emit('project.edit.modal', this.project);
       },
     },
     mounted() {

@@ -102,10 +102,12 @@ class ProjectController extends Controller
 
             $project->update($request->except(['patch_day']));
 
-            if ($project->patchDay && $request->patch_day) {
-                $project->patchDay->update($request->patch_day);
-            } else {
-                abort(404, 'Projects PatchDay not found.');
+            if ($request->patch_day) {
+                if ($project->patchDay) {
+                    $project->patchDay->update($request->patch_day);
+                } else {
+                    abort(404, 'Projects PatchDay not found.');
+                }
             }
             return ['success' => true];
         } else {
