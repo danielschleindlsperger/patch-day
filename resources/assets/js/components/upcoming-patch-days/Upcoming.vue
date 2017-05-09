@@ -21,6 +21,7 @@
                             <v-list-tile-sub-title>
                                 <!-- Display in days from now aswell -->
                                 Due on {{ protocol.due_date | Date }}
+                                ({{ protocol.due_date | DaysFromNow }})
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                         <v-list-tile-action>
