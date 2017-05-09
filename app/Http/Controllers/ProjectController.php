@@ -58,9 +58,7 @@ class ProjectController extends Controller
             'company_id' => 'required|exists:companies,id',
         ]);
 
-        $project = Project::create([
-            'name' => $request->name,
-        ]);
+        $project = Project::create($request->all());
 
         if ($project) {
             return ['created' => true];
