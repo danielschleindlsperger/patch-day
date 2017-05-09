@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\PatchDay;
+use App\Project;
 use App\User;
 use App\Protocol;
 use Carbon\Carbon;
@@ -114,16 +115,20 @@ class ProtocolAdminTest extends TestCase
     /** @test */
     public function admin_can_see_upcoming_patch_days()
     {
+        $project = factory(Project::class)->create();
+
         $protocols = factory(Protocol::class, 3)->create([
             'done' => false,
         ])
-            ->each(function ($protocol, $index) {
-                $patchDay = factory(PatchDay::class)->create();
+            ->each(function ($protocol, $index) use ($project) {
+        $patchDay = factory(PatchDay::class)->create([
+            'project_id' => $project->id,
+        ]);
 
-                $protocol->due_date = Carbon::now()->addWeek($index)->toDateString();
-                $protocol->patch_day_id = $patchDay->id;
-                $protocol->save();
-            });
+        $protocol->due_date = Carbon::now()->addWeek($index)->toDateString();
+        $protocol->patch_day_id = $patchDay->id;
+        $protocol->save();
+    });
 
         $response = $this->json('GET', '/protocols/upcoming?limit=3');
 
@@ -131,14 +136,29 @@ class ProtocolAdminTest extends TestCase
             ->assertStatus(200)
             ->assertJsonStructure([
                 [
-                    'done', 'due_date', 'comment'
+                    'done',
+                    'due_date',
+                    'comment',
+                    'patch_day' => [
+                        'project'
+                    ]
                 ],
                 [
-                    'done', 'due_date', 'comment'
+                    'done',
+                    'due_date',
+                    'comment',
+                    'patch_day' => [
+                        'project'
+                    ]
                 ],
                 [
-                    'done', 'due_date', 'comment'
-                ]
+                    'done',
+                    'due_date',
+                    'comment',
+                    'patch_day' => [
+                        'project'
+                    ]
+                ],
             ])
             // assert order
             ->assertJson([

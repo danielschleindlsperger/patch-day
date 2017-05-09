@@ -64,7 +64,8 @@ class ProtocolController extends Controller
     {
         $limit = $request->limit ?: 5;
         if (Auth::user()->isAdmin()) {
-            $protocols = Protocol::where('done', false)
+            $protocols = Protocol::with('patchDay', 'patchDay.project')
+                ->where('done', false)
                 ->orderBy('due_date', 'ASC')
                 ->take($limit)
                 ->get();
