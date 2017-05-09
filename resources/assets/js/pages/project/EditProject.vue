@@ -3,7 +3,7 @@
               class="create-project-modal">
         <v-card>
             <v-card-row>
-                <v-card-title>Create Project</v-card-title>
+                <v-card-title>Edit Project</v-card-title>
             </v-card-row>
             <v-card-row>
                 <v-card-text>
