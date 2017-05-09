@@ -23,26 +23,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * @param $projectId
-     * @return mixed
-     *
-     * return all PatchDays for the specified Project
-     */
-    public function showProjectsProtocols($projectId)
-    {
-        $project = Project::with('patchDay', 'patchDay.protocols')->find
-        ($projectId);
-
-        if ($project) {
-            $this->authorize('view', $project);
-            $protocols = $project->patchDay->protocols()->get();
-            return $protocols;
-        } else {
-            abort(404, 'Specified project not found');
-        }
-    }
-
-    /**
      * @param Request $request
      * @param $id
      * @return mixed
@@ -51,7 +31,9 @@ class ProjectController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $project = Project::with(['company', 'patchDay'])->find($id);
+        $project = Project::with([
+            'company', 'patchDay', 'patchDay.protocols'
+        ])->find($id);
 
         if ($project) {
             $this->authorize('view', $project);

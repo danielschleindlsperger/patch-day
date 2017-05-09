@@ -125,11 +125,19 @@ class ProjectAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_specific_project_with_associated_patch_day()
+    public function admin_can_view_project_with_patch_day_and_protocols()
     {
         $project = factory(Project::class)->create([
             'name' => 'Test Project',
         ]);
+
+        $response = $this->json('GET', '/projects/' . $project->id);
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                'name' => 'Test Project',
+                'id' => $project->id,
+            ]);
 
         // associated patch-day
         $patchDay = factory(PatchDay::class)->create(['cost' => 300]);
@@ -137,7 +145,6 @@ class ProjectAdminTest extends TestCase
         $patchDay->save();
 
         $response = $this->json('GET', '/projects/' . $project->id);
-
         $response
             ->assertStatus(200)
             ->assertJsonStructure(
@@ -150,6 +157,28 @@ class ProjectAdminTest extends TestCase
             )
             ->assertJsonFragment([
                 'name' => 'Test Project',
+            ]);
+
+        // associate protocols
+        factory(Protocol::class, 5)->create([
+            'patch_day_id' => $patchDay->id,
+        ]);
+        $response = $this->json('GET', '/projects/' . $project->id);
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'name',
+                'patch_day' => [
+                    'cost',
+                    'start_date',
+                    'interval',
+                    'active',
+                    'protocols' => [
+                        [
+                            'comment', 'done'
+                        ]
+                    ],
+                ],
             ]);
     }
 
@@ -176,7 +205,9 @@ class ProjectAdminTest extends TestCase
         $response->assertStatus(404);
     }
 
-    /** @test */
+    /**
+     * deprecated, protocols now sent with project
+     */
     public function admin_can_see_projects_protocols()
     {
         // create project/patch-day and associate

@@ -59,7 +59,7 @@
                 <h3 class="text-xs-center">PatchDays</h3>
                 <v-data-table
                         :headers="tableHeaders"
-                        v-model="patchDays"
+                        v-model="project.patch_day.protocols"
                         hide-actions
                         class="elevation-1"
                 >
@@ -108,9 +108,9 @@
           },
           patch_day: {
             active: false,
+            protocols: []
           }
         },
-        patchDays: [],
         tableHeaders: [
           {
             text: 'Name',
@@ -133,7 +133,7 @@
     computed: {
       patchDay() {
         return this.project.patch_day
-      }
+      },
     },
     methods: {
       deleteProject(event) {
@@ -171,16 +171,6 @@
           if (error.response.status === 404) {
             this.$router.push({name: 'not-found'})
           }
-        })
-
-      this.$http.get(`/projects/${projectId}/protocols`)
-        .then(response => {
-          this.patchDays = response.data
-          console.log(response.data)
-        })
-        .catch(error => {
-          console.log(error.response.data)
-          eventBus.$emit('info.snackbar', error.response.data.error)
         })
     }
   }

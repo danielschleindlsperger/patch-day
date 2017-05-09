@@ -96,7 +96,9 @@ class ProjectClientTest extends TestCase
         $response->assertStatus(403);
     }
 
-    /** @test */
+    /**
+     * deprecated, protocols now sent with project
+     */
     public function client_can_see_projects_protocols()
     {
         // create company and associate client with it
