@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\PatchDay;
 use App\User;
 use App\Protocol;
 use Carbon\Carbon;
@@ -94,7 +95,7 @@ class ProtocolAdminTest extends TestCase
         $this->assertFalse($protocol->done);
         $this->assertNull($protocol->comment);
 
-        $response = $this->json('PUT', '/protocols/'.$protocol->id, [
+        $response = $this->json('PUT', '/protocols/' . $protocol->id, [
             'comment' => '<p>It was good.</p>',
             'done' => true,
         ]);
@@ -108,5 +109,48 @@ class ProtocolAdminTest extends TestCase
 
         $this->assertEquals('<p>It was good.</p>', $updatedProtocol->comment);
         $this->assertTrue($updatedProtocol->done);
+    }
+
+    /** @test */
+    public function admin_can_see_upcoming_patch_days()
+    {
+        $protocols = factory(Protocol::class, 3)->create([
+            'done' => false,
+        ])
+            ->each(function ($protocol, $index) {
+                $patchDay = factory(PatchDay::class)->create();
+
+                $protocol->due_date = Carbon::now()->addWeek($index)->toDateString();
+                $protocol->patch_day_id = $patchDay->id;
+                $protocol->save();
+            });
+
+        $response = $this->json('GET', '/protocols/upcoming?limit=3');
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                [
+                    'done', 'due_date', 'comment'
+                ],
+                [
+                    'done', 'due_date', 'comment'
+                ],
+                [
+                    'done', 'due_date', 'comment'
+                ]
+            ])
+            // assert order
+            ->assertJson([
+                [
+                    'id' => $protocols[0]->id
+                ],
+                [
+                    'id' => $protocols[1]->id
+                ],
+                [
+                    'id' => $protocols[2]->id
+                ],
+            ]);
     }
 }

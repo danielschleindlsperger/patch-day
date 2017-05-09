@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Protocol\CreateProtocol;
 use App\Http\Requests\Protocol\UpdateProtocol;
 use App\Protocol;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProtocolController extends Controller
 {
@@ -48,6 +50,27 @@ class ProtocolController extends Controller
             return $protocol;
         } else {
             abort(404, 'Specified protocol not found.');
+        }
+    }
+
+    /**
+     * Return upcoming patch-days for admins
+     *
+     * @param Request $request
+     * @return mixed
+     * @throws AuthenticationException
+     */
+    public function showUpcoming(Request $request)
+    {
+        $limit = $request->limit ?: 5;
+        if (Auth::user()->isAdmin()) {
+            $protocols = Protocol::where('done', false)
+                ->orderBy('due_date', 'ASC')
+                ->take($limit)
+                ->get();
+            return $protocols;
+        } else {
+            throw new AuthenticationException();
         }
     }
 

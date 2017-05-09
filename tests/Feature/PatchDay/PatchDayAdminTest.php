@@ -43,7 +43,7 @@ class PatchDayAdminTest extends TestCase
     /** @test */
     public function admin_can_see_a_patchday()
     {
-        $response = $this->json('GET', 'patch-days/'.$this->patchDay->id);
+        $response = $this->json('GET', 'patch-days/' . $this->patchDay->id);
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
@@ -74,7 +74,7 @@ class PatchDayAdminTest extends TestCase
     public function admin_can_edit_a_patchday()
     {
         // response with invalid data
-        $response = $this->json('PUT', 'patch-days/'.$this->patchDay->id, [
+        $response = $this->json('PUT', 'patch-days/' . $this->patchDay->id, [
             'cost' => false,
         ]);
         $response
@@ -82,7 +82,7 @@ class PatchDayAdminTest extends TestCase
 
 
         // response with valid data
-        $response = $this->json('PUT', 'patch-days/'.$this->patchDay->id, [
+        $response = $this->json('PUT', 'patch-days/' . $this->patchDay->id, [
             'cost' => 500,
         ]);
         $response
@@ -109,7 +109,7 @@ class PatchDayAdminTest extends TestCase
         $this->assertNotNull($patchDay);
         $this->assertInstanceOf(PatchDay::class, $patchDay);
 
-        $response = $this->json('DELETE', '/patch-days/'.$patchDay->id);
+        $response = $this->json('DELETE', '/patch-days/' . $patchDay->id);
 
         $response->assertStatus(200);
         $response->assertJsonFragment([
