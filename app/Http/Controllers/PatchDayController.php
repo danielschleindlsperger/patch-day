@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PatchDay\CreatePatchDay;
+use App\Http\Requests\PatchDay\CreateProject;
 use App\Http\Requests\PatchDay\UpdatePatchDay;
 use App\PatchDay;
 use App\Project;
@@ -22,29 +22,6 @@ class PatchDayController extends Controller
             return PatchDay::all();
         } else {
             abort(403, 'Not authorized.');
-        }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(CreatePatchDay $request)
-    {
-        $this->authorize('create', PatchDay::class);
-        $project = Project::find($request->project_id);
-
-        if ($project) {
-
-            $patchDay = PatchDay::create($request->all());
-            $patchDay->project()->associate($project);
-            $patchDay->save();
-
-            return ['created' => true];
-        } else {
-            abort(404, 'Project not found');
         }
     }
 

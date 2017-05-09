@@ -24,7 +24,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 
     // PatchDay resource
     Route::resource('patch-days', 'PatchDayController', [
-        'only' => ['index', 'store', 'show', 'update', 'destroy']
+        'only' => ['index', 'show', 'update', 'destroy']
     ]);
 
     // Protocol resource

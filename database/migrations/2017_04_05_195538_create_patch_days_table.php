@@ -16,10 +16,10 @@ class CreatePatchDaysTable extends Migration
         Schema::create('patch_days', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('cost')->nullable();
-            $table->date('start_date');
+            $table->date('start_date')->nullable();
             // time between patch days in months
             $table->tinyInteger('interval')->unsigned()->default(1);
-            $table->boolean('active')->nullable();
+            $table->boolean('active')->default(false);
             $table->integer('project_id')->unsigned()->nullable();
             $table->foreign('project_id')->references('id')->on('projects');
             $table->timestamps();

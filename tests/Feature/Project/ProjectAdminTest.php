@@ -51,11 +51,15 @@ class ProjectAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_create_project()
+    public function admin_can_create_project_and_associated_patch_day()
     {
         $response = $this->json('POST', '/projects', [
             'name' => 'Example Project',
             'company_id' => $this->company->id,
+            'patch_day' => [
+                'cost' => 15000,
+                'active' => false,
+            ]
         ]);
 
         $response
@@ -63,6 +67,16 @@ class ProjectAdminTest extends TestCase
             ->assertJsonFragment([
                 'created' => true
             ]);
+
+        $project = Project::all()->last();
+        $patchDay = PatchDay::all()->last();
+
+        $this->assertInstanceOf(PatchDay::class, $patchDay);
+        $this->assertInstanceOf(PatchDay::class, $project->patchDay);
+        $this->assertEquals($patchDay->project_id, $project->id);
+        $this->assertEquals(15000, $patchDay->cost);
+        $this->assertFalse($patchDay->active);
+        $this->assertEmpty($patchDay->comment);
     }
 
     /** @test */

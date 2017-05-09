@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Project\CreateProject;
+use App\PatchDay;
 use App\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,23 +46,21 @@ class ProjectController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param CreateProject $request
      * @return array
      *
      * Create new project
      */
-    public function store(Request $request)
+    public function store(CreateProject $request)
     {
         $this->authorize('create', Project::class);
 
-        $this->validate($request, [
-            'name' => 'required',
-            'company_id' => 'required|exists:companies,id',
-        ]);
-
-        $project = Project::create($request->all());
+        $project = Project::create($request->except(['patch_day']));
 
         if ($project) {
+            $patchDay = PatchDay::create($request->patch_day);
+            $patchDay->project()->associate($project);
+            $patchDay->save();
             return ['created' => true];
         }
     }

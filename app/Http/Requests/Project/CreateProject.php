@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\PatchDay;
+namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreatePatchDay extends FormRequest
+class CreateProject extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,11 @@ class CreatePatchDay extends FormRequest
     public function rules()
     {
         return [
-            'cost' => 'numeric',
-            'active' => 'boolean',
-            'start_date' => 'required|date',
-            'project_id' => 'required|numeric',
+            'name' => 'required|',
+            'company_id' => 'required|exists:companies,id',
+            'patch_day.cost' => 'numeric',
+            'patch_day.active' => 'boolean',
+            'patch_day.start_date' => 'date',
         ];
     }
 }
