@@ -15,6 +15,10 @@ class PatchDaySeeder extends Seeder
         $faker = Faker\Factory::create();
         $projects = \App\Project::all();
 
+        // disable event listeners to not trigger saved events on the
+        // patch day model
+        \App\PatchDay::flushEventListeners();
+
         foreach ($projects as $project) {
             $startDate = $faker->dateTimeThisYear;
 
@@ -37,7 +41,7 @@ class PatchDaySeeder extends Seeder
             ) {
                 // patch-day assumed done when it is in the past
                 $dueDate = Carbon::parse($patchDay->start_date)
-                    ->addMonths($key);
+                    ->addMonths($key * $patchDay->interval);
                 $done = Carbon::now()->gt($dueDate);
 
                 $protocol->patch_day_id = $patchDay->id;

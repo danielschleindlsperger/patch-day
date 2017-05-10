@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Observers\PatchDayObserver;
 use App\Observers\ProtocolObserver;
+use App\PatchDay;
 use App\Protocol;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -30,5 +32,6 @@ class EventServiceProvider extends ServiceProvider
         parent::boot();
 
         Protocol::observe(new ProtocolObserver());
+        PatchDay::observe(new PatchDayObserver());
     }
 }

@@ -57,9 +57,10 @@ class ProjectController extends Controller
         $project = Project::create($request->except(['patch_day']));
 
         if ($project) {
-            $patchDay = PatchDay::create($request->patch_day);
-            $patchDay->project()->associate($project);
-            $patchDay->save();
+            $fields = array_merge($request->patch_day, [
+                'project_id' => $project->id,
+            ]);
+            $patchDay = PatchDay::create($fields);
             return ['created' => true];
         }
     }
