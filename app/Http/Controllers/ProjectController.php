@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Project\CreateProject;
+use App\Http\Requests\Project\UpdateProject;
 use App\PatchDay;
 use App\Project;
 use Illuminate\Http\Request;
@@ -53,8 +54,6 @@ class ProjectController extends Controller
      */
     public function store(CreateProject $request)
     {
-        $this->authorize('create', Project::class);
-
         $project = Project::create($request->except(['patch_day']));
 
         if ($project) {
@@ -66,20 +65,17 @@ class ProjectController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param UpdateProject $request
      * @param $id
      * @return array
      *
      * Update specified projects properties
      */
-    public function update(Request $request, $id)
+    public function update(UpdateProject $request, $id)
     {
         $project = Project::with('patchDay')->find($id);
 
-        $this->authorize('update', $project);
-
         if ($project) {
-
             $project->update($request->except(['patch_day']));
 
             if ($request->patch_day) {

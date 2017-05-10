@@ -54,23 +54,6 @@ class PatchDayAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_create_a_patchday()
-    {
-        $response = $this->json('POST', 'patch-days', [
-            'cost' => 200,
-            'start_date' => (new Carbon('now +2 weeks'))->toDateString(),
-            'active' => true,
-            'project_id' => $this->project->id,
-        ]);
-
-        $response
-            ->assertStatus(200)
-            ->assertJsonFragment([
-                'created' => true,
-            ]);
-    }
-
-    /** @test */
     public function admin_can_edit_a_patchday()
     {
         // response with invalid data

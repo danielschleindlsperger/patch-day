@@ -5,7 +5,7 @@ namespace App\Http\Requests\Project;
 use App\Project;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateProject extends FormRequest
+class UpdateProject extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +14,9 @@ class CreateProject extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->can('create', Project::class);
+        $project = Project::find($this->route('project'));
+
+        return $project && $this->user()->can('update', $project);
     }
 
     /**
@@ -25,8 +27,7 @@ class CreateProject extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|',
-            'company_id' => 'required|exists:companies,id',
+            'company_id' => 'exists:companies,id',
             'patch_day.cost' => 'numeric',
             'patch_day.active' => 'boolean',
             'patch_day.start_date' => 'date',

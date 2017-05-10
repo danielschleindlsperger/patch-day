@@ -67,19 +67,6 @@ class PatchDayClientTest extends TestCase
     }
 
     /** @test */
-    public function client_cannot_create_a_patchday()
-    {
-        $response = $this->json('POST', 'patch-days', [
-            'cost' => 200,
-            'start_date' => (new Carbon('now +2 weeks'))->toDateString(),
-            'active' => true,
-            'project_id' => (string) $this->project->id,
-        ]);
-
-        $response->assertStatus(403);
-    }
-
-    /** @test */
     public function client_cannot_edit_a_patchday()
     {
         // response with valid data
