@@ -25,13 +25,8 @@ class PatchDayTest extends TestCase
             'cost' => 200,
             'start_date' => new Carbon('now +2 weeks'),
             'active' => true,
+            'project_id' => $project->id,
         ]);
-
-        $this->assertNull($patchDay->project);
-        $this->assertNotInstanceOf(Project::class, $patchDay->project);
-
-        $patchDay->project()->associate($project);
-        $patchDay->save();
 
         $this->assertNotNull($patchDay->project);
         $this->assertInstanceOf(Project::class, $patchDay->project);

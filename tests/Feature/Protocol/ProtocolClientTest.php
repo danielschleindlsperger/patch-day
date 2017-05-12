@@ -34,10 +34,9 @@ class ProtocolClientTest extends TestCase
 
         $this->company = factory(Company::class)->create();
         $this->project = factory(Project::class)->create();
-        $this->patchDay = factory(PatchDay::class)->create();
-
-        $this->patchDay->project()->associate($this->project);
-        $this->patchDay->save();
+        $this->patchDay = factory(PatchDay::class)->create([
+            'project_id' => $this->project->id,
+        ]);
 
         $this->project->company()->associate($this->company);
         $this->project->save();

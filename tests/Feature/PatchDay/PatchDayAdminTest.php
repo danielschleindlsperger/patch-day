@@ -29,9 +29,8 @@ class PatchDayAdminTest extends TestCase
             'cost' => 200,
             'start_date' => new Carbon('now +2 weeks'),
             'active' => true,
+            'project_id' => $this->project->id,
         ]);
-        $this->patchDay->project()->associate($this->project);
-        $this->patchDay->save();
 
         // Auth
         $admin = factory(User::class)->create([
@@ -85,9 +84,8 @@ class PatchDayAdminTest extends TestCase
             'cost' => 200,
             'start_date' => new Carbon('now +2 weeks'),
             'active' => true,
+            'project_id' => $this->project->id,
         ]);
-        $patchDay->project()->associate($this->project);
-        $patchDay->save();
 
         $this->assertNotNull($patchDay);
         $this->assertInstanceOf(PatchDay::class, $patchDay);

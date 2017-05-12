@@ -154,9 +154,10 @@ class ProjectAdminTest extends TestCase
             ]);
 
         // associated patch-day
-        $patchDay = factory(PatchDay::class)->create(['cost' => 300]);
-        $patchDay->project()->associate($project);
-        $patchDay->save();
+        $patchDay = factory(PatchDay::class)->create([
+            'cost' => 300,
+            'project_id' => $project->id,
+        ]);
 
         $response = $this->json('GET', '/projects/' . $project->id);
         $response

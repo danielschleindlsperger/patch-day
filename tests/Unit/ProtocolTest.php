@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\PatchDay;
+use App\Project;
 use App\Protocol;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -13,10 +14,21 @@ class ProtocolTest extends TestCase
     use DatabaseTransactions;
     use DatabaseMigrations;
 
+    protected $project;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->project = factory(Project::class)->create();
+    }
+
     /** @test */
     public function a_protocol_belongs_to_a_patch_day()
     {
-        $patchDay = factory(PatchDay::class)->create();
+        $patchDay = factory(PatchDay::class)->create([
+            'project_id' => $this->project->id,
+        ]);
 
         $protocol = factory(Protocol::class)->create();
 
@@ -34,13 +46,12 @@ class ProtocolTest extends TestCase
     /** @test */
     public function it_has_the_correctly_enumerated_number_inside_a_patch_day()
     {
-        $patchDay = factory(PatchDay::class)->create();
-        $protocols = factory(Protocol::class, 5)->create([
-            'patch_day_id' => $patchDay->id,
+        $patchDay = factory(PatchDay::class)->create([
+            'project_id' => $this->project->id,
         ]);
 
-        $protocol = $protocols[4];
+        $protocol = $patchDay->protocols()->get()->last();
         $this->assertNotNull($protocol->protocol_number);
-        $this->assertEquals($protocol->protocol_number, 5);
+        $this->assertEquals($protocol->protocol_number, 2);
     }
 }
