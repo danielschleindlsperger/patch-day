@@ -61,8 +61,9 @@ class GenerateProtocolsService
     {
         $unfinishedProtocols =
             $this->protocols->filter(function ($protocol, $key) {
-                $inFuture = Carbon::parse($protocol->due_date)->gt(Carbon::now());
-                return $inFuture && !$protocol->done;
+//                $inFuture = Carbon::parse($protocol->due_date)->gt(Carbon::now());
+//                return $inFuture && !$protocol->done;
+                return !$protocol->done;
             });
         $count = $unfinishedProtocols->count();
         return $margin - $count;
