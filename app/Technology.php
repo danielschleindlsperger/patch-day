@@ -12,4 +12,14 @@ class Technology extends Model
     protected $fillable = [
         'name', 'version',
     ];
+
+    /**
+     * get all patch days this exact technology is used in.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function patchDays()
+    {
+        return $this->belongsToMany(PatchDay::class);
+    }
 }

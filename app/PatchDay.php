@@ -38,4 +38,14 @@ class PatchDay extends Model
     {
         return $this->hasMany(Protocol::class);
     }
+
+    /**
+     * The patch day's technologies
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function technologies()
+    {
+        return $this->belongsToMany(Technology::class);
+    }
 }
