@@ -19,6 +19,8 @@ class CreatePatchDayTechnologyTable extends Migration
 
             $table->foreign('patch_day_id')->references('id')->on('patch_days');
             $table->foreign('technology_id')->references('id')->on('technologies');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

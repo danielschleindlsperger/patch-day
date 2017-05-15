@@ -30,7 +30,9 @@ class UpdatePatchDay extends FormRequest
             'cost' => 'numeric',
             'active' => 'boolean',
             'start_date' => 'date',
-            'project_id' => 'numeric',
+            'project_id' => 'exists:projects,id',
+            'technologies' => 'filled',
+            'technologies.*' => 'numeric|exists:technologies,id',
         ];
     }
 }
