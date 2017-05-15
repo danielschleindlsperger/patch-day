@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ProjectAdminTest extends TestCase
+class ProjectTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
@@ -34,7 +34,7 @@ class ProjectAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_project_overview()
+    public function can_view_project_overview()
     {
         $projects = factory(Project::class, 2)->create();
 
@@ -51,7 +51,7 @@ class ProjectAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_create_project_and_associated_patch_day()
+    public function can_create_project_and_associated_patch_day()
     {
         $response = $this->json('POST', '/projects', [
             'name' => 'Example Project',
@@ -80,7 +80,7 @@ class ProjectAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_cannot_create_project_without_providing_a_name()
+    public function cannot_create_project_without_providing_a_name()
     {
         $response = $this->json('POST', '/projects', [
             '' => ''
@@ -94,7 +94,7 @@ class ProjectAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_upate_a_project_and_associated_patch_day()
+    public function can_upate_a_project_and_associated_patch_day()
     {
         $project = factory(Project::class)->create([
             'name' => 'Test Project',
@@ -139,7 +139,7 @@ class ProjectAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_view_project_with_patch_day_and_protocols()
+    public function can_view_project_with_patch_day_and_protocols()
     {
         $project = factory(Project::class)->create([
             'name' => 'Test Project',
@@ -198,7 +198,7 @@ class ProjectAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_delete_a_project()
+    public function can_delete_a_project()
     {
         $project = factory(Project::class)->create([
             'name' => 'Test Project',
@@ -218,39 +218,5 @@ class ProjectAdminTest extends TestCase
 
         $response = $this->json('GET', '/projects/' . $project->id);
         $response->assertStatus(404);
-    }
-
-    /**
-     * deprecated, protocols now sent with project
-     */
-    public function admin_can_see_projects_protocols()
-    {
-        // create project/patch-day and associate
-        $project = factory(Project::class)->create();
-        $patchDay = factory(PatchDay::class)->create(['cost' => 300]);
-        $patchDay->project()->associate($project);
-        $patchDay->save();
-
-        // create protocols and associate
-        $protocol = factory(Protocol::class)->create();
-        $protocol->patchDay()->associate($patchDay);
-        $protocol->save();
-        $protocol2 = factory(Protocol::class)->create();
-        $protocol2->patchDay()->associate($patchDay);
-        $protocol2->save();
-
-        $response = $this->json('GET', '/projects/' . $project->id . '/protocols');
-        $response
-            ->assertStatus(200)
-            ->assertJsonStructure(
-                [
-                    [
-                        'id', 'comment', 'done', 'due_date'
-                    ],
-                    [
-                        'id', 'comment', 'done', 'due_date'
-                    ]
-                ]
-            );
     }
 }

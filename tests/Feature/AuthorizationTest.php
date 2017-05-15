@@ -52,7 +52,7 @@ class AuthorizationTest extends TestCase
     }
 
     /** @test */
-    public function clients_cannot_access_forbidden_company_routes()
+    public function client_cannot_access_forbidden_company_routes()
     {
 
         // CANNOT CREATE COMPANY
@@ -98,5 +98,58 @@ class AuthorizationTest extends TestCase
 
         $response = $this->json('GET', '/companies/' . $company->id);
         $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function client_cannot_access_forbidden_project_routes()
+    {
+
+        // CANNOT ACCESS PROJECTS INDEX
+        $response = $this->json('GET', '/projects');
+        $response->assertStatus(403);
+
+
+        // CANNOT CREATE PROJECT
+        $response = $this->json('POST', '/projects', [
+            'name' => 'Example Project'
+        ]);
+        $response->assertStatus(403);
+
+
+        // CANNOT UPDATE PROJECT
+        $response = $this->json('PUT', '/projects/' . $this->project->id, [
+            'name' => 'Updated Project'
+        ])->assertStatus(403);
+        $project = Project::find($this->project->id);
+        $this->assertNotEquals('Updated Project', $project->name);
+
+
+        // CANNOT DELETE PROJECT
+        $response = $this->json('DELETE', '/projects/' . $this->project->id);
+        $response->assertStatus(403);
+        $project = Project::find($this->project->id);
+        $this->assertNotNull($project);
+        $this->assertInstanceOf(Project::class, $project);
+        $this->assertEquals('Fake Project', $project->name);
+    }
+
+    /** @test */
+    public function client_can_access_their_companies_projects()
+    {
+        // project doesn't belong to users company, so this should fail
+        $response = $this->json('GET', '/projects/' . $this->project->id);
+        $response->assertStatus(403);
+
+        $this->client->company()->associate($this->company);
+        $this->client->save();
+
+        $response = $this->json('GET', '/projects/' . $this->project->id);
+        $response->assertStatus(200)
+            ->assertJson([
+                'name' => $this->project->name,
+            ]);
+
+        $this->client->company()->dissociate();
+        $this->client->save();
     }
 }
