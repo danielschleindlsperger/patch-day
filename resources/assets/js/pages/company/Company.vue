@@ -23,7 +23,7 @@
             <div class="projects">
                 <h3 class="text-xs-center">Projects</h3>
                 <v-list>
-                    <v-list-item v-for="item in projects"
+                    <v-list-item v-for="item in company.projects"
                                  :key="item.id">
                         <v-list-tile avatar router
                                      :href="'/projects/' + item.id">
@@ -98,16 +98,6 @@
           if (error.response.status === 404) {
             this.$router.push({name: 'not-found'})
           }
-        })
-
-      this.$http.get(`/companies/${companyId}/projects`)
-        .then(response => {
-          this.projects = response.data
-          console.log(response.data)
-        })
-        .catch(error => {
-          console.log(error.response.data)
-          eventBus.$emit('info.snackbar', error.response.data.error)
         })
     }
   }

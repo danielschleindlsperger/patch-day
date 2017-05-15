@@ -32,7 +32,7 @@ class PatchDayController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  PatchDay $patchDay
      * @return \Illuminate\Http\Response
      */
     public function show(PatchDay $patchDay)
@@ -44,8 +44,8 @@ class PatchDayController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  UpdatePatchDay $request
+     * @param  PatchDay $patchDay
      * @return \Illuminate\Http\Response
      */
     public function update(UpdatePatchDay $request, PatchDay $patchDay)
@@ -62,7 +62,7 @@ class PatchDayController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  PatchDay $patchDay
      * @return \Illuminate\Http\Response
      */
     public function destroy(PatchDay $patchDay)
@@ -71,24 +71,5 @@ class PatchDayController extends Controller
         $patchDay->delete();
 
         return ['success' => true];
-    }
-
-    /**
-     * @param $patchDayId
-     * @return mixed
-     *
-     * show the PatchDay's protocols
-     */
-    public function showPatchDaysProtocols($patchDayId)
-    {
-        $patchDay = PatchDay::find($patchDayId);
-
-        if ($patchDay) {
-            $this->authorize('view', $patchDay);
-            $protocols = $patchDay->protocols;
-            return $protocols;
-        } else {
-            abort(404, 'Specified PatchDay not found.');
-        }
     }
 }

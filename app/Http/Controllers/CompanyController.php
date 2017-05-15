@@ -59,26 +59,8 @@ class CompanyController extends Controller
     public function show(Company $company)
     {
         $this->authorize('view', $company);
+        $company->load('projects', 'projects.patchDay');
         return $company;
-    }
-
-    /**
-     * @param $companyId
-     * @return mixed
-     *
-     * return all Projects for the specified company
-     */
-    public function showCompanysProjects($companyId)
-    {
-        $company = Company::find($companyId);
-
-        if ($company) {
-            $this->authorize('view', $company);
-            $projects = $company->projects;
-            return $projects;
-        } else {
-            abort(404, 'Specified company not found');
-        }
     }
 
     /**

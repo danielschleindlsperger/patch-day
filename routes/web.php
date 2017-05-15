@@ -15,7 +15,6 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::resource('companies', 'CompanyController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
-    Route::get('companies/{companyId}/projects', 'CompanyController@showCompanysProjects');
 
     // Project resource
     Route::resource('projects', 'ProjectController', [
@@ -24,7 +23,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 
     // PatchDay resource
     Route::resource('patch-days', 'PatchDayController', [
-        'only' => ['index', 'show', 'update', 'destroy']
+        'only' => ['index', 'show','destroy']
     ]);
 
     // Protocol resource
@@ -34,6 +33,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     ]);
 
     // User resource
+    Route::get('users/me', 'UserController@showMe');
     Route::resource('users', 'UserController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
