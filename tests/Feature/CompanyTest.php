@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests\Feature\Company;
+namespace Tests\Feature;
 
+use App\PatchDay;
 use App\User;
 use App\Company;
 use App\Project;
@@ -10,7 +11,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class CompanyAdminTest extends TestCase
+class CompanyTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
@@ -75,21 +76,53 @@ class CompanyAdminTest extends TestCase
     /** @test */
     public function can_see_a_companies_projects()
     {
-        $company = factory(Company::class)->create();
-        $project = factory(Project::class)->create(['name' => 'Fake Project']);
-        $project2 = factory(Project::class)->create(['name' => 'Fake Project 2']);
+        $company = factory(Company::class)->create([
+            'name' => 'Fake Company',
+        ]);
+        $project = factory(Project::class)->create([
+            'name' => 'Fake Project',
+            'company_id' => $company->id,
+        ]);
+        $patch_day = factory(PatchDay::class)->create([
+            'project_id' => $project->id,
+        ]);
 
-        $project->company()->associate($company);
-        $project2->company()->associate($company);
+        $project2 = factory(Project::class)->create([
+            'name' => 'Fake Project 2',
+            'company_id' => $company->id,
+        ]);
+        $patch_day2 = factory(PatchDay::class)->create([
+            'project_id' => $project2->id,
+        ]);
 
-        $project->save();
-        $project2->save();
+        $response = $this->json('GET', '/companies/' . $company->id);
 
-        $response = $this->json('GET', '/companies/' . $company->id . '/projects');
         $response
             ->assertStatus(200)
-            ->assertSee('Fake Project')
-            ->assertSee('Fake Project 2');
+            ->assertJsonStructure([
+                'name',
+                'projects' => [
+                    [
+                        'name',
+                        'patch_day' => [
+                            'cost', 'start_date', 'interval', 'active',
+                        ],
+                    ],
+                ],
+            ])
+            ->assertJson([
+                'name' => 'Fake Company',
+                'projects' => [
+                    [
+                        'name' => 'Fake Project',
+                        'patch_day' => [],
+                    ],
+                    [
+                        'name' => 'Fake Project 2',
+                        'patch_day' => [],
+                    ],
+                ],
+            ]);
     }
 
     /** @test */
