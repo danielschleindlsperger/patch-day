@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\PatchDay;
 
+use App\PatchDay;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePatchDay extends FormRequest
@@ -13,7 +14,9 @@ class UpdatePatchDay extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $patch_day = PatchDay::find($this->route('patch_day'));
+
+        return $patch_day && $this->user()->can('update', $patch_day);
     }
 
     /**

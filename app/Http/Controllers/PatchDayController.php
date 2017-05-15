@@ -53,7 +53,11 @@ class PatchDayController extends Controller
     public function update(UpdatePatchDay $request, $id)
     {
         $patchDay = PatchDay::find($id);
-        $this->authorize('update', $patchDay);
+
+        if ($request->technologies) {
+            $patchDay->technologies()->sync($request->technologies);
+        }
+
         $patchDay->update($request->all());
 
         return ['updated' => true];

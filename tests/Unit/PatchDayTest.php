@@ -50,7 +50,7 @@ class PatchDayTest extends TestCase
         $backendTechnology = Technology::create([
             'name' => 'php',
             'version' => '7.0.30',
-        ]) ;
+        ]);
 
         $frontendTechnology = Technology::create([
             'name' => 'jQuery',
@@ -59,7 +59,7 @@ class PatchDayTest extends TestCase
 
         // has no technologies
         $this->assertNotInstanceOf(Technology::class,
-        $patchDay->technologies()->first());
+            $patchDay->technologies()->first());
 
         $patchDay->technologies()->attach($backendTechnology);
         $patchDay->technologies()->attach($frontendTechnology);
