@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Company;
 use App\PatchDay;
 use App\Project;
 use App\Technology;
@@ -17,6 +18,7 @@ class TechnologyTest extends TestCase
     use DatabaseMigrations;
     use DatabaseTransactions;
 
+    protected $company;
     protected $project;
     protected $patchDay;
 
@@ -24,7 +26,10 @@ class TechnologyTest extends TestCase
     {
         parent::setUp();
 
-        $this->project = factory(Project::class)->create();
+        $this->company = factory(Company::class)->create();
+        $this->project = factory(Project::class)->create([
+            'company_id' => $this->company->id,
+        ]);
 
         // Auth
         $admin = factory(User::class)->create([
@@ -33,15 +38,35 @@ class TechnologyTest extends TestCase
         $this->actingAs($admin);
     }
 
-
+    /** @test */
     public function admin_can_create_project_with_default_technologies()
     {
+        $latestPhp = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.3.3',
+        ]);
+
+        $latestLaravel = Technology::create([
+            'name' => 'Laravel',
+            'version' => '5.4.23',
+        ]);
+
+        $latestVue = Technology::create([
+            'name' => 'php',
+            'version' => '7.0.30',
+        ]);
+
         $response = $this->json('POST', '/projects', [
             'name' => 'Example Project',
             'company_id' => $this->company->id,
             'patch_day' => [
                 'cost' => 15000,
                 'active' => false,
+                'technologies' => [
+                    $latestPhp->id,
+                    $latestLaravel->id,
+                    $latestVue->id,
+                ]
             ]
         ]);
 
@@ -51,15 +76,14 @@ class TechnologyTest extends TestCase
                 'created' => true
             ]);
 
-        $project = Project::all()->last();
         $patchDay = PatchDay::all()->last();
+        $technologies = $patchDay->technologies()->get();
+        $updatedLaravel = $technologies->where('name', 'Laravel')->first();
 
-        $this->assertInstanceOf(PatchDay::class, $patchDay);
-        $this->assertInstanceOf(PatchDay::class, $project->patchDay);
-        $this->assertEquals($patchDay->project_id, $project->id);
-        $this->assertEquals(15000, $patchDay->cost);
-        $this->assertFalse($patchDay->active);
-        $this->assertEmpty($patchDay->comment);
+        $this->assertContainsOnlyInstancesOf(Technology::class, $technologies);
+        $this->assertCount(3, $technologies);
+        $this->assertEquals('Laravel', $updatedLaravel->name);
+        $this->assertEquals('5.4.23', $updatedLaravel->version);
     }
 
     /** @test */

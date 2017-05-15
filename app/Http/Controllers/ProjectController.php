@@ -61,6 +61,11 @@ class ProjectController extends Controller
                 'project_id' => $project->id,
             ]);
             $patchDay = PatchDay::create($fields);
+
+            if ($request->input('patch_day.technologies')) {
+                $patchDay->technologies()->sync($request->input('patch_day.technologies'));
+            }
+
             return ['created' => true];
         }
     }

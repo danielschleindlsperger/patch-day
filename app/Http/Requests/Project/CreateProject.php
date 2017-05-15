@@ -30,6 +30,8 @@ class CreateProject extends FormRequest
             'patch_day.cost' => 'numeric',
             'patch_day.active' => 'boolean',
             'patch_day.start_date' => 'date',
+            'patch_day.technologies' => 'filled',
+            'patch_day.technologies.*' => 'numeric|exists:technologies,id',
         ];
     }
 }
