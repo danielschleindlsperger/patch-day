@@ -76,20 +76,20 @@ class ProjectController extends Controller
     {
         $project = Project::with('patchDay')->find($id);
 
-        if ($project) {
-            $project->update($request->except(['patch_day']));
+        $project->update($request->except(['patch_day']));
 
-            if ($request->patch_day) {
-                if ($project->patchDay) {
-                    $project->patchDay->update($request->patch_day);
-                } else {
-                    abort(404, 'Projects PatchDay not found.');
+        if ($request->input('patch_day')) {
+            if ($project->patchDay) {
+                if ($request->input('patch_day.technologies')) {
+                    $project->patchDay->technologies()->sync
+                    ($request->input('patch_day.technologies'));
                 }
+                $project->patchDay->update($request->patch_day);
+            } else {
+                abort(422, 'Projects PatchDay not found.');
             }
-            return ['success' => true];
-        } else {
-            abort(404, 'Project not found.');
         }
+        return ['success' => true];
     }
 
     /**

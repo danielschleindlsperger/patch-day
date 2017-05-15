@@ -54,30 +54,6 @@ class PatchDayAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_edit_a_patchday()
-    {
-        // response with invalid data
-        $response = $this->json('PUT', 'patch-days/' . $this->patchDay->id, [
-            'cost' => false,
-        ]);
-        $response
-            ->assertStatus(422);
-
-        // response with valid data
-        $response = $this->json('PUT', 'patch-days/' . $this->patchDay->id, [
-            'cost' => 500,
-        ]);
-        $response
-            ->assertStatus(200)
-            ->assertJsonFragment([
-                'updated' => true,
-            ]);
-        $patchDay = PatchDay::find($this->patchDay->id);
-
-        $this->assertEquals(500, $patchDay->cost);
-    }
-
-    /** @test */
     public function admin_can_delete_a_patchday()
     {
         $patchDay = factory(PatchDay::class)->create([

@@ -25,18 +25,41 @@ class TechnologyTest extends TestCase
         parent::setUp();
 
         $this->project = factory(Project::class)->create();
-        $this->patchDay = factory(PatchDay::class)->create([
-            'cost' => 200,
-            'start_date' => new Carbon('now +2 weeks'),
-            'active' => true,
-            'project_id' => $this->project->id,
-        ]);
 
         // Auth
         $admin = factory(User::class)->create([
             'role' => 'admin',
         ]);
         $this->actingAs($admin);
+    }
+
+
+    public function admin_can_create_project_with_default_technologies()
+    {
+        $response = $this->json('POST', '/projects', [
+            'name' => 'Example Project',
+            'company_id' => $this->company->id,
+            'patch_day' => [
+                'cost' => 15000,
+                'active' => false,
+            ]
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'created' => true
+            ]);
+
+        $project = Project::all()->last();
+        $patchDay = PatchDay::all()->last();
+
+        $this->assertInstanceOf(PatchDay::class, $patchDay);
+        $this->assertInstanceOf(PatchDay::class, $project->patchDay);
+        $this->assertEquals($patchDay->project_id, $project->id);
+        $this->assertEquals(15000, $patchDay->cost);
+        $this->assertFalse($patchDay->active);
+        $this->assertEmpty($patchDay->comment);
     }
 
     /** @test */
@@ -62,17 +85,19 @@ class TechnologyTest extends TestCase
             'version' => '7.0.30',
         ]);
 
-        $response = $this->json('PUT', '/patch-days/' . $patchDay->id, [
-            'technologies' => [
-                $latestPhp->id,
-                $latestVue->id,
+        $response = $this->json('PUT', '/projects/' . $this->project->id, [
+            'patch_day' => [
+                'technologies' => [
+                    $latestPhp->id,
+                    $latestVue->id,
+                ],
             ],
         ]);
 
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
-                'updated' => true,
+                'success' => true,
             ]);
 
         $vue = $patchDay->technologies()->first();

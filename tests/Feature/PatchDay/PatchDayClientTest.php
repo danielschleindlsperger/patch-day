@@ -66,16 +66,6 @@ class PatchDayClientTest extends TestCase
     }
 
     /** @test */
-    public function client_cannot_edit_a_patchday()
-    {
-        // response with valid data
-        $response = $this->json('PUT', 'patch-days/'.$this->patchDay->id, [
-            'cost' => 500,
-        ]);
-        $response->assertStatus(403);
-    }
-
-    /** @test */
     public function client_cannot_delete_a_patchday()
     {
         $patchDay = factory(PatchDay::class)->create([
