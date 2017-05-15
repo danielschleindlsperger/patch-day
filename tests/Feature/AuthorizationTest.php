@@ -7,6 +7,7 @@ use App\Protocol;
 use App\User;
 use App\Company;
 use App\Project;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -151,5 +152,71 @@ class AuthorizationTest extends TestCase
 
         $this->client->company()->dissociate();
         $this->client->save();
+    }
+
+    /** @test */
+    public function client_cannot_access_forbidden_protocol_routes()
+    {
+
+        // CANNOT CREATE PROTOCOL
+        $countBefore = Protocol::all()->count();
+        $response = $this->json('POST', '/protocols', []);
+        $response->assertStatus(403);
+        $this->assertCount($countBefore, Protocol::all());
+
+
+        // CANNOT UPDATE PROTOCOL
+        $protocol = factory(Protocol::class)->create([
+            'patch_day_id' => $this->patch_day->id,
+            'comment' => 'Fake comment',
+            'done' => false,
+        ]);
+
+        // should still fail, even though protocol belongs to client's company
+        $this->client->company()->associate($this->company);
+
+        $this->json('PUT', '/protocols/' . $protocol->id, [
+            'comment' => 'Great patch day!',
+            'done' => true,
+        ])->assertStatus(403);
+
+        $updatedProtocol = Protocol::find($protocol->id);
+
+        $this->assertNotEquals('Great patch day!', $updatedProtocol->comment);
+        $this->assertFalse($updatedProtocol->done);
+        // cleanup
+        $this->client->company()->dissociate();
+
+
+        // CANNOT DELETE PROTOCOL
+        $countBefore = Protocol::all()->count();
+        $this->json('DELETE', 'protocols/' . $this->protocols->first()->id)
+            ->assertStatus(403);
+        $this->assertCount($countBefore, Protocol::all());
+    }
+
+    /** @test */
+    public function client_can_see_their_companys_projects_protocols()
+    {
+        $protocol = factory(Protocol::class)->create([
+            'comment' => 'It was good.',
+            'done' => true,
+            'due_date' => Carbon::now()->toDateTimeString(),
+            'patch_day_id' => $this->patch_day->id,
+        ]);
+
+        // company not associated with client, so should fail
+        $this->json('GET', '/protocols/' . $protocol->id)
+            ->assertStatus(403);
+
+        $this->client->company()->associate($this->company);
+
+        // associated, so should work
+        $this->json('GET', '/protocols/' . $protocol->id)
+            ->assertStatus(200)
+            ->assertJson([
+                'comment' => 'It was good.',
+                'done' => true,
+            ]);
     }
 }

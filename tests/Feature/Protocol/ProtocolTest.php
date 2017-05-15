@@ -7,13 +7,12 @@ use App\Project;
 use App\User;
 use App\Protocol;
 use Carbon\Carbon;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ProtocolAdminTest extends TestCase
+class ProtocolTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
@@ -30,7 +29,7 @@ class ProtocolAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_see_a_protocol()
+    public function can_see_a_protocol()
     {
         $protocol = factory(Protocol::class)->create([
             'comment' => 'It was good.',
@@ -54,7 +53,7 @@ class ProtocolAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_create_a_protocol()
+    public function can_create_a_protocol()
     {
         $response = $this->json('POST', '/protocols', [
             'done' => 'yes',
@@ -84,7 +83,7 @@ class ProtocolAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_edit_a_protocol()
+    public function can_edit_a_protocol()
     {
         $protocol = factory(Protocol::class)->create([
             'due_date' => Carbon::now()->toDateTimeString(),
@@ -112,7 +111,7 @@ class ProtocolAdminTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_see_upcoming_patch_days()
+    public function can_see_upcoming_patch_days()
     {
         $project = factory(Project::class)->create();
 
