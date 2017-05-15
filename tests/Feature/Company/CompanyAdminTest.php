@@ -61,9 +61,7 @@ class CompanyAdminTest extends TestCase
         $company = factory(Company::class)->create();
 
         $response = $this->json('GET', '/companies/9543');
-        $response
-            ->assertStatus(404)
-            ->assertSee('Specified company was not found.');
+        $response->assertStatus(404);
 
         $response = $this->json('GET', '/companies/' . $company->id);
         $response

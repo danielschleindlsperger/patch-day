@@ -6,6 +6,11 @@ use App\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @resource Companies
+ *
+ * CRUD operations for companies.
+ */
 class CompanyController extends Controller
 {
     /**
@@ -51,16 +56,10 @@ class CompanyController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Company $company)
     {
-        $company = Company::find($id);
-
-        if ($company) {
-            $this->authorize('view', $company);
-            return $company;
-        } else {
-            abort(404, 'Specified company was not found.');
-        }
+        $this->authorize('view', $company);
+        return $company;
     }
 
     /**
@@ -89,17 +88,11 @@ class CompanyController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Company $company)
     {
-        $company = Company::find($id);
-
-        if ($company) {
-            $this->authorize('update', $company);
-            $company->update($request->all());
-            return ['success' => true];
-        } else {
-            abort(404, 'Specified company not found');
-        }
+        $this->authorize('update', $company);
+        $company->update($request->all());
+        return ['success' => true];
     }
 
     /**
@@ -108,16 +101,10 @@ class CompanyController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Company $company)
     {
-        $company = Company::find($id);
-
-        if ($company) {
-            $this->authorize('delete', $company);
-            $company->delete();
-            return ['success' => true];
-        } else {
-            abort(404, 'Specified company not found.');
-        }
+        $this->authorize('delete', $company);
+        $company->delete();
+        return ['success' => true];
     }
 }

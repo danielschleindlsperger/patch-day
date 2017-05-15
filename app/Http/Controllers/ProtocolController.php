@@ -9,6 +9,12 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @resource Protocols
+ *
+ * Protocols are the recurring Events for PatchDays in which the Projects are
+ * updated.
+ */
 class ProtocolController extends Controller
 {
     /**
@@ -40,17 +46,11 @@ class ProtocolController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Protocol $protocol)
     {
-        $protocol = Protocol::with('patchDay', 'patchDay.project', 'patchDay.project.company')->find
-        ($id);
-
-        if ($protocol) {
-            $this->authorize('view', $protocol);
-            return $protocol;
-        } else {
-            abort(404, 'Specified protocol not found.');
-        }
+        $protocol->load(['patchDay', 'patchDay.project', 'patchDay.project.company']);
+        $this->authorize('view', $protocol);
+        return $protocol;
     }
 
     /**
@@ -82,14 +82,10 @@ class ProtocolController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProtocol $request, $id)
+    public function update(UpdateProtocol $request, Protocol $protocol)
     {
-        $protocol = Protocol::find($id);
-
         $this->authorize('update', $protocol);
-
         $protocol->update($request->all());
-
         return ['updated' => true];
     }
 
@@ -99,12 +95,10 @@ class ProtocolController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Protocol $protocol)
     {
-        $protocol = Protocol::find($id);
         $this->authorize('delete', $protocol);
         $protocol->delete();
-
         return ['success' => true];
     }
 }

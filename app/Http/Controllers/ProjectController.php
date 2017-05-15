@@ -9,6 +9,9 @@ use App\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @resource Projects
+ */
 class ProjectController extends Controller
 {
     /**
@@ -32,18 +35,11 @@ class ProjectController extends Controller
      *
      * Return specified project
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, Project $project)
     {
-        $project = Project::with([
-            'company', 'patchDay', 'patchDay.protocols'
-        ])->find($id);
-
-        if ($project) {
-            $this->authorize('view', $project);
-            return $project;
-        } else {
-            abort(404, 'Project not found.');
-        }
+        $project->load(['company', 'patchDay', 'patchDay.protocols']);
+        $this->authorize('view', $project);
+        return $project;
     }
 
     /**
@@ -77,9 +73,9 @@ class ProjectController extends Controller
      *
      * Update specified projects properties
      */
-    public function update(UpdateProject $request, $id)
+    public function update(UpdateProject $request, Project $project)
     {
-        $project = Project::with('patchDay')->find($id);
+        $project->load('patchDay');
 
         $project->update($request->except(['patch_day']));
 
@@ -104,9 +100,8 @@ class ProjectController extends Controller
      *
      * Delete specified project
      */
-    public function destroy($id)
+    public function destroy(Project $project)
     {
-        $project = Project::find($id);
         $this->authorize('delete', $project);
         $project->delete();
 

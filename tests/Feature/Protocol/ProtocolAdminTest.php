@@ -41,8 +41,7 @@ class ProtocolAdminTest extends TestCase
         // request to non existing id
         $response = $this->json('GET', '/protocols/9543');
         $response
-            ->assertStatus(404)
-            ->assertSee('Specified protocol not found.');
+            ->assertStatus(404);
 
         // request to actual id
         $response = $this->json('GET', '/protocols/' . $protocol->id);

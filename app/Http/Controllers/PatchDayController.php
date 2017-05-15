@@ -8,7 +8,11 @@ use App\PatchDay;
 use App\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\ApacheRequest;
 
+/**
+ * @resource PatchDays
+ */
 class PatchDayController extends Controller
 {
     /**
@@ -31,16 +35,10 @@ class PatchDayController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(PatchDay $patchDay)
     {
-        $patchDay = PatchDay::find($id);
-
-        if ($patchDay) {
-            $this->authorize('view', $patchDay);
-            return $patchDay;
-        } else {
-            abort(404, 'PatchDay not found.');
-        }
+        $this->authorize('view', $patchDay);
+        return $patchDay;
     }
 
     /**
@@ -50,10 +48,8 @@ class PatchDayController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePatchDay $request, $id)
+    public function update(UpdatePatchDay $request, PatchDay $patchDay)
     {
-        $patchDay = PatchDay::find($id);
-
         if ($request->technologies) {
             $patchDay->technologies()->sync($request->technologies);
         }
@@ -69,9 +65,8 @@ class PatchDayController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(PatchDay $patchDay)
     {
-        $patchDay = PatchDay::find($id);
         $this->authorize('delete', $patchDay);
         $patchDay->delete();
 
