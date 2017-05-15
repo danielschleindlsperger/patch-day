@@ -30,12 +30,11 @@ class ProtocolController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  CreateProtocol $request
      * @return \Illuminate\Http\Response
      */
     public function store(CreateProtocol $request)
     {
-        $this->authorize('create', Protocol::class);
         Protocol::create($request->all());
         return ['success' => true];
     }
@@ -43,7 +42,7 @@ class ProtocolController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  Protocol $protocol
      * @return \Illuminate\Http\Response
      */
     public function show(Protocol $protocol)
@@ -78,8 +77,8 @@ class ProtocolController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  UpdateProtocol $request
+     * @param  Protocol $protocol
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateProtocol $request, Protocol $protocol)
@@ -92,7 +91,7 @@ class ProtocolController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  Protocol $protocol
      * @return \Illuminate\Http\Response
      */
     public function destroy(Protocol $protocol)

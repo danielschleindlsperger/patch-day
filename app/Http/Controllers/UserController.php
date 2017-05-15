@@ -56,7 +56,9 @@ class UserController extends Controller
      */
     public function showMe(Request $request)
     {
-        return Auth::user();
+        $user = $request->user();
+        $user->load('company');
+        return $user;
     }
 
     /**

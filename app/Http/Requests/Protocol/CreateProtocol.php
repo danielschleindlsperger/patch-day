@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Protocol;
 
+use App\Protocol;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateProtocol extends FormRequest
@@ -13,7 +14,7 @@ class CreateProtocol extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user()->can('create', Protocol::class);
     }
 
     /**
