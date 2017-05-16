@@ -43,3 +43,11 @@ $factory->define(App\Protocol::class, function (Faker\Generator $faker) {
         'due_date' => (new Carbon('now +1 week'))->toDateTimeString()
     ];
 });
+
+$factory->define(App\Technology::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'version' => random_int(0, 9) . '.' . random_int(0, 9) . '.' . random_int
+            (0, 9),
+    ];
+});
