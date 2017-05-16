@@ -14,6 +14,7 @@ class PatchDaySeeder extends Seeder
     {
         $faker = Faker\Factory::create();
         $projects = \App\Project::all();
+        $technologies = \App\Technology::all();
 
         // disable event listeners to not trigger saved events on the
         // patch day model
@@ -30,6 +31,14 @@ class PatchDaySeeder extends Seeder
                 'active' => (bool)rand(0, 1),
                 'project_id' => $project->id
             ]);
+
+            // create default technologies
+            $tech_ids = [];
+            $technologies->shuffle()->unique('name')->splice(0,
+                random_int(2, 4))->each(function ($tech) use (&$tech_ids) {
+                array_push($tech_ids, $tech->id);
+            });
+            $patchDay->technologies()->attach($tech_ids);
 
             // create random amount of protocols (a.k.a. actual patch
             // days on specific dates) for patch-day
