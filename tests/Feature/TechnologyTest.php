@@ -236,6 +236,31 @@ class TechnologyTest extends TestCase
                     'version' => '2.2.1',
                 ],
             ]);
+    }
 
+    /** @test */
+    public function admin_can_delete_technology()
+    {
+        $technologies = factory(Technology::class, 50)->create();
+
+        $faultyTech = factory(Technology::class)->create([
+            'name' => 'Joomla',
+            'version' => '3.6.10',
+        ]);
+
+        $count = Technology::all()->count();
+
+        $this
+            ->json('DELETE', '/technologies/' . $faultyTech->id)
+            ->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+            ]);
+
+        $tech = Technology::find($faultyTech->id);
+
+        $this->assertNull($tech);
+        $this->assertNotInstanceOf(Technology::class, $tech);
+        $this->assertEquals($count - 1, Technology::all()->count());
     }
 }

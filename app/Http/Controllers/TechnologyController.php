@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class TechnologyController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of all technologies.
      *
      * @return \Illuminate\Http\Response
      */
@@ -23,7 +23,7 @@ class TechnologyController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Technology in storage.
      *
      * @param  CreateTechnology $request
      * @return \Illuminate\Http\Response
@@ -35,7 +35,7 @@ class TechnologyController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display Technology.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
@@ -46,7 +46,7 @@ class TechnologyController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Technology in storage.
      *
      * @param  UpdateTechnology $request
      * @param  Technology $technology
@@ -59,13 +59,16 @@ class TechnologyController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the Technology from storage.
      *
-     * @param  int $id
+     * @param  Technology $technology
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Technology $technology)
     {
-        //
+        $this->authorize('delete', $technology);
+        $technology->delete();
+
+        return ['success' => true];
     }
 }
