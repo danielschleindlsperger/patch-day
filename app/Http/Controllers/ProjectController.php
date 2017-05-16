@@ -30,14 +30,14 @@ class ProjectController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
+     * @param Project $project
      * @return mixed
      *
      * Return specified project
      */
     public function show(Request $request, Project $project)
     {
-        $project->load(['company', 'patchDay', 'patchDay.protocols']);
+        $project->load(['company', 'patchDay', 'patchDay.protocols', 'patchDay.technologies']);
         $this->authorize('view', $project);
         return $project;
     }
@@ -68,7 +68,7 @@ class ProjectController extends Controller
 
     /**
      * @param UpdateProject $request
-     * @param $id
+     * @param Project $project
      * @return array
      *
      * Update specified projects properties
@@ -94,8 +94,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param $id
+     * @param Project $project
      * @return array
      *
      * Delete specified project
