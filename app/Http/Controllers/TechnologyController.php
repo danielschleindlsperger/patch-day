@@ -22,6 +22,15 @@ class TechnologyController extends Controller
         return $techs;
     }
 
+    public function showVersionsForTech(Request $request, $name)
+    {
+        $versions = Technology::where('name', $name)
+            ->orderBy('version', 'DESC')
+            ->get();
+
+        return $versions;
+    }
+
     /**
      * Store a newly created Technology in storage.
      *
@@ -32,17 +41,6 @@ class TechnologyController extends Controller
     {
         Technology::create($request->all());
         return ['created' => true];
-    }
-
-    /**
-     * Display Technology.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**

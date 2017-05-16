@@ -263,4 +263,44 @@ class TechnologyTest extends TestCase
         $this->assertNotInstanceOf(Technology::class, $tech);
         $this->assertEquals($count - 1, Technology::all()->count());
     }
+
+    /** @test */
+    public function can_see_all_versions_for_a_tech()
+    {
+        $php = factory(Technology::class)->create([
+            'name' => 'php',
+            'version' => '7.0.0',
+        ]);
+        $vue = factory(Technology::class)->create([
+            'name' => 'Vue.js',
+            'version' => '2.1.6',
+        ]);
+        $vue2 = factory(Technology::class)->create([
+            'name' => 'Vue.js',
+            'version' => '2.2.4',
+        ]);
+        $vue3 = factory(Technology::class)->create([
+            'name' => 'Vue.js',
+            'version' => '0.1.19',
+        ]);
+
+        $this
+            ->json('GET', '/technologies/' . urlencode('Vue.js'))
+            ->assertStatus(200)
+            ->assertJson([
+                [
+                    'name' => 'Vue.js',
+                    'version' => '2.2.4',
+                ],
+                [
+                    'name' => 'Vue.js',
+                    'version' => '2.1.6',
+                ],
+                [
+                    'name' => 'Vue.js',
+                    'version' => '0.1.19',
+                ],
+            ])
+            ->assertDontSeeText('php');
+    }
 }

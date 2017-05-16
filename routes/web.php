@@ -39,7 +39,8 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     ]);
 
     // Technology resource
+    Route::get('technologies/{name}', 'TechnologyController@showVersionsForTech');
     Route::resource('technologies', 'TechnologyController', [
-        'only' => ['index', 'store', 'show', 'update', 'destroy']
+        'only' => ['index', 'store', 'update', 'destroy']
     ]);
 });
