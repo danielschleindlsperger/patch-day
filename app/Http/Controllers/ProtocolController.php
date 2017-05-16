@@ -83,7 +83,6 @@ class ProtocolController extends Controller
      */
     public function update(UpdateProtocol $request, Protocol $protocol)
     {
-        $this->authorize('update', $protocol);
         $protocol->update($request->all());
         return ['updated' => true];
     }
