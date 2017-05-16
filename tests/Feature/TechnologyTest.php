@@ -87,7 +87,7 @@ class TechnologyTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_update_technologies()
+    public function admin_can_update_a_projects_technologies()
     {
         $patchDay = factory(PatchDay::class)->create([
             'cost' => 200,

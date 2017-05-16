@@ -22,11 +22,7 @@ class TechnologyTest extends TestCase
         $this->expectException(MassAssignmentException::class);
         $this->expectException(QueryException::class);
         $technology = Technology::create();
-    }
 
-    /** @test */
-    public function a_technology_has_a_name_and_a_version_number()
-    {
         $technology = Technology::create([
             'name' => 'php',
             'version' => '7.0.30',
