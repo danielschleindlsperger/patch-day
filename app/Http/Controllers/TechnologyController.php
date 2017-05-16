@@ -16,8 +16,8 @@ class TechnologyController extends Controller
      */
     public function index()
     {
-        $techs = Technology::orderBy('name', 'DESC')
-            ->orderBy('version', 'DESC')
+        $techs = Technology::orderByRaw('LOWER(name) ASC')
+            ->orderByRAW('LOWER(version) DESC')
             ->get();
         return $techs;
     }
@@ -25,7 +25,7 @@ class TechnologyController extends Controller
     public function showVersionsForTech(Request $request, $name)
     {
         $versions = Technology::where('name', $name)
-            ->orderBy('version', 'DESC')
+            ->orderByRAW('LOWER(version) DESC')
             ->get();
 
         return $versions;
