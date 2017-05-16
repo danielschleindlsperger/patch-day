@@ -175,4 +175,67 @@ class TechnologyTest extends TestCase
         $this->assertEquals('Laravel', $tech->name);
         $this->assertEquals('5.4.30', $tech->version);
     }
+
+    /** @test */
+    public function can_see_all_technologies()
+    {
+        $vue = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.2.2',
+        ]);
+        $vue2 = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.2.1',
+        ]);
+        $vue3 = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.3.1',
+        ]);
+
+        $php = Technology::create([
+            'name' => 'php',
+            'version' => '7.1.4',
+        ]);
+        $php2 = Technology::create([
+            'name' => 'php',
+            'version' => '5.6.30',
+        ]);
+        $php3 = Technology::create([
+            'name' => 'php',
+            'version' => '7.0.10',
+        ]);
+
+
+        $this
+            ->json('GET', '/technologies')
+            ->assertStatus(200)
+            // assert order (first alphabetical names, then version numbers)
+            ->assertJson([
+                [
+                    'name' => 'php',
+                    'version' => '7.1.4',
+                ],
+                [
+                    'name' => 'php',
+                    'version' => '7.0.10',
+                ],
+                [
+                    'name' => 'php',
+                    'version' => '5.6.30',
+                ],
+                [
+                    'name' => 'Vue.js',
+                    'version' => '2.3.1',
+                ],
+                [
+                    'name' => 'Vue.js',
+                    'version' => '2.2.2',
+                ],
+                [
+                    'name' => 'Vue.js',
+                    'version' => '2.2.1',
+                ],
+            ]);
+
+    }
 }

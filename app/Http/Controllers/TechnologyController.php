@@ -16,7 +16,10 @@ class TechnologyController extends Controller
      */
     public function index()
     {
-        //
+        $techs = Technology::orderBy('name', 'DESC')
+            ->orderBy('version', 'DESC')
+            ->get();
+        return $techs;
     }
 
     /**
