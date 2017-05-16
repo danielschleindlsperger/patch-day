@@ -37,4 +37,9 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::resource('users', 'UserController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
+
+    // Technology resource
+    Route::resource('technologies', 'TechnologyController', [
+        'only' => ['index', 'store', 'show', 'update', 'destroy']
+    ]);
 });

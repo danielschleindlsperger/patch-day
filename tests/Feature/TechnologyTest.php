@@ -129,4 +129,50 @@ class TechnologyTest extends TestCase
         $this->assertEquals('Vue.js', $vue->name);
         $this->assertEquals('2.3.3', $vue->version);
     }
+
+    /** @test */
+    public function admin_can_create_new_technology()
+    {
+        $this
+            ->json('POST', '/technologies', [])
+            ->assertStatus(422)
+            ->assertJsonStructure([
+                'name',
+                'version'
+            ]);
+
+        $this
+            ->json('POST', '/technologies', [
+                'name' => 'Laravel',
+                'version' => '5.5.1',
+            ])
+            ->assertStatus(200)
+            ->assertJson(['created' => true]);
+
+        $tech = Technology::all()->last();
+        $this->assertInstanceOf(Technology::class, $tech);
+        $this->assertEquals('Laravel', $tech->name);
+        $this->assertEquals('5.5.1', $tech->version);
+    }
+
+    /** @test */
+    public function admin_can_update_technology()
+    {
+        $tech = Technology::create([
+            'name' => 'Laravel',
+            'version' => '5.5.1',
+        ]);
+
+        $this
+            ->json('PUT', '/technologies/' . $tech->id, [
+                'name' => 'Laravel',
+                'version' => '5.4.30',
+            ])
+            ->assertStatus(200)
+            ->assertJson(['updated' => true]);
+
+        $tech = Technology::find($tech->id);
+        $this->assertEquals('Laravel', $tech->name);
+        $this->assertEquals('5.4.30', $tech->version);
+    }
 }
