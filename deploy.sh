@@ -1,2 +1,2 @@
-#!/bin/sh
-echo "Current branch: $TRAVIS_BRANCH"
+#!/bin/bash
+echo "Testing deployment"
