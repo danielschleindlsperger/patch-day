@@ -14,7 +14,6 @@ class CompanyPolicy
      * Admins can do anything.
      *
      * @param $user
-     * @param $ability
      * @return bool
      */
     public function before($user)

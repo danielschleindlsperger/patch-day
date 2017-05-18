@@ -15,27 +15,32 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::resource('companies', 'CompanyController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
-    Route::get('companies/{companyId}/projects', 'CompanyController@showCompanysProjects');
 
     // Project resource
     Route::resource('projects', 'ProjectController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
-    Route::get('projects/{projectId}/patch-days', 'ProjectController@showProjectsPatchDays');
 
     // PatchDay resource
     Route::resource('patch-days', 'PatchDayController', [
-        'only' => ['index', 'store', 'show', 'update', 'destroy']
+        'only' => ['index', 'show','destroy']
     ]);
-    Route::get('patch-days/{patchDayId}/protocols', 'PatchDayController@showPatchDaysProtocols');
 
     // Protocol resource
+    Route::get('protocols/upcoming', 'ProtocolController@showUpcoming');
     Route::resource('protocols', 'ProtocolController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
 
     // User resource
+    Route::get('users/me', 'UserController@showMe');
     Route::resource('users', 'UserController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
+    ]);
+
+    // Technology resource
+    Route::get('technologies/{name}', 'TechnologyController@showVersionsForTech');
+    Route::resource('technologies', 'TechnologyController', [
+        'only' => ['index', 'store', 'update', 'destroy']
     ]);
 });

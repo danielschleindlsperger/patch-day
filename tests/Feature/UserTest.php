@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class UserAdminTest extends TestCase
+class UserTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
@@ -37,16 +37,18 @@ class UserAdminTest extends TestCase
     public function a_user_can_see_their_account_details()
     {
         $response = $this->json('GET', '/users/me');
-        $response->assertStatus(200);
-        $response->assertJsonFragment([
-            'id' => $this->admin->id,
-            'email' => $this->admin->email,
-            'name' => 'Fake Name',
-            'role' => 'admin',
-        ]);
-        $json = $response->json();
-        $this->assertEquals($this->company->name, $json['company']['name']);
-        $this->assertEquals($this->company->id, $json['company']['id']);
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                'id' => $this->admin->id,
+                'email' => $this->admin->email,
+                'name' => 'Fake Name',
+                'role' => 'admin',
+                'company' => [
+                    'id' => $this->company->id,
+                    'name' => $this->company->name,
+                ],
+            ]);
     }
 
     /** @test */

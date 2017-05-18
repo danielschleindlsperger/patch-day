@@ -36,7 +36,18 @@ $factory->define(App\Company::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Protocol::class, function (Faker\Generator $faker) {
+    $done = (bool)rand(0, 1);
     return [
+        'comment' => $done ? $faker->sentence(10) : null,
+        'done' => $done,
         'due_date' => (new Carbon('now +1 week'))->toDateTimeString()
+    ];
+});
+
+$factory->define(App\Technology::class, function (Faker\Generator $faker) {
+    return [
+        'name' => $faker->word,
+        'version' => random_int(0, 9) . '.' . random_int(0, 9) . '.' . random_int
+            (0, 9),
     ];
 });

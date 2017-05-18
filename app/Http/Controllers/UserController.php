@@ -39,46 +39,39 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  User $user
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        if ($id === 'me') {
-            try {
-                $user = Auth::user();
-            } catch (\Exception $e) {
-                abort(404, 'No authenticated user found.');
-            }
-        } else {
-            try {
-                $user = User::find($id);
-            } catch (\Exception $e) {
-                abort(404, 'User not found.');
-            }
-        }
-        if ($user->company) {
-            $user->company = $user->company->get();
-        }
+        $user->load('company');
+        return $user;
+    }
+
+    /**
+     * Returns the logged in user.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     */
+    public function showMe(Request $request)
+    {
+        $user = $request->user();
+        $user->load('company');
         return $user;
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  UpdateUser $request
+     * @param  User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUser $request, $id)
+    public function update(UpdateUser $request, User $user)
     {
-        $user = User::find($id);
-        if ($user) {
-            $user->update($request->all());
-            return ['updated' => true];
-        } else {
-            abort(404);
-        }
+        $user->update($request->all());
+        return ['updated' => true];
     }
 
     /**

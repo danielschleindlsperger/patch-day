@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Project\CreateProject;
+use App\Http\Requests\Project\UpdateProject;
+use App\PatchDay;
 use App\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @resource Projects
+ */
 class ProjectController extends Controller
 {
     /**
@@ -23,98 +29,78 @@ class ProjectController extends Controller
     }
 
     /**
-     * @param $projectId
-     * @return mixed
-     *
-     * return all PatchDays for the specified Project
-     */
-    public function showProjectsPatchDays($projectId)
-    {
-        $project = Project::find($projectId);
-
-        if ($project) {
-            $this->authorize('view', $project);
-            $patchDays = $project->patchDays;
-            return $patchDays;
-        } else {
-            abort(404, 'Specified project not found');
-        }
-    }
-
-    /**
      * @param Request $request
-     * @param $id
+     * @param Project $project
      * @return mixed
      *
      * Return specified project
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, Project $project)
     {
-        $project = Project::find($id);
-
-        if ($project) {
-            $this->authorize('view', $project);
-            return $project;
-        } else {
-            abort(404, 'Project not found.');
-        }
+        $project->load(['company', 'patchDay', 'patchDay.protocols', 'patchDay.technologies']);
+        $this->authorize('view', $project);
+        return $project;
     }
 
     /**
-     * @param Request $request
+     * @param CreateProject $request
      * @return array
      *
      * Create new project
      */
-    public function store(Request $request)
+    public function store(CreateProject $request)
     {
-        $this->authorize('create', Project::class);
-
-        $this->validate($request, [
-            'name' => 'required',
-            'company_id' => 'required|exists:companies,id',
-        ]);
-
-        $project = Project::create([
-            'name' => $request->name,
-        ]);
+        $project = Project::create($request->except(['patch_day']));
 
         if ($project) {
+            $fields = array_merge($request->patch_day, [
+                'project_id' => $project->id,
+            ]);
+            $patchDay = PatchDay::create($fields);
+
+            if ($request->input('patch_day.technologies')) {
+                $patchDay->technologies()->sync($request->input('patch_day.technologies'));
+            }
+
             return ['created' => true];
         }
     }
 
     /**
-     * @param Request $request
-     * @param $id
+     * @param UpdateProject $request
+     * @param Project $project
      * @return array
      *
      * Update specified projects properties
      */
-    public function update(Request $request, $id)
+    public function update(UpdateProject $request, Project $project)
     {
-        $project = Project::find($id);
+        $project->load('patchDay');
 
-        if ($project) {
-            $this->authorize('update', $project);
-            $project->name = $request->name;
-            $project->save();
-            return ['success' => true];
-        } else {
-            abort(404, 'Project not found.');
+        $project->update($request->except(['patch_day']));
+
+        if ($request->input('patch_day')) {
+            if ($project->patchDay) {
+                if ($request->input('patch_day.technologies')) {
+                    $project->patchDay->technologies()->sync
+                    ($request->input('patch_day.technologies'));
+                }
+                $project->patchDay->update($request->patch_day);
+            } else {
+                abort(422, 'Projects PatchDay not found.');
+            }
         }
+        return ['success' => true];
     }
 
     /**
-     * @param Request $request
-     * @param $id
+     * @param Project $project
      * @return array
      *
      * Delete specified project
      */
-    public function destroy($id)
+    public function destroy(Project $project)
     {
-        $project = Project::find($id);
         $this->authorize('delete', $project);
         $project->delete();
 

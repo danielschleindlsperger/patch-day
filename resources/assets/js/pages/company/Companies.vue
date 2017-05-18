@@ -1,41 +1,37 @@
 <template>
     <div>
         <v-container>
-            <v-card>
-                <v-card-text>
-                    <div class="button-row">
-                        <v-btn primary dark
-                               @click.native="openCreateCompanyModal">
-                            <v-icon class="white--text text--darken-2">
-                                add_circle
-                            </v-icon>
-                        </v-btn>
-                    </div>
-                    <v-list>
-                        <v-list-item v-for="company in companies"
-                                     :key="company.id">
-                            <v-list-tile avatar router
-                                         :href="'/companies/' + company.id">
-                                <v-list-tile-avatar>
-                                    <v-icon>business</v-icon>
-                                </v-list-tile-avatar>
-                                <v-list-tile-content>
-                                    <v-list-tile-title>{{ company.name }}
-                                    </v-list-tile-title>
-                                </v-list-tile-content>
-                                <v-list-tile-action>
-                                    <v-btn icon ripple
-                                           @click.native="deleteItem($event, company)">
-                                        <v-icon class="grey--text">
-                                            delete
-                                        </v-icon>
-                                    </v-btn>
-                                </v-list-tile-action>
-                            </v-list-tile>
-                        </v-list-item>
-                    </v-list>
-                </v-card-text>
-            </v-card>
+            <div class="button-row">
+                <v-btn primary dark
+                       @click.native="openCreateCompanyModal">
+                    <v-icon class="white--text text--darken-2">
+                        add_circle
+                    </v-icon>
+                </v-btn>
+            </div>
+            <v-list>
+                <v-list-item v-for="company in companies"
+                             :key="company.id">
+                    <v-list-tile avatar router
+                                 :href="'/companies/' + company.id">
+                        <v-list-tile-avatar>
+                            <v-icon>business</v-icon>
+                        </v-list-tile-avatar>
+                        <v-list-tile-content>
+                            <v-list-tile-title>{{ company.name }}
+                            </v-list-tile-title>
+                        </v-list-tile-content>
+                        <v-list-tile-action>
+                            <v-btn icon ripple
+                                   @click.native="deleteItem($event, company)">
+                                <v-icon class="grey--text">
+                                    delete
+                                </v-icon>
+                            </v-btn>
+                        </v-list-tile-action>
+                    </v-list-tile>
+                </v-list-item>
+            </v-list>
         </v-container>
 
         <delete-company></delete-company>

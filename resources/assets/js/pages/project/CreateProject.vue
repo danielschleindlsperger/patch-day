@@ -19,6 +19,29 @@
                                 max-height="320"
                                 :rules="rules.company"
                         />
+                        <v-row>
+                            <v-col xs12 md6>
+                                <v-text-field
+                                        name="cost"
+                                        label="Price/PatchDay in Cents*"
+                                        v-model="project.patch_day.cost"
+                                        type="number"
+                                ></v-text-field>
+                            </v-col>
+                            <v-col xs12 md6>
+                                <v-switch primary
+                                          success
+                                          hide-details
+                                          label="Active*"
+                                          v-model="project.patch_day.active"/>
+                            </v-col>
+                        </v-row>
+                        <v-subheader>
+                            Every {{ project.patch_day.interval
+                            }} months.* (Between 1 and 12)
+                        </v-subheader>
+                        <v-slider v-model="project.patch_day.interval"
+                                  :min="1" :max="12" :step="1" light/>
                         <small>*indicates required field</small>
                     </v-container>
                 </v-card-text>
@@ -45,6 +68,11 @@
         project: {
           name: '',
           company: {},
+          patch_day: {
+            cost: 20000,
+            active: false,
+            interval: 2,
+          }
         },
         companies: [],
         rules: {
@@ -67,10 +95,9 @@
     },
     methods: {
       createProject() {
-        this.$http.post('/projects', {
-          name: this.project.name,
-          company_id: this.project.company.id,
-        })
+        this.project.company_id = this.project.company.id
+
+        this.$http.post('/projects', this.project)
           .then(response => {
             if (response.status === 200) {
               eventBus.$emit('project.created')

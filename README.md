@@ -1,4 +1,4 @@
-## PatchDay
+## PatchDay [![Build Status](https://travis-ci.com/danielschleindlsperger/patch-day.svg?token=VD8yfsWVJBPy7NewnTP6&branch=master)](https://travis-ci.com/danielschleindlsperger/patch-day)
 
 Platform for management of periodic updates of software projects.
 

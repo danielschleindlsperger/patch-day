@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\PatchDay;
+namespace App\Http\Requests\Technology;
 
+use App\Technology;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreatePatchDay extends FormRequest
+class UpdateTechnology extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +14,9 @@ class CreatePatchDay extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        $tech = Technology::find($this->route('technology'));
+
+        return $tech && $this->user()->can('update', $tech);
     }
 
     /**
@@ -24,10 +27,8 @@ class CreatePatchDay extends FormRequest
     public function rules()
     {
         return [
-            'cost' => 'numeric',
-            'active' => 'boolean',
-            'start_date' => 'required|date',
-            'project_id' => 'required|numeric',
+            'name' => 'string',
+            'version' => 'string',
         ];
     }
 }

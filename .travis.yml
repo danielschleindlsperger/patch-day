@@ -2,25 +2,17 @@ os:
   - linux
 language: php
 php:
-  - 7.0
+  - 7.1
 before_script:
   - chmod 777 -R storage
   - cp .env.travis .env
   - composer self-update
   - composer install --no-interaction
   - php artisan key:generate
-  - nvm install stable
-  - npm install npm@latest -g
-  - npm install
-  - npm run production
 script:
   - vendor/bin/phpunit
 deploy:
-  provider: script
-  skip_cleanup: true
-  script: rsync -r --delete-after --exclude-from=.rsync-exclude.txt $TRAVIS_BUILD_DIR travis@45.76.81.223:/var/www/patch-day
-  on:
-    branch: production
-branches:
-  only:
-    - production
+  - provider: script
+    script: deploy.sh
+    on:
+      branch: production

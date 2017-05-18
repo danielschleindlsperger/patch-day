@@ -11,7 +11,11 @@ class Project extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'name',
+        'name', 'company_id',
+    ];
+
+    protected $casts = [
+        'company_id' => 'integer',
     ];
 
     /**
@@ -22,13 +26,13 @@ class Project extends Model
     protected $dates = ['deleted_at'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      *
-     * return the project's PatchDays
+     * return the projects PatchDay
      */
-    public function patchDays()
+    public function patchDay()
     {
-        return $this->hasMany(PatchDay::class);
+        return $this->hasOne(PatchDay::class);
     }
 
     /**

@@ -1,11 +1,23 @@
 <template>
-    <v-app id="sidebar-example-2" class="elevation-1" top-toolbar
-           left-fixed-sidebar sidebar-under-toolbar>
+    <v-app id="patch-day" class="elevation-1" top-toolbar left-fixed-sidebar
+           sidebar-under-toolbar>
         <v-toolbar class="primary">
-            <v-toolbar-side-icon @click.native.stop="sidebar.open =
-            !sidebar.open"/>
+            <v-toolbar-side-icon
+                    class="hidden-lg-and-up"
+                    @click.native.stop="sidebar.open = !sidebar.open"/>
             <v-toolbar-title class="hidden-sm-and-down">PatchDay
             </v-toolbar-title>
+            <v-toolbar-items class="hidden-md-and-down">
+                <v-toolbar-item ripple router href="/">
+                    Dashboard
+                </v-toolbar-item>
+                <v-toolbar-item ripple router href="/companies">
+                    Companies
+                </v-toolbar-item>
+                <v-toolbar-item ripple router href="/projects">
+                    Projects
+                </v-toolbar-item>
+            </v-toolbar-items>
         </v-toolbar>
         <main>
             <side-bar :sidebar="sidebar"></side-bar>
@@ -27,8 +39,7 @@
     data() {
       return {
         sidebar: {
-          open: true,
-          closeOnClick: false,
+          open: false,
         }
       }
     },
@@ -40,13 +51,10 @@
 </script>
 
 <style lang="scss">
-    .toolbar {
-        z-index: 10;
-        position: fixed;
-    }
 
     main {
-        padding-top: 64px;
+        position: relative;
+        padding-left: 0 !important;
     }
 
     .content {

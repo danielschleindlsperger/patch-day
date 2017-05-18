@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PatchDay\CreatePatchDay;
+use App\Http\Requests\PatchDay\CreateProject;
 use App\Http\Requests\PatchDay\UpdatePatchDay;
 use App\PatchDay;
 use App\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\ApacheRequest;
 
+/**
+ * @resource PatchDays
+ */
 class PatchDayController extends Controller
 {
     /**
@@ -26,57 +30,30 @@ class PatchDayController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(CreatePatchDay $request)
-    {
-        $this->authorize('create', PatchDay::class);
-        $project = Project::find($request->project_id);
-
-        if ($project) {
-
-            $patchDay = PatchDay::create($request->all());
-            $patchDay->project()->associate($project);
-            $patchDay->save();
-
-            return ['created' => true];
-        } else {
-            abort(404, 'Project not found');
-        }
-    }
-
-    /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  PatchDay $patchDay
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(PatchDay $patchDay)
     {
-        $patchDay = PatchDay::find($id);
-
-        if ($patchDay) {
-            $this->authorize('view', $patchDay);
-            return $patchDay;
-        } else {
-            abort(404, 'PatchDay not found.');
-        }
+        $this->authorize('view', $patchDay);
+        return $patchDay;
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  UpdatePatchDay $request
+     * @param  PatchDay $patchDay
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePatchDay $request, $id)
+    public function update(UpdatePatchDay $request, PatchDay $patchDay)
     {
-        $patchDay = PatchDay::find($id);
-        $this->authorize('update', $patchDay);
+        if ($request->technologies) {
+            $patchDay->technologies()->sync($request->technologies);
+        }
+
         $patchDay->update($request->all());
 
         return ['updated' => true];
@@ -85,34 +62,14 @@ class PatchDayController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  PatchDay $patchDay
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(PatchDay $patchDay)
     {
-        $patchDay = PatchDay::find($id);
         $this->authorize('delete', $patchDay);
         $patchDay->delete();
 
         return ['success' => true];
-    }
-
-    /**
-     * @param $patchDayId
-     * @return mixed
-     *
-     * show the PatchDay's protocols
-     */
-    public function showPatchDaysProtocols($patchDayId)
-    {
-        $patchDay = PatchDay::find($patchDayId);
-
-        if ($patchDay) {
-            $this->authorize('view', $patchDay);
-            $protocols = $patchDay->protocols;
-            return $protocols;
-        } else {
-            abort(404, 'Specified PatchDay not found.');
-        }
     }
 }

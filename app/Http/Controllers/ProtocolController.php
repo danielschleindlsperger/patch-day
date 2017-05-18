@@ -5,8 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Protocol\CreateProtocol;
 use App\Http\Requests\Protocol\UpdateProtocol;
 use App\Protocol;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
+/**
+ * @resource Protocols
+ *
+ * Protocols are the recurring Events for PatchDays in which the Projects are
+ * updated.
+ */
 class ProtocolController extends Controller
 {
     /**
@@ -22,12 +30,11 @@ class ProtocolController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  CreateProtocol $request
      * @return \Illuminate\Http\Response
      */
     public function store(CreateProtocol $request)
     {
-        $this->authorize('create', Protocol::class);
         Protocol::create($request->all());
         return ['success' => true];
     }
@@ -35,51 +42,61 @@ class ProtocolController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  Protocol $protocol
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Protocol $protocol)
     {
-        $protocol = Protocol::find($id);
+        $protocol->load(['patchDay', 'patchDay.project', 'patchDay.project.company']);
+        $this->authorize('view', $protocol);
+        return $protocol;
+    }
 
-        if ($protocol) {
-            $this->authorize('view', $protocol);
-            return $protocol;
+    /**
+     * Return upcoming patch-days for admins
+     *
+     * @param Request $request
+     * @return mixed
+     * @throws AuthenticationException
+     */
+    public function showUpcoming(Request $request)
+    {
+        $limit = $request->limit ?: 5;
+        if (Auth::user()->isAdmin()) {
+            $protocols = Protocol::with('patchDay', 'patchDay.project')
+                ->where('done', false)
+                ->orderBy('due_date', 'ASC')
+                ->take($limit)
+                ->get();
+            return $protocols;
         } else {
-            abort(404, 'Specified protocol not found.');
+            throw new AuthenticationException();
         }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  UpdateProtocol $request
+     * @param  Protocol $protocol
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProtocol $request, $id)
+    public function update(UpdateProtocol $request, Protocol $protocol)
     {
-        $protocol = Protocol::find($id);
-
-        $this->authorize('update', $protocol);
-
         $protocol->update($request->all());
-
         return ['updated' => true];
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  Protocol $protocol
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Protocol $protocol)
     {
-        $protocol = Protocol::find($id);
         $this->authorize('delete', $protocol);
         $protocol->delete();
-
         return ['success' => true];
     }
 }

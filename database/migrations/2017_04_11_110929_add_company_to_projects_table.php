@@ -26,7 +26,7 @@ class AddCompanyToProjectsTable extends Migration
      */
     public function down()
     {
-        Schema::table('project', function (Blueprint $table) {
+        Schema::table('projects', function (Blueprint $table) {
             $table->dropForeign('projects_company_id_foreign');
         });
     }
