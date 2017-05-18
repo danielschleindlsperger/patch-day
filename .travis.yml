@@ -11,8 +11,13 @@ before_script:
   - php artisan key:generate
 script:
   - vendor/bin/phpunit
+before_deploy:
+  - nvm install stable
+  - npm install npm@latest -g
+  - npm install
+  - npm run production
 deploy:
   - provider: script
-    script: deploy.sh
+    script: bash ./deploy.sh
     on:
       branch: production
