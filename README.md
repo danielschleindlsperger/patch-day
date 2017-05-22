@@ -28,6 +28,7 @@ production`
 ### Dependencies
 - Backend:
     - Laravel: https://laravel.com
+    - API Generator: https://github.com/mpociot/laravel-apidoc-generator
 - Frontend:
     - vuejs: https://vuejs.org/v2/guide/
     - vue-router: https://router.vuejs.org/en/

@@ -3,7 +3,9 @@
 namespace Tests\Feature\User;
 
 use App\Company;
+use App\Notifications\UserSignedUp;
 use App\User;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -120,5 +122,34 @@ class UserTest extends TestCase
         $this->assertNotNull($updatedUser->company);
         $this->assertInstanceOf(Company::class, $updatedUser->company);
         $this->assertEquals($company->id, $updatedUser->company->id);
+    }
+
+    /** @test */
+    public function a_slack_notification_is_sent_after_a_user_is_created()
+    {
+        $admins = User::where('role', 'admin')->get();
+        Notification::fake();
+        $test = $this;
+
+        $this->json('POST', '/users', [
+            'name' => 'Fake User',
+            'email' => 'hello@example.com',
+            'password' => 'password',
+        ])->assertStatus(200);
+
+        $user = User::latest()->first();
+
+        Notification::assertSentTo($admins, UserSignedUp::class,
+            function ($notification, $channels) use ($user, $test) {
+
+                $channels = collect($channels);
+
+                $test->assertEquals($notification->user->id, $user->id);
+                $test->assertInstanceOf(User::class, $notification->user);
+                $test->assertTrue($channels->contains('slack'));
+
+                return $notification->user->id === $user->id;
+            }
+        );
     }
 }
