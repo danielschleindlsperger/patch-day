@@ -5,7 +5,7 @@ php:
   - 7.1
 before_script:
   - chmod 777 -R storage
-  - cp .env.travis .env
+  - cp .env.testing .env
   - composer self-update
   - composer install --no-interaction
   - php artisan key:generate

@@ -137,18 +137,17 @@ class UserTest extends TestCase
             'password' => 'password',
         ])->assertStatus(200);
 
-        $user = User::latest()->first();
-
         Notification::assertSentTo($admins, UserSignedUp::class,
-            function ($notification, $channels) use ($user, $test) {
+            function ($notification, $channels) use ($test) {
 
                 $channels = collect($channels);
 
-                $test->assertEquals($notification->user->id, $user->id);
+                $test->assertEquals('hello@example.com',
+                    $notification->user->email);
                 $test->assertInstanceOf(User::class, $notification->user);
                 $test->assertTrue($channels->contains('slack'));
 
-                return $notification->user->id === $user->id;
+                return true;
             }
         );
     }
