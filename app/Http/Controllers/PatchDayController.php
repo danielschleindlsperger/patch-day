@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\ApacheRequest;
 
 /**
  * @resource PatchDays
+ * PatchDays are an extension of Projects with information about the
+ * recurring events that are then stored in the form of Protocols.
  */
 class PatchDayController extends Controller
 {

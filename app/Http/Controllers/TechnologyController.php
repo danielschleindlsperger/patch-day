@@ -7,6 +7,13 @@ use App\Http\Requests\Technology\UpdateTechnology;
 use App\Technology;
 use Illuminate\Http\Request;
 
+/**
+ * @resource Technologies
+ *
+ * Technologies are frameworks, languages and all other software used on the
+ * front- and backend. Examples are 'Laravel', 'php' or 'Apache'.
+ * Technologies also include versions.
+ */
 class TechnologyController extends Controller
 {
     /**

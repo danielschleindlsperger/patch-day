@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 /**
  * @resource Companies
- *
- * CRUD operations for companies.
  */
 class CompanyController extends Controller
 {

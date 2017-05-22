@@ -8,6 +8,13 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @resource Users
+ * In order to view any content a visitor needs to have a registered User
+ * account. Users with the role of 'client' can view some resources that
+ * belong to their company. Users with the role of 'admin' can view all
+ * resources and can edit them aswell.
+ */
 class UserController extends Controller
 {
     /**

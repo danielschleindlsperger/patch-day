@@ -3,9 +3,11 @@
 /public/storage
 /public/css
 /public/js
+/public/docs
 /public/mix-manifest.json
 /storage/*.key
 /vendor
+resources/*/vendor
 /.idea
 /.vagrant
 Homestead.json
