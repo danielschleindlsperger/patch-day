@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\PatchDay;
 use App\Project;
 use App\Protocol;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -19,7 +20,11 @@ class ProtocolUnitTest extends TestCase
     {
         parent::setUp();
 
-        $this->project = factory(Project::class)->create();
+        $this->project = Project::create([
+            'name' => 'Fake Project',
+            'base_price' => 30000,
+            'penalty' => 15000,
+        ]);
     }
 
     /** @test */
@@ -43,7 +48,6 @@ class ProtocolUnitTest extends TestCase
     /** @test */
     public function a_protocol_has_attributes()
     {
-        // TODO: price set on creation
         $protocol = Protocol::create([
             'project_id' => $this->project->id,
         ]);
@@ -88,5 +92,87 @@ class ProtocolUnitTest extends TestCase
 
         // cleanup
         $protocol->project()->dissociate();
+    }
+
+    /** @test */
+    public function a_protocol_has_its_patch_days_due_date()
+    {
+        $patch_day = PatchDay::create([
+            'date' => '2017-03-30',
+        ]);
+
+        $protocol = Protocol::create([
+            'project_id' => $this->project->id,
+            'patch_day_id' => $patch_day->id,
+        ]);
+
+        $this->assertEquals('2017-03-30', $protocol->date);
+    }
+
+    /** @test */
+    public function
+    a_protocol_has_a_price_that_increases_with_each_missed_patch_day()
+    {
+        $firstDate = '2017-01-30';
+
+        $patch_day_1 = PatchDay::create([
+            'date' => Carbon::parse($firstDate)->toDateString(),
+        ]);
+        $protocol_1 = Protocol::create([
+            'done' => true,
+            'comment' => 'easy update',
+            'patch_day_id' => $patch_day_1->id,
+            'project_id' => $this->project->id,
+        ]);
+        $this->assertEquals(30000, $protocol_1->price);
+
+        $patch_day_2 = PatchDay::create([
+            'date' => Carbon::parse($firstDate)->addMonths(1)
+                ->toDateString(),
+        ]);
+        $protocol_2 = Protocol::create([
+            'done' => false,
+            'comment' => 'blabla',
+            'patch_day_id' => $patch_day_2->id,
+            'project_id' => $this->project->id,
+        ]);
+        $this->assertEquals(30000, $protocol_2->price);
+
+        $patch_day_3 = PatchDay::create([
+            'date' => Carbon::parse($firstDate)->addMonths(2)
+                ->toDateString(),
+        ]);
+        $protocol_3 = Protocol::create([
+            'done' => false,
+            'comment' => 'blabla',
+            'patch_day_id' => $patch_day_3->id,
+            'project_id' => $this->project->id,
+        ]);
+        $this->assertEquals(45000, $protocol_3->price);
+
+        $patch_day_4 = PatchDay::create([
+            'date' => Carbon::parse($firstDate)->addMonths(3)
+                ->toDateString(),
+        ]);
+        $protocol_4 = Protocol::create([
+            'done' => true,
+            'comment' => 'blabla',
+            'patch_day_id' => $patch_day_4->id,
+            'project_id' => $this->project->id,
+        ]);
+        $this->assertEquals(60000, $protocol_4->price);
+
+        $patch_day_5 = PatchDay::create([
+            'date' => Carbon::parse($firstDate)->addMonths(4)
+                ->toDateString(),
+        ]);
+        $protocol_5 = Protocol::create([
+            'done' => true,
+            'comment' => 'blabla',
+            'patch_day_id' => $patch_day_5->id,
+            'project_id' => $this->project->id,
+        ]);
+        $this->assertEquals(30000, $protocol_5->price);
+
     }
 }

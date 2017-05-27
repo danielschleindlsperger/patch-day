@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\PatchDay;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
@@ -29,9 +28,9 @@ class Project extends Model
     protected $dates = ['deleted_at'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      *
-     * return the projects Protocols
+     * return the project's Protocols
      */
     public function protocols()
     {

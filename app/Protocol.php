@@ -11,16 +11,29 @@ class Protocol extends Model
         'done' => false,
     ];
 
-    // protocol number is set in event listener
+    protected $appends = [
+        'date',
+    ];
+
     protected $fillable = [
-        'comment', 'done', 'due_date', 'protocol_number', 'patch_day_id',
+        'comment', 'done', 'patch_day_id', 'project_id',
+    ];
+
+    protected $with = [
+        'project',
+        'patch_day',
+    ];
+
+    protected $hidden = [
+        'project',
+        'patch_day',
     ];
 
     protected $casts = [
         'done' => 'boolean',
-        'due_date' => 'date',
-        'protocol_number' => 'integer',
         'patch_day_id' => 'integer',
+        'project_id' => 'integer',
+        'date' => 'date',
     ];
 
     /**
@@ -41,5 +54,45 @@ class Protocol extends Model
     public function patch_day()
     {
         return $this->belongsTo(PatchDay::class);
+    }
+
+    /**
+     * Get the protocols date from it's patch-day
+     *
+     * @return string
+     */
+    public function getDateAttribute()
+    {
+        return $this->patch_day->date;
+    }
+
+    /**
+     * Determine the price for the protocol.
+     * Missed patch-days imply a penalty for each missed one.
+     *
+     * @return int price
+     */
+    public function getPriceAttribute()
+    {
+        $base_price = $this->project->base_price;
+        $penalty = $this->project->penalty;
+
+        // protocols that are older than this one
+        $protocols = $this->project->protocols()
+            ->orderBy('id', 'DESC')
+            ->where('id', '<', $this->id)
+            ->get();
+
+        $missedProtocols = 0;
+        $protocols->each(function ($protocol) use (&$missedProtocols) {
+            if ($protocol->done) {
+                return false;
+            }
+            $missedProtocols++;
+        });
+
+        $price = $base_price + ($penalty * $missedProtocols);
+
+        return $price;
     }
 }
