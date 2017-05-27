@@ -38,10 +38,10 @@ class Protocol extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      *
-     * return the protocol's patch day
+     * return the protocol's project
      */
-    public function patchDay()
+    public function project()
     {
-        return $this->belongsTo(PatchDay::class);
+        return $this->belongsTo(Project::class);
     }
 }

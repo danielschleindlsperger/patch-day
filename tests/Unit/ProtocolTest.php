@@ -24,23 +24,44 @@ class ProtocolTest extends TestCase
     }
 
     /** @test */
-    public function a_protocol_belongs_to_a_patch_day()
+    public function a_protocol_belongs_to_a_project()
     {
-        $patchDay = factory(PatchDay::class)->create([
+        $protocol = factory(Protocol::class)->create();
+
+        $this->assertNull($protocol->project);
+        $this->assertNotInstanceOf(Project::class, $protocol->project);
+
+        $protocol->project()->associate($this->project);
+        $protocol->save();
+
+        $this->assertNotNull($protocol->project);
+        $this->assertInstanceOf(Project::class, $protocol->project);
+
+        // cleanup
+        $protocol->project()->disassociate();
+    }
+
+    /** @test */
+    public function a_protocol_has_attributes()
+    {
+        // TODO: price set on creation
+        $protocol = Protocol::create([
             'project_id' => $this->project->id,
         ]);
 
-        $protocol = factory(Protocol::class)->create();
+        $this->assertNull($protocol->comment);
+        $this->assertNotNull($protocol->done);
+        $this->assertFalse($protocol->done);
 
-        $this->assertNull($protocol->patchDay);
-        $this->assertNotInstanceOf(PatchDay::class, $protocol->patchDay);
-        $this->assertInstanceOf(PatchDay::class, $patchDay);
+        $protocol->update([
+            'comment' => 'Test Comment',
+            'done' => true,
+        ]);
 
-        $protocol->patchDay()->associate($patchDay);
-        $protocol->save();
-
-        $this->assertNotNull($protocol->patchDay);
-        $this->assertInstanceOf(PatchDay::class, $protocol->patchDay);
+        $this->assertNotNull($protocol->comment);
+        $this->assertEquals('Test Comment', $protocol->comment);
+        $this->assertNotNull($protocol->done);
+        $this->assertTrue($protocol->done);
     }
 
     /** @test */

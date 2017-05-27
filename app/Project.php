@@ -31,11 +31,11 @@ class Project extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      *
-     * return the projects PatchDay
+     * return the projects Protocols
      */
-    public function patchDay()
+    public function project()
     {
-        return $this->hasOne(PatchDay::class);
+        return $this->hasMany(Protocol::class);
     }
 
     /**

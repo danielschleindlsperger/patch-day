@@ -17,10 +17,10 @@ class CreateProtocolsTable extends Migration
             $table->increments('id');
             $table->text('comment')->nullable();
             $table->boolean('done')->default(false);
-            $table->date('due_date');
-            $table->smallInteger('protocol_number')->unsigned()->nullable();
-            $table->integer('patch_day_id')->unsigned()->nullable();
-            $table->foreign('patch_day_id')->references('id')->on('patch_days');
+
+            $table->integer('project_id')->unsigned()->nullable();
+            $table->foreign('project_id')->references('id')->on('projects');
+
             $table->timestamps();
         });
     }
