@@ -17,6 +17,7 @@ class CreatePatchDaysTable extends Migration
             $table->increments('id');
             $table->date('date');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -9,25 +9,26 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class PatchDayTest extends TestCase
+class PatchDayUnitTest extends TestCase
 {
     use DatabaseMigrations;
-    use DatabaseTransactions;
 
     /** @test */
     public function a_patch_day_has_a_date()
     {
-        // date required
-        $this->expectException(MassAssignmentException::class);
-        $this->expectException(QueryException::class);
-        $patch_day = PatchDay::create();
+        try {
+            //date required
+            $patch_day = PatchDay::create();
+        } catch (\Exception $e) {
+            $this->assertInstanceOf(QueryException::class, $e);
+        }
 
         $patch_day = PatchDay::create([
-            'date' => '2017-30-03',
+            'date' => '2017-03-30',
         ]);
 
         $this->assertNotNull($patch_day);
         $this->assertInstanceOf(PatchDay::class, $patch_day);
-        $this->assertEquals('2017-30-03', $patch_day->date);
+        $this->assertEquals('2017-03-30', $patch_day->date);
     }
 }

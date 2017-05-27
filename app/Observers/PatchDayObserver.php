@@ -17,6 +17,6 @@ class PatchDayObserver
     public function saved(PatchDay $patchDay)
     {
         // update protocols for patch-day if necessary
-        (new GenerateProtocolsService($patchDay->id))->go();
+//        (new GenerateProtocolsService($patchDay->id))->go();
     }
 }

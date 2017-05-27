@@ -33,7 +33,7 @@ class Project extends Model
      *
      * return the projects Protocols
      */
-    public function project()
+    public function protocols()
     {
         return $this->hasMany(Protocol::class);
     }

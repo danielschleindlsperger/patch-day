@@ -13,11 +13,11 @@ class CreatePatchDayTechnologyTable extends Migration
      */
     public function up()
     {
-        Schema::create('patch_day_technology', function (Blueprint $table) {
-            $table->integer('patch_day_id')->unsigned();
+        Schema::create('projects_technologies', function (Blueprint $table) {
+            $table->integer('project_id')->unsigned();
             $table->integer('technology_id')->unsigned();
 
-            $table->foreign('patch_day_id')->references('id')->on('patch_days');
+            $table->foreign('project_id')->references('id')->on('projects');
             $table->foreign('technology_id')->references('id')->on('technologies');
 
             $table->softDeletes();
@@ -32,6 +32,6 @@ class CreatePatchDayTechnologyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('patch_day_technology');
+        Schema::dropIfExists('projects_technologies');
     }
 }
