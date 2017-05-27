@@ -5,17 +5,20 @@ namespace App;
 use App\PatchDay;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Project extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
-        'name', 'company_id',
+        'name', 'company_id', 'base_price', 'penalty',
     ];
 
     protected $casts = [
         'company_id' => 'integer',
+        'base_price' => 'integer',
+        'penalty' => 'integer',
     ];
 
     /**

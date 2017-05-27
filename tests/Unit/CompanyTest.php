@@ -33,18 +33,18 @@ class CompanyTest extends TestCase
         $user = factory(User::class)
             ->create([
                 'name' => 'Fake User 1',
-            ])
-            ->company()->associate($company)
-            ->save();
+                'company_id' => $company->id,
+            ]);
 
         $user2 = factory(User::class)
             ->create([
                 'name' => 'Fake User 2',
-            ])
-            ->company()->associate($company)
-            ->save();
+                'company_id' => $company->id,
+            ]);
 
-        $this->assertNotNull( $company->users->first());
+        $this->assertNotNull( $company->users()->get());
+        $this->assertInstanceOf(\Illuminate\Support\Collection::class,
+            $company->users()->get());
         $this->assertInstanceOf(User::class, $company->users->first());
         $this->assertEquals('Fake User 2', $company->users->get(1)->name);
     }
