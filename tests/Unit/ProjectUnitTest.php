@@ -6,6 +6,7 @@ use App\Company;
 use App\Project;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Database\QueryException;
+use Mockery\Exception;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -29,10 +30,14 @@ class ProjectUnitTest extends TestCase
     /** @test */
     public function project_has_a_name()
     {
-        // name required
-        $this->expectException(MassAssignmentException::class);
-        $this->expectException(QueryException::class);
-        $project = Project::create();
+        try {
+            // name required
+            $project = Project::create();
+        } catch (MassAssignmentException $e) {
+            $this->assertInstanceOf(MassAssignmentException::class, $e);
+        } catch (QueryException $e) {
+            $this->assertInstanceOf(QueryException::class, $e);
+        }
 
         $project = Project::create([
             'name' => 'Fake Project',

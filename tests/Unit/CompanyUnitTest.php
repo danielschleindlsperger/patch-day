@@ -4,11 +4,13 @@ namespace Tests\Unit;
 
 use App\Company;
 use App\User;
+use Illuminate\Database\Eloquent\MassAssignmentException;
+use Illuminate\Database\QueryException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class CompanyTest extends TestCase
+class CompanyUnitTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
@@ -16,6 +18,15 @@ class CompanyTest extends TestCase
     /** @test */
     public function a_company_has_a_name()
     {
+        try {
+            // name required
+            $company = Company::create();
+        } catch (MassAssignmentException $e) {
+            $this->assertInstanceOf(MassAssignmentException::class, $e);
+        } catch (QueryException $e) {
+            $this->assertInstanceOf(QueryException::class, $e);
+        }
+
         $company = factory(Company::class)->create([
             'name' => 'Example company',
         ]);
@@ -28,7 +39,9 @@ class CompanyTest extends TestCase
     /** @test */
     public function a_company_has_users()
     {
-        $company = factory(Company::class)->create();
+        $company = Company::create([
+            'name' => 'Fake Company',
+        ]);
 
         $user = factory(User::class)
             ->create([
@@ -42,7 +55,7 @@ class CompanyTest extends TestCase
                 'company_id' => $company->id,
             ]);
 
-        $this->assertNotNull( $company->users()->get());
+        $this->assertNotNull($company->users()->get());
         $this->assertInstanceOf(\Illuminate\Support\Collection::class,
             $company->users()->get());
         $this->assertInstanceOf(User::class, $company->users->first());
