@@ -24,18 +24,6 @@ class Protocol extends Model
     ];
 
     /**
-     * Get the date in actual date format
-     *
-     * @param string $value
-     *
-     * @return string
-     */
-    public function getDueDateAttribute($value)
-    {
-        return Carbon::parse($value)->toDateString();
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      *
      * return the protocol's project
@@ -43,5 +31,15 @@ class Protocol extends Model
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * get the protocol's patch-day
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function patch_day()
+    {
+        return $this->belongsTo(PatchDay::class);
     }
 }
