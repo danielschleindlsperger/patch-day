@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class Project extends Model
@@ -55,5 +56,20 @@ class Project extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * return only the latest version for each technology based on name.
+     *
+     * @return Collection technologies
+     */
+    public function getCurrentTechnologiesAttribute()
+    {
+        return $this->technologies()
+            ->orderBy('name', 'ASC')
+            ->orderBy('version', 'DESC')
+            ->orderBy('protocol_id', 'DESC')
+            ->groupBy('name')
+            ->get();
     }
 }

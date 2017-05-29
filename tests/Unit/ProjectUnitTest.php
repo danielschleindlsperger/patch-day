@@ -155,4 +155,73 @@ class ProjectUnitTest extends TestCase
         $this->assertNotNull($project->technologies[0]->date);
         $this->assertEquals('2017-03-30', $project->technologies[0]->date);
     }
+
+    /** @test */
+    public function a_project_has_current_technologies()
+    {
+        $vue = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.4.0',
+        ]);
+
+        $vue_2 = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.4.12',
+        ]);
+
+        $laravel = Technology::create([
+            'name' => 'Laravel',
+            'version' => '5.4.1',
+        ]);
+
+        $laravel_2 = Technology::create([
+            'name' => 'Laravel',
+            'version' => '5.4.14',
+        ]);
+
+        $project = Project::create([
+            'name' => 'Fake Project',
+            'company_id' => $this->company->id,
+        ]);
+
+        // base technologies
+        $project->technologies()->attach([$vue->id, $laravel->id]);
+
+        $current_techs = $project->current_technologies;
+        $this->assertCount(2, $current_techs);
+        $this->assertInstanceOf(Technology::class, $current_techs[0]);
+        $this->assertEquals('Laravel', $current_techs[0]->name);
+        $this->assertEquals('5.4.1', $current_techs[0]->version);
+
+        $this->assertInstanceOf(Technology::class, $current_techs[1]);
+        $this->assertEquals('Vue.js', $current_techs[1]->name);
+        $this->assertEquals('2.4.0', $current_techs[1]->version);
+
+        // technologies get updated on patch-day
+        $patch_day = PatchDay::create([
+            'date' => '2017-03-30',
+        ]);
+
+        $protocol = Protocol::create([
+            'price' => 30000,
+            'comment' => 'donezo',
+            'done' => true,
+            'patch_day_id' => $patch_day->id,
+        ]);
+
+        $project->technologies()->attach([
+            $vue_2->id => ['protocol_id' => $protocol->id],
+            $laravel_2->id => ['protocol_id' => $protocol->id],
+        ]);
+
+        $current_techs = $project->current_technologies;
+        $this->assertCount(2, $current_techs);
+        $this->assertInstanceOf(Technology::class, $current_techs[0]);
+        $this->assertEquals('Laravel', $current_techs[0]->name);
+        $this->assertEquals('5.4.14', $current_techs[0]->version);
+
+        $this->assertInstanceOf(Technology::class, $current_techs[1]);
+        $this->assertEquals('Vue.js', $current_techs[1]->name);
+        $this->assertEquals('2.4.12', $current_techs[1]->version);
+    }
 }
