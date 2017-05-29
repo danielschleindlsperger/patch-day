@@ -50,20 +50,11 @@ class ProjectController extends Controller
      */
     public function store(CreateProject $request)
     {
-        $project = Project::create($request->except(['patch_day']));
-
-        if ($project) {
-            $fields = array_merge($request->patch_day, [
-                'project_id' => $project->id,
-            ]);
-            $patchDay = PatchDay::create($fields);
-
-            if ($request->input('patch_day.technologies')) {
-                $patchDay->technologies()->sync($request->input('patch_day.technologies'));
-            }
-
-            return ['created' => true];
+        $project = Project::create($request->all());
+        if ($request->technologies) {
+            $project->technologies()->attach($request->technologies);
         }
+        return ['created' => true];
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Tests\Feature\Project;
 
 use App\Company;
 use App\Protocol;
+use App\Technology;
 use App\User;
 use App\PatchDay;
 use App\Project;
@@ -13,7 +14,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ProjectTest extends TestCase
+class ProjectFeatureTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
@@ -41,24 +42,98 @@ class ProjectTest extends TestCase
         $response = $this->json('GET', '/projects');
 
         $response->assertStatus(200)
-            ->assertJsonFragment([
-                'name' => $projects->all()[0]->name,
-            ],
+            ->assertJson([
+                [
+                    'name' => $projects->all()[0]->name,
+                ],
                 [
                     'name' => $projects->all()[1]->name,
                 ]
-            );
+            ]);
     }
 
     /** @test */
-    public function can_create_project_and_associated_patch_day()
+    public function can_create_project()
     {
+        // bad request
+        $response = $this->json('POST', '/projects', []);
+        $response
+            ->assertStatus(422)
+            ->assertJsonStructure([
+                'name',
+                'company_id'
+            ]);
+
+        // barebones project without additional data
         $response = $this->json('POST', '/projects', [
             'name' => 'Example Project',
             'company_id' => $this->company->id,
-            'patch_day' => [
-                'cost' => 15000,
-                'active' => false,
+        ]);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'created' => true
+            ]);
+        $project = Project::orderBy('id', 'desc')->first();
+
+        $this->assertNotNull($project);
+        $this->assertInstanceOf(Project::class, $project);
+        $this->assertEquals('Example Project', $project->name);
+
+        // project with all data provided
+        $response = $this->json('POST', '/projects', [
+            'name' => 'Example Project 2',
+            'base_price' => 40000,
+            'penalty' => 15000,
+            'company_id' => $this->company->id,
+        ]);
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'created' => true
+            ]);
+        $project_2 = Project::orderBy('id', 'desc')->first();
+
+        $this->assertNotNull($project_2);
+        $this->assertInstanceOf(Project::class, $project_2);
+        $this->assertEquals('Example Project 2', $project_2->name);
+        $this->assertEquals(40000, $project_2->base_price);
+        $this->assertEquals(15000, $project_2->penalty);
+    }
+
+    /** @test */
+    public function admin_can_create_project_with_default_technologies()
+    {
+        $latestLaravel = Technology::create([
+            'name' => 'Laravel',
+            'version' => '5.4.23',
+        ]);
+
+        $latestVue = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.4.12',
+        ]);
+
+        $response = $this->json('POST', '/projects', [
+            'name' => 'Example Project',
+            'company_id' => $this->company->id,
+            'technologies' => [
+                'asdf',
+                'asdf'
+            ]
+        ]);
+        $response->assertStatus(422)
+            ->assertJsonStructure([
+                'technologies.0',
+                'technologies.1',
+            ]);
+
+        $response = $this->json('POST', '/projects', [
+            'name' => 'Example Project',
+            'company_id' => $this->company->id,
+            'technologies' => [
+                $latestLaravel->id,
+                $latestVue->id,
             ]
         ]);
 
@@ -68,15 +143,16 @@ class ProjectTest extends TestCase
                 'created' => true
             ]);
 
-        $project = Project::all()->last();
-        $patchDay = PatchDay::all()->last();
+        $project = Project::orderBy('id', 'desc')->first();
 
-        $this->assertInstanceOf(PatchDay::class, $patchDay);
-        $this->assertInstanceOf(PatchDay::class, $project->patchDay);
-        $this->assertEquals($patchDay->project_id, $project->id);
-        $this->assertEquals(15000, $patchDay->cost);
-        $this->assertFalse($patchDay->active);
-        $this->assertEmpty($patchDay->comment);
+        $technologies = $project->technology_history;
+
+        $this->assertContainsOnlyInstancesOf(Technology::class, $technologies);
+        $this->assertCount(2, $technologies);
+        $this->assertEquals('Laravel', $technologies[0]->name);
+        $this->assertEquals('5.4.23', $technologies[0]->version);
+        $this->assertEquals('Vue.js', $technologies[1]->name);
+        $this->assertEquals('2.4.12', $technologies[1]->version);
     }
 
     /** @test */

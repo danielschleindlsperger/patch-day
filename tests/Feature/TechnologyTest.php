@@ -39,54 +39,6 @@ class TechnologyTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_create_project_with_default_technologies()
-    {
-        $latestPhp = Technology::create([
-            'name' => 'Vue.js',
-            'version' => '2.3.3',
-        ]);
-
-        $latestLaravel = Technology::create([
-            'name' => 'Laravel',
-            'version' => '5.4.23',
-        ]);
-
-        $latestVue = Technology::create([
-            'name' => 'php',
-            'version' => '7.0.30',
-        ]);
-
-        $response = $this->json('POST', '/projects', [
-            'name' => 'Example Project',
-            'company_id' => $this->company->id,
-            'patch_day' => [
-                'cost' => 15000,
-                'active' => false,
-                'technologies' => [
-                    $latestPhp->id,
-                    $latestLaravel->id,
-                    $latestVue->id,
-                ]
-            ]
-        ]);
-
-        $response
-            ->assertStatus(200)
-            ->assertJsonFragment([
-                'created' => true
-            ]);
-
-        $patchDay = PatchDay::all()->last();
-        $technologies = $patchDay->technologies()->get();
-        $updatedLaravel = $technologies->where('name', 'Laravel')->first();
-
-        $this->assertContainsOnlyInstancesOf(Technology::class, $technologies);
-        $this->assertCount(3, $technologies);
-        $this->assertEquals('Laravel', $updatedLaravel->name);
-        $this->assertEquals('5.4.23', $updatedLaravel->version);
-    }
-
-    /** @test */
     public function admin_can_update_a_projects_technologies()
     {
         $patchDay = factory(PatchDay::class)->create([
