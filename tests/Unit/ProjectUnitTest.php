@@ -22,8 +22,10 @@ class ProjectUnitTest extends TestCase
     protected $company;
     protected $vue;
     protected $vue_2;
+    protected $vue_3;
     protected $laravel;
     protected $laravel_2;
+    protected $laravel_3;
 
     public function setUp()
     {
@@ -43,6 +45,11 @@ class ProjectUnitTest extends TestCase
             'version' => '2.4.12',
         ]);
 
+        $this->vue_3 = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '3.1.2',
+        ]);
+
         $this->laravel = Technology::create([
             'name' => 'Laravel',
             'version' => '5.4.1',
@@ -51,6 +58,11 @@ class ProjectUnitTest extends TestCase
         $this->laravel_2 = Technology::create([
             'name' => 'Laravel',
             'version' => '5.4.14',
+        ]);
+
+        $this->laravel_3 = Technology::create([
+            'name' => 'Laravel',
+            'version' => '6.2.5',
         ]);
     }
 
@@ -213,5 +225,72 @@ class ProjectUnitTest extends TestCase
         $this->assertInstanceOf(Technology::class, $current_techs[1]);
         $this->assertEquals('Vue.js', $current_techs[1]->name);
         $this->assertEquals('2.4.12', $current_techs[1]->version);
+    }
+
+
+    /** @test */
+    public function a_project_has_a_technology_history()
+    {
+        $project = Project::create([
+            'name' => 'Fake Project',
+            'company_id' => $this->company->id,
+        ]);
+
+        // projects base technologies
+        $project->technologies()->attach([$this->vue->id, $this->laravel->id]);
+
+        // project gets updated on patch-day_1
+        $patch_day = PatchDay::create([
+            'date' => '2017-03-30',
+        ]);
+
+        $protocol = Protocol::create([
+            'price' => 30000,
+            'comment' => 'donezo',
+            'done' => true,
+            'patch_day_id' => $patch_day->id,
+        ]);
+
+        $project->technologies()->attach([
+            $this->vue_2->id => ['protocol_id' => $protocol->id],
+            $this->laravel_2->id => ['protocol_id' => $protocol->id],
+        ]);
+
+        // project gets updated again on patch-day_2
+        $patch_day_2 = PatchDay::create([
+            'date' => '2017-04-30',
+        ]);
+
+        $protocol_2 = Protocol::create([
+            'price' => 30000,
+            'comment' => 'donezo',
+            'done' => true,
+            'patch_day_id' => $patch_day_2->id,
+        ]);
+
+        $project->technologies()->attach([
+            $this->vue_3->id => ['protocol_id' => $protocol_2->id],
+            $this->laravel_3->id => ['protocol_id' => $protocol_2->id],
+        ]);
+
+        $history = $project->technology_history;
+        $this->assertNotNull($history);
+        $this->assertCount(6, $history);
+
+        // assert the correct order: based on update time (recent first), then
+        // alphabetical order of tech name
+        $this->assertEquals($this->laravel_3->id, $history[0]->id);
+        $this->assertEquals($this->vue_3->id, $history[1]->id);
+        $this->assertEquals($this->laravel_2->id, $history[2]->id);
+        $this->assertEquals($this->vue_2->id, $history[3]->id);
+        $this->assertEquals($this->laravel->id, $history[4]->id);
+        $this->assertEquals($this->vue->id, $history[5]->id);
+
+        // assert relationships and properties
+        $this->assertEquals($protocol->id, $history[3]->pivot->protocol_id);
+        $this->assertEquals($protocol_2->id, $history[0]->pivot->protocol_id);
+
+        $this->assertEquals('2017-03-30', $history[3]->date);
+        $this->assertEquals('2017-04-30', $history[0]->date);
     }
 }

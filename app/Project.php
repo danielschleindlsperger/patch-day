@@ -72,4 +72,18 @@ class Project extends Model
             ->groupBy('name')
             ->get();
     }
+
+    /**
+     * return all
+     *
+     * @return Collection technologies
+     */
+    public function getTechnologyHistoryAttribute()
+    {
+        return $this->technologies()
+            ->orderBy('protocol_id', 'DESC')
+            ->orderBy('name', 'ASC')
+            ->orderBy('version', 'DESC')
+            ->get();
+    }
 }
