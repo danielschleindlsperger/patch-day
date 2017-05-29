@@ -20,6 +20,10 @@ class ProjectUnitTest extends TestCase
     use DatabaseTransactions;
 
     protected $company;
+    protected $vue;
+    protected $vue_2;
+    protected $laravel;
+    protected $laravel_2;
 
     public function setUp()
     {
@@ -27,6 +31,26 @@ class ProjectUnitTest extends TestCase
 
         $this->company = Company::create([
             'name' => 'Fake Company',
+        ]);
+
+        $this->vue = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.4.0',
+        ]);
+
+        $this->vue_2 = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.4.12',
+        ]);
+
+        $this->laravel = Technology::create([
+            'name' => 'Laravel',
+            'version' => '5.4.1',
+        ]);
+
+        $this->laravel_2 = Technology::create([
+            'name' => 'Laravel',
+            'version' => '5.4.14',
         ]);
     }
 
@@ -96,15 +120,6 @@ class ProjectUnitTest extends TestCase
     /** @test */
     public function project_has_technologies()
     {
-        $vue = Technology::create([
-            'name' => 'Vue.js',
-            'version' => '2.4.0',
-        ]);
-        $laravel = Technology::create([
-            'name' => 'Laravel',
-            'version' => '5.4.13',
-        ]);
-
         $project = Project::create([
             'name' => 'Fake Project',
             'company_id' => $this->company->id,
@@ -112,7 +127,7 @@ class ProjectUnitTest extends TestCase
 
         $this->assertCount(0, $project->technologies()->get());
 
-        $project->technologies()->attach([$vue->id, $laravel->id]);
+        $project->technologies()->attach([$this->vue->id, $this->laravel->id]);
 
         $this->assertNotNull($project->technologies()->get());
         $this->assertCount(2, $project->technologies()->get());
@@ -121,18 +136,13 @@ class ProjectUnitTest extends TestCase
             $project->technologies()->get()[0]);
         $this->assertEquals('Laravel',
             $project->technologies()->get()[1]->name);
-        $this->assertEquals('5.4.13',
+        $this->assertEquals('5.4.1',
             $project->technologies()->get()[1]->version);
     }
 
     /** @test */
     public function project_technology_has_a_date()
     {
-        $vue = Technology::create([
-            'name' => 'Vue.js',
-            'version' => '2.4.0',
-        ]);
-
         $project = Project::create([
             'name' => 'Fake Project',
             'company_id' => $this->company->id,
@@ -150,7 +160,7 @@ class ProjectUnitTest extends TestCase
         ]);
 
         $project->technologies()
-            ->attach([$vue->id => ['protocol_id' => $protocol->id]]);
+            ->attach([$this->vue->id => ['protocol_id' => $protocol->id]]);
 
         $this->assertNotNull($project->technologies[0]->date);
         $this->assertEquals('2017-03-30', $project->technologies[0]->date);
@@ -159,33 +169,13 @@ class ProjectUnitTest extends TestCase
     /** @test */
     public function a_project_has_current_technologies()
     {
-        $vue = Technology::create([
-            'name' => 'Vue.js',
-            'version' => '2.4.0',
-        ]);
-
-        $vue_2 = Technology::create([
-            'name' => 'Vue.js',
-            'version' => '2.4.12',
-        ]);
-
-        $laravel = Technology::create([
-            'name' => 'Laravel',
-            'version' => '5.4.1',
-        ]);
-
-        $laravel_2 = Technology::create([
-            'name' => 'Laravel',
-            'version' => '5.4.14',
-        ]);
-
         $project = Project::create([
             'name' => 'Fake Project',
             'company_id' => $this->company->id,
         ]);
 
         // base technologies
-        $project->technologies()->attach([$vue->id, $laravel->id]);
+        $project->technologies()->attach([$this->vue->id, $this->laravel->id]);
 
         $current_techs = $project->current_technologies;
         $this->assertCount(2, $current_techs);
@@ -210,8 +200,8 @@ class ProjectUnitTest extends TestCase
         ]);
 
         $project->technologies()->attach([
-            $vue_2->id => ['protocol_id' => $protocol->id],
-            $laravel_2->id => ['protocol_id' => $protocol->id],
+            $this->vue_2->id => ['protocol_id' => $protocol->id],
+            $this->laravel_2->id => ['protocol_id' => $protocol->id],
         ]);
 
         $current_techs = $project->current_technologies;
