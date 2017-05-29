@@ -3,7 +3,9 @@
 namespace Tests\Unit;
 
 use App\Company;
+use App\PatchDay;
 use App\Project;
+use App\Protocol;
 use App\Technology;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Database\QueryException;
@@ -113,11 +115,44 @@ class ProjectUnitTest extends TestCase
         $project->technologies()->attach([$vue->id, $laravel->id]);
 
         $this->assertNotNull($project->technologies()->get());
+        $this->assertCount(2, $project->technologies()->get());
+
         $this->assertInstanceOf(Technology::class,
             $project->technologies()->get()[0]);
         $this->assertEquals('Laravel',
             $project->technologies()->get()[1]->name);
         $this->assertEquals('5.4.13',
             $project->technologies()->get()[1]->version);
+    }
+
+    /** @test */
+    public function project_technology_has_a_date()
+    {
+        $vue = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.4.0',
+        ]);
+
+        $project = Project::create([
+            'name' => 'Fake Project',
+            'company_id' => $this->company->id,
+        ]);
+
+        $patch_day = PatchDay::create([
+            'date' => '2017-03-30',
+        ]);
+
+        $protocol = Protocol::create([
+            'price' => 30000,
+            'comment' => 'donezo',
+            'done' => true,
+            'patch_day_id' => $patch_day->id,
+        ]);
+
+        $project->technologies()
+            ->attach([$vue->id => ['protocol_id' => $protocol->id]]);
+
+        $this->assertNotNull($project->technologies[0]->date);
+        $this->assertEquals('2017-03-30', $project->technologies[0]->date);
     }
 }

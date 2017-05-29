@@ -20,6 +20,12 @@ class Technology extends Model
      */
     public function projects()
     {
-        return $this->belongsToMany(Project::class);
+        return $this->belongsToMany(Project::class)->withPivot('protocol_id');
+    }
+
+    public function getDateAttribute()
+    {
+        return $this->pivot ?
+            Protocol::find($this->pivot->protocol_id)->date : null;
     }
 }
