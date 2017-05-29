@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Company;
+use App\Http\Requests\Company\CreateCompany;
+use App\Http\Requests\Company\UpdateCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,51 +28,40 @@ class CompanyController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new company.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  CreateCompany $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateCompany $request)
     {
-        $this->authorize('create', Company::class);
+        $company = Company::create($request->all());
 
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-
-        $company = Company::create([
-            'name' => $request->name,
-        ]);
-
-        if ($company) {
-            return ['created' => true];
-        }
+        return $company;
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified company with its projects.
      *
-     * @param  int $id
+     * @param  Company $company
      * @return \Illuminate\Http\Response
      */
     public function show(Company $company)
     {
         $this->authorize('view', $company);
-        $company->load('projects', 'projects.patchDay');
+        $company->load('projects');
         return $company;
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified company.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  UpdateCompany $request
+     * @param  Company $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(UpdateCompany $request, Company $company)
     {
-        $this->authorize('update', $company);
         $company->update($request->all());
         return ['success' => true];
     }

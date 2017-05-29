@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class CompanyTest extends TestCase
+class CompanyFeatureTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
@@ -35,7 +35,7 @@ class CompanyTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
-                'created' => true,
+                'name' => 'Example company',
             ]);
     }
 
@@ -47,9 +47,10 @@ class CompanyTest extends TestCase
         $response = $this->json('GET', '/companies');
         $response
             ->assertStatus(200)
-            ->assertJsonFragment([
-                'name' => $companies->all()[0]->name,
-            ],
+            ->assertJsonFragment(
+                [
+                    'name' => $companies->all()[0]->name,
+                ],
                 [
                     'name' => $companies->all()[1]->name,
                 ]
@@ -57,9 +58,19 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function can_see_a_company()
+    public function can_see_a_company_with_its_projects()
     {
         $company = factory(Company::class)->create();
+
+        $project = factory(Project::class)->create([
+            'name' => 'Fake Project',
+            'company_id' => $company->id,
+        ]);
+
+        $project_2 = factory(Project::class)->create([
+            'name' => 'Fake Project 2',
+            'company_id' => $company->id,
+        ]);
 
         $response = $this->json('GET', '/companies/9543');
         $response->assertStatus(404);
@@ -67,62 +78,28 @@ class CompanyTest extends TestCase
         $response = $this->json('GET', '/companies/' . $company->id);
         $response
             ->assertStatus(200)
-            ->assertJsonFragment([
-                    'name' => $company->name,
-                ]
-            );
-    }
-
-    /** @test */
-    public function can_see_a_companies_projects()
-    {
-        $company = factory(Company::class)->create([
-            'name' => 'Fake Company',
-        ]);
-        $project = factory(Project::class)->create([
-            'name' => 'Fake Project',
-            'company_id' => $company->id,
-        ]);
-        $patch_day = factory(PatchDay::class)->create([
-            'project_id' => $project->id,
-        ]);
-
-        $project2 = factory(Project::class)->create([
-            'name' => 'Fake Project 2',
-            'company_id' => $company->id,
-        ]);
-        $patch_day2 = factory(PatchDay::class)->create([
-            'project_id' => $project2->id,
-        ]);
-
-        $response = $this->json('GET', '/companies/' . $company->id);
-
-        $response
-            ->assertStatus(200)
             ->assertJsonStructure([
                 'name',
                 'projects' => [
                     [
                         'name',
-                        'patch_day' => [
-                            'cost', 'start_date', 'interval', 'active',
-                        ],
-                    ],
-                ],
+                        'base_price',
+                        'penalty',
+                    ]
+                ]
             ])
             ->assertJson([
-                'name' => 'Fake Company',
-                'projects' => [
-                    [
-                        'name' => 'Fake Project',
-                        'patch_day' => [],
-                    ],
-                    [
-                        'name' => 'Fake Project 2',
-                        'patch_day' => [],
-                    ],
-                ],
-            ]);
+                    'name' => $company->name,
+                    'projects' => [
+                        [
+                            'name' => 'Fake Project',
+                        ],
+                        [
+                            'name' => 'Fake Project 2',
+                        ]
+                    ]
+                ]
+            );
     }
 
     /** @test */
