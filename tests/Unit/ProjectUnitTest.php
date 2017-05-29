@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Company;
 use App\Project;
+use App\Technology;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Database\QueryException;
 use Mockery\Exception;
@@ -88,5 +89,35 @@ class ProjectUnitTest extends TestCase
 
         $this->assertEquals($project->base_price, 30000);
         $this->assertEquals($project->penalty, 10000);
+    }
+
+    /** @test */
+    public function project_has_technologies()
+    {
+        $vue = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.4.0',
+        ]);
+        $laravel = Technology::create([
+            'name' => 'Laravel',
+            'version' => '5.4.13',
+        ]);
+
+        $project = Project::create([
+            'name' => 'Fake Project',
+            'company_id' => $this->company->id,
+        ]);
+
+        $this->assertCount(0, $project->technologies()->get());
+
+        $project->technologies()->attach([$vue->id, $laravel->id]);
+
+        $this->assertNotNull($project->technologies()->get());
+        $this->assertInstanceOf(Technology::class,
+            $project->technologies()->get()[0]);
+        $this->assertEquals('Laravel',
+            $project->technologies()->get()[1]->name);
+        $this->assertEquals('5.4.13',
+            $project->technologies()->get()[1]->version);
     }
 }

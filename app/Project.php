@@ -38,6 +38,16 @@ class Project extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *
+     * return the project's technologies
+     */
+    public function technologies()
+    {
+        return $this->belongsToMany(Technology::class);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      *
      * return the company the project belongs to

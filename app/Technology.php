@@ -14,12 +14,12 @@ class Technology extends Model
     ];
 
     /**
-     * get all patch days this exact technology is used in.
+     * get all projects this exact technology is used in.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function patchDays()
+    public function projects()
     {
-        return $this->belongsToMany(PatchDay::class);
+        return $this->belongsToMany(Project::class);
     }
 }

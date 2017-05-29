@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePatchDayTechnologyTable extends Migration
+class CreateProjectTechnologyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreatePatchDayTechnologyTable extends Migration
      */
     public function up()
     {
-        Schema::create('projects_technologies', function (Blueprint $table) {
+        Schema::create('project_technology', function (Blueprint $table) {
             $table->integer('project_id')->unsigned();
             $table->integer('technology_id')->unsigned();
+            $table->integer('protocol_id')->unsigned()->nullable();
 
             $table->foreign('project_id')->references('id')->on('projects');
             $table->foreign('technology_id')->references('id')->on('technologies');
+            $table->foreign('protocol_id')->references('id')->on('protocols');
 
             $table->softDeletes();
             $table->timestamps();
@@ -32,6 +34,6 @@ class CreatePatchDayTechnologyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('projects_technologies');
+        Schema::dropIfExists('project_technology');
     }
 }
