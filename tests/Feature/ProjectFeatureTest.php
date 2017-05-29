@@ -204,25 +204,28 @@ class ProjectFeatureTest extends TestCase
     }
 
     /** @test */
-    public function can_view_project_with_patch_day_and_protocols()
+    public function can_view_project_with_current_technology_and_history()
     {
         $project = factory(Project::class)->create([
-            'name' => 'Test Project',
+            'name' => 'Fake Project',
+            'company_id' => $this->company->id,
         ]);
 
-        $response = $this->json('GET', '/projects/' . $project->id);
-        $response
-            ->assertStatus(200)
-            ->assertJson([
-                'name' => 'Test Project',
-                'id' => $project->id,
-            ]);
-
-        // associated patch-day
-        $patchDay = factory(PatchDay::class)->create([
-            'cost' => 300,
-            'project_id' => $project->id,
+        $latestLaravel = Technology::create([
+            'name' => 'Laravel',
+            'version' => '5.4.23',
         ]);
+
+        $latestVue = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.4.12',
+        ]);
+
+        $project->technologies()->attach([
+            $latestVue->id,
+            $latestLaravel->id,
+        ]);
+
 
         $response = $this->json('GET', '/projects/' . $project->id);
         $response
@@ -230,36 +233,13 @@ class ProjectFeatureTest extends TestCase
             ->assertJsonStructure(
                 [
                     'name',
-                    'patch_day' => [
-                        'cost', 'start_date', 'interval', 'active',
-                    ]
+                    'base_price',
+                    'penalty',
+                    'company_id',
+                    'technology_history',
+                    'current_technologies',
                 ]
-            )
-            ->assertJsonFragment([
-                'name' => 'Test Project',
-            ]);
-
-        // associate protocols
-        factory(Protocol::class, 5)->create([
-            'patch_day_id' => $patchDay->id,
-        ]);
-        $response = $this->json('GET', '/projects/' . $project->id);
-        $response
-            ->assertStatus(200)
-            ->assertJsonStructure([
-                'name',
-                'patch_day' => [
-                    'cost',
-                    'start_date',
-                    'interval',
-                    'active',
-                    'protocols' => [
-                        [
-                            'comment', 'done'
-                        ]
-                    ],
-                ],
-            ]);
+            );
     }
 
     /** @test */

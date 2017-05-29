@@ -15,6 +15,11 @@ class Project extends Model
         'name', 'company_id', 'base_price', 'penalty',
     ];
 
+    protected $appends = [
+        'technology_history',
+        'current_technologies',
+    ];
+
     protected $casts = [
         'company_id' => 'integer',
         'base_price' => 'integer',

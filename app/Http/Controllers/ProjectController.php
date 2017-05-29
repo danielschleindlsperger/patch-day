@@ -37,7 +37,6 @@ class ProjectController extends Controller
      */
     public function show(Request $request, Project $project)
     {
-        $project->load(['company', 'patchDay', 'patchDay.protocols', 'patchDay.technologies']);
         $this->authorize('view', $project);
         return $project;
     }
