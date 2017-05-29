@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class PatchDay extends Model
 {
     protected $fillable = [
-      'date',
+        'date',
     ];
 
     protected $dates = ['date'];
@@ -34,5 +34,18 @@ class PatchDay extends Model
     public function getDateAttribute($value)
     {
         return Carbon::parse($value)->toDateString();
+    }
+
+    /**
+     * Get all projects that are registered for this patch-day.
+     *
+     * @return Collection projects
+     */
+    public function getProjectsAttribute()
+    {
+        $patch_day_id = $this->id;
+        return Project::whereHas('protocols', function ($query) use ($patch_day_id) {
+            $query->where('patch_day_id', $patch_day_id);
+        })->get();
     }
 }
