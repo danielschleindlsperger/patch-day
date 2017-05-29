@@ -46,8 +46,8 @@ class TechnologyController extends Controller
      */
     public function store(CreateTechnology $request)
     {
-        Technology::create($request->all());
-        return ['created' => true];
+        $tech = Technology::create($request->all());
+        return $tech;
     }
 
     /**
