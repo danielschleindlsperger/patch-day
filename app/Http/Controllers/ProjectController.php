@@ -51,9 +51,11 @@ class ProjectController extends Controller
     public function store(CreateProject $request)
     {
         $project = Project::create($request->all());
+
         if ($request->technologies) {
             $project->technologies()->attach($request->technologies);
         }
+
         return ['created' => true];
     }
 
@@ -66,21 +68,12 @@ class ProjectController extends Controller
      */
     public function update(UpdateProject $request, Project $project)
     {
-        $project->load('patchDay');
+        $project->update($request->except(['technologies']));
 
-        $project->update($request->except(['patch_day']));
-
-        if ($request->input('patch_day')) {
-            if ($project->patchDay) {
-                if ($request->input('patch_day.technologies')) {
-                    $project->patchDay->technologies()->sync
-                    ($request->input('patch_day.technologies'));
-                }
-                $project->patchDay->update($request->patch_day);
-            } else {
-                abort(422, 'Projects PatchDay not found.');
-            }
+        if ($request->technologies) {
+            $project->technologies()->attach($request->technologies);
         }
+
         return ['success' => true];
     }
 

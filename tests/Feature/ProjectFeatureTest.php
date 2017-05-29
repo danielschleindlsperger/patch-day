@@ -156,62 +156,51 @@ class ProjectFeatureTest extends TestCase
     }
 
     /** @test */
-    public function cannot_create_project_without_providing_a_name()
-    {
-        $response = $this->json('POST', '/projects', [
-            '' => ''
-        ]);
-
-        $response
-            ->assertStatus(422)
-            ->assertJsonStructure([
-                'name', 'company_id'
-            ]);
-    }
-
-    /** @test */
-    public function can_upate_a_project_and_associated_patch_day()
+    public function can_upate_a_project()
     {
         $project = factory(Project::class)->create([
-            'name' => 'Test Project',
+            'name' => 'Fake Project',
+            'base_price' => 40000,
+            'penalty' => 15000,
+            'company_id' => $this->company->id,
         ]);
 
-        $patchDay = factory(PatchDay::class)->create([
-            'interval' => 3,
-            'cost' => 30000,
-            'active' => false,
-            'start_date' => Carbon::now()->addWeek(2)->toDateString(),
-        ]);
-        $patchDay->project()->associate($project);
-        $patchDay->save();
+        $company_2 = Company::create(['name' => 'Fake Company 2']);
 
-        $this->assertEquals('Test Project', $project->name);
-        $this->assertInstanceOf(PatchDay::class, $project->patchDay);
+        $latestLaravel = Technology::create([
+            'name' => 'Laravel',
+            'version' => '5.4.23',
+        ]);
+
+        $latestVue = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.4.12',
+        ]);
 
         $response = $this->json('PUT', '/projects/' . $project->id, [
             'name' => 'Updated Project',
-            'patch_day' => [
-                'cost' => 20000,
-                'active' => true,
-                'interval' => 4,
+            'base_price' => 50000,
+            'penalty' => 20000,
+            'company_id' => $company_2->id,
+            'technologies' => [
+                $latestLaravel->id,
+                $latestVue->id,
             ]
         ]);
 
         $response
             ->assertStatus(200)
-            ->assertJsonFragment([
-                [
-                    'success' => true
-                ]
+            ->assertJson([
+                'success' => true
             ]);
 
-        $updatedProject = Project::with('patchDay')->find($project->id);
+        $updatedProject = Project::orderBy('id', 'desc')->first();
 
         $this->assertEquals('Updated Project', $updatedProject->name);
-        $this->assertEquals($updatedProject->patchDay->id, $patchDay->id);
-        $this->assertEquals($updatedProject->patchDay->cost, 20000);
-        $this->assertEquals($updatedProject->patchDay->active, true);
-        $this->assertEquals($updatedProject->patchDay->interval, 4);
+        $this->assertEquals(50000, $updatedProject->base_price);
+        $this->assertEquals(20000, $updatedProject->penalty);
+        $this->assertInstanceOf(Company::class, $updatedProject->company);
+        $this->assertEquals('Fake Company 2', $updatedProject->company->name);
     }
 
     /** @test */

@@ -26,10 +26,10 @@ class CreateProject extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'company_id' => 'required|exists:companies,id',
+            'company_id' => 'required|integer|exists:companies,id',
             'base_price' => 'integer',
             'penalty' => 'integer',
-            'technologies.*' => 'exists:technologies,id',
+            'technologies.*' => 'integer|exists:technologies,id',
         ];
     }
 }
