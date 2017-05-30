@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PatchDay\CreatePatchDay;
 use App\Http\Requests\PatchDay\CreateProject;
 use App\Http\Requests\PatchDay\UpdatePatchDay;
 use App\PatchDay;
@@ -44,7 +45,20 @@ class PatchDayController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Create new patch-day.
+     *
+     * @param CreatePatchDay $request
+     * @return array
+     */
+    public function store(CreatePatchDay $request)
+    {
+        $patch_day = PatchDay::create($request->all());
+
+        return $patch_day;
+    }
+
+    /**
+     * Update the specified patch-day.
      *
      * @param  UpdatePatchDay $request
      * @param  PatchDay $patchDay
@@ -52,10 +66,6 @@ class PatchDayController extends Controller
      */
     public function update(UpdatePatchDay $request, PatchDay $patchDay)
     {
-        if ($request->technologies) {
-            $patchDay->technologies()->sync($request->technologies);
-        }
-
         $patchDay->update($request->all());
 
         return ['updated' => true];
