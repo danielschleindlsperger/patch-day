@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class UserTest extends TestCase
+class UserFeatureTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
@@ -75,8 +75,9 @@ class UserTest extends TestCase
         ]);
         $response
             ->assertStatus(200)
-            ->assertJsonFragment([
-                'created' => true
+            ->assertJson([
+                'name' => 'Fake User',
+                'email' => 'hello@example.com',
             ]);
     }
 
