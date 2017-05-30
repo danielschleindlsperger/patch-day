@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Protocol\CreateProtocol;
 use App\Http\Requests\Protocol\UpdateProtocol;
 use App\Protocol;
+use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -96,6 +97,15 @@ class ProtocolController extends Controller
     public function destroy(Protocol $protocol)
     {
         $this->authorize('delete', $protocol);
+
+        $patch_day = $protocol->patch_day;
+
+        $today = Carbon::now()->endOfDay();
+
+        if ($today->greaterThan(Carbon::parse($patch_day->date)->endOfDay())) {
+            abort(422, 'Cannot delete patch-day');
+        }
+
         $protocol->delete();
         return ['success' => true];
     }

@@ -84,8 +84,6 @@ class PatchDaySignupFeatureTest extends TestCase
         $response = $this->json('POST', '/projects/' . $project->id . '/patch-days', [
             'patch_day_id' => $patch_day->id,
         ]);
-
-
         $response->assertStatus(200);
 
         $protocols = Protocol::all();
@@ -95,6 +93,12 @@ class PatchDaySignupFeatureTest extends TestCase
         $this->assertCount(1, $protocols);
         $this->assertTrue($patch_day->projects->contains($project));
 
+        Carbon::setTestNow(Carbon::now()->addWeeks(3));
+        // has to be in the future
+        $response = $this->json('DELETE', '/protocols/' . $protocol->id);
+        $response->assertStatus(422);
+
+        Carbon::setTestNow();
         $response = $this->json('DELETE', '/protocols/' . $protocol->id)
             ->assertStatus(200);
 
