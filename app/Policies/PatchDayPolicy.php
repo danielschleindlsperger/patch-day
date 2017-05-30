@@ -25,10 +25,21 @@ class PatchDayPolicy
     }
 
     /**
+     * Determine whether the user can view the patch-day index resource.
+     *
+     * @param  \App\User $user
+     * @return mixed
+     */
+    public function index(User $user)
+    {
+        return $user->isAdmin();
+    }
+
+    /**
      * Determine whether the user can view the patchDay.
      *
-     * @param  \App\User  $user
-     * @param  \App\PatchDay  $patchDay
+     * @param  \App\User $user
+     * @param  \App\PatchDay $patchDay
      * @return mixed
      */
     public function view(User $user, PatchDay $patchDay)
@@ -42,7 +53,7 @@ class PatchDayPolicy
     /**
      * Determine whether the user can create patchDays.
      *
-     * @param  \App\User  $user
+     * @param  \App\User $user
      * @return mixed
      */
     public function create(User $user)
@@ -53,8 +64,8 @@ class PatchDayPolicy
     /**
      * Determine whether the user can update the patchDay.
      *
-     * @param  \App\User  $user
-     * @param  \App\PatchDay  $patchDay
+     * @param  \App\User $user
+     * @param  \App\PatchDay $patchDay
      * @return mixed
      */
     public function update(User $user, PatchDay $patchDay)
@@ -65,8 +76,8 @@ class PatchDayPolicy
     /**
      * Determine whether the user can delete the patchDay.
      *
-     * @param  \App\User  $user
-     * @param  \App\PatchDay  $patchDay
+     * @param  \App\User $user
+     * @param  \App\PatchDay $patchDay
      * @return mixed
      */
     public function delete(User $user, PatchDay $patchDay)

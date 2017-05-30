@@ -19,17 +19,15 @@ use Symfony\Component\HttpFoundation\ApacheRequest;
 class PatchDayController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of all patch-days.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        if (Auth::user() && Auth::user()->isAdmin()) {
-            return PatchDay::all();
-        } else {
-            abort(403, 'Not authorized.');
-        }
+        $this->authorize('index', PatchDay::class);
+
+        return PatchDay::orderBy('date', 'DESC')->get();
     }
 
     /**
@@ -72,7 +70,7 @@ class PatchDayController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified patch-day.
      *
      * @param  PatchDay $patchDay
      * @return \Illuminate\Http\Response
