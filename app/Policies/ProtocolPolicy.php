@@ -77,6 +77,10 @@ class ProtocolPolicy
      */
     public function delete(User $user, Protocol $protocol)
     {
-        return $user->isAdmin();
+        $protocolCompany = $protocol->project->company;
+        $userCompany = $user->company;
+
+        return $protocolCompany && $userCompany &&
+            $protocolCompany->id === $userCompany->id;
     }
 }

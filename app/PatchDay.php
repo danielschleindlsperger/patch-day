@@ -44,6 +44,7 @@ class PatchDay extends Model
     public function getProjectsAttribute()
     {
         $patch_day_id = $this->id;
+
         return Project::whereHas('protocols', function ($query) use ($patch_day_id) {
             $query->where('patch_day_id', $patch_day_id);
         })->get();

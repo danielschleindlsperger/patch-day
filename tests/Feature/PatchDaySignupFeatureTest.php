@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Company;
 use App\PatchDay;
 use App\Project;
+use App\Protocol;
 use App\User;
 use Carbon\Carbon;
 use Tests\TestCase;
@@ -39,7 +40,7 @@ class PatchDaySignupFeatureTest extends TestCase
     }
 
     /** @test */
-    public function a_client_can_his_project_up_for_a_patch_day()
+    public function a_client_can_sign_his_project_up_for_a_patch_day()
     {
         $project = factory(Project::class)->create([
             'company_id' => $this->company->id,
@@ -67,5 +68,41 @@ class PatchDaySignupFeatureTest extends TestCase
                 'date' => $this->patch_day->date,
                 'price' => $project->base_price,
             ]);
+    }
+
+    /** @test */
+    public function a_client_can_cancel_a_projects_patch_day()
+    {
+        $project = factory(Project::class)->create([
+            'company_id' => $this->company->id,
+        ]);
+
+        $patch_day = factory(PatchDay::class)->create([
+            'date' => Carbon::now()->addWeeks(2)->toDateString(),
+        ]);
+
+        $response = $this->json('POST', '/projects/' . $project->id . '/patch-days', [
+            'patch_day_id' => $patch_day->id,
+        ]);
+
+
+        $response->assertStatus(200);
+
+        $protocols = Protocol::all();
+        $protocol = $project->protocols()->first();
+
+        $this->assertNotNull($protocols);
+        $this->assertCount(1, $protocols);
+        $this->assertTrue($patch_day->projects->contains($project));
+
+        $response = $this->json('DELETE', '/protocols/' . $protocol->id)
+            ->assertStatus(200);
+
+        $protocols = Protocol::all();
+        $protocol = $project->protocols()->first();
+
+        $this->assertNull($protocol);
+        $this->assertCount(0, $protocols);
+        $this->assertFalse($patch_day->projects->contains($project));
     }
 }

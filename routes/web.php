@@ -18,7 +18,6 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 
     // Project resource
     Route::post('projects/{project}/patch-days', 'ProjectController@projectSignup');
-    Route::delete('projects/{project}/patch-days', 'ProjectController@cancelSignup');
     Route::resource('projects', 'ProjectController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
