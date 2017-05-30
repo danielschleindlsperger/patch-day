@@ -24,6 +24,17 @@ class ProjectPolicy
     }
 
     /**
+     * Determine whether the user can view the project index resource.
+     *
+     * @param  \App\User $user
+     * @return mixed
+     */
+    public function index(User $user)
+    {
+        return $user->isAdmin();
+    }
+
+    /**
      * Determine whether the user can view the project.
      *
      * @param  \App\User  $user

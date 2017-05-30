@@ -42,17 +42,23 @@ class CompanyFeatureTest extends TestCase
     /** @test */
     public function can_see_all_companies()
     {
-        $companies = factory(Company::class, 2)->create();
+        $company = Company::create([
+            'name' => 'Be Careful Inc.',
+        ]);
+
+        $company_2 = Company::create([
+            'name' => 'A Random Co.',
+        ]);
 
         $response = $this->json('GET', '/companies');
         $response
             ->assertStatus(200)
             ->assertJsonFragment(
                 [
-                    'name' => $companies->all()[0]->name,
+                    'name' => $company_2->name,
                 ],
                 [
-                    'name' => $companies->all()[1]->name,
+                    'name' => $company->name,
                 ]
             );
     }

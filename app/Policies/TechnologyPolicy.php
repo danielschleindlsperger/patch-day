@@ -24,6 +24,17 @@ class TechnologyPolicy
     }
 
     /**
+     * Determine whether the user can view the technology index resource.
+     *
+     * @param  \App\User $user
+     * @return mixed
+     */
+    public function index(User $user)
+    {
+        return $user->isAdmin();
+    }
+
+    /**
      * Determine whether the user can view the technology.
      *
      * @param  \App\User  $user

@@ -14,17 +14,15 @@ use Illuminate\Support\Facades\Auth;
 class CompanyController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of all companies.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        if (Auth::user() && Auth::user()->isAdmin()) {
-            return Company::all();
-        } else {
-            abort(403, 'Not authorized.');
-        }
+        $this->authorize('index', Company::class);
+
+        return Company::orderBy('name', 'ASC')->get();
     }
 
     /**

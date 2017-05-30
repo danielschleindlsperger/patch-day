@@ -23,19 +23,26 @@ class TechnologyController extends Controller
      */
     public function index()
     {
-        $techs = Technology::orderByRaw('LOWER(name) ASC')
+        $this->authorize('index', Technology::class);
+
+        return Technology::orderByRaw('LOWER(name) ASC')
             ->orderByRAW('LOWER(version) DESC')
             ->get();
-        return $techs;
     }
 
-    public function showVersionsForTech(Request $request, $name)
+    /**
+     * Get all versions that exist for the technology with the specified name.
+     *
+     * @param $name
+     * @return mixed
+     */
+    public function showVersionsForTech($name)
     {
-        $versions = Technology::where('name', $name)
+        $this->authorize('index', Technology::class);
+
+        return Technology::where('name', $name)
             ->orderByRAW('LOWER(version) DESC')
             ->get();
-
-        return $versions;
     }
 
     /**

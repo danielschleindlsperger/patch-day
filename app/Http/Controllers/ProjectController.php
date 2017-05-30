@@ -15,17 +15,15 @@ use Illuminate\Support\Facades\Auth;
 class ProjectController extends Controller
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * Display a listing of all projects.
      *
-     * Return all projects
+     * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        if (Auth::user() && Auth::user()->isAdmin()) {
-            return Project::all();
-        } else {
-            abort(403, 'Not authorized.');
-        }
+        $this->authorize('index', Project::class);
+
+        return Project::orderBy('name', 'ASC')->get();
     }
 
     /**
