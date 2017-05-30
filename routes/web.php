@@ -17,6 +17,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     ]);
 
     // Project resource
+    Route::post('projects/{project}/patch-day-signup', 'ProjectController@projectSignup');
     Route::resource('projects', 'ProjectController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);

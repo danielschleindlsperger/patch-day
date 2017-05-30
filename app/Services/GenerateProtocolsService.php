@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\PatchDay;
+use App\Project;
 use App\Protocol;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -28,9 +29,10 @@ class GenerateProtocolsService
      */
     protected $latestProtocol;
 
-    public function __construct($id)
+    public function __construct(PatchDay $patch_day, Project $project)
     {
-        $this->patchDay = PatchDay::with('project', 'protocols')->find($id);
+        $this->patch_day = $patch_day;
+        $this->project = $project;
         $this->protocols = $this->patchDay->protocols;
 
         $this->getLatest();

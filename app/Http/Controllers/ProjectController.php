@@ -6,6 +6,7 @@ use App\Http\Requests\Project\CreateProject;
 use App\Http\Requests\Project\UpdateProject;
 use App\PatchDay;
 use App\Project;
+use App\Protocol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -86,5 +87,26 @@ class ProjectController extends Controller
         $project->delete();
 
         return ['success' => true];
+    }
+
+    /**
+     * Sign a project up for a patch_day. Return the resulting protocol.
+     *
+     * @param Request $request
+     * @param Project $project
+     * @return mixed
+     */
+    public function projectSignup(Request $request, Project $project)
+    {
+        $this->authorize('signup', $project);
+
+        $patch_day = PatchDay::findOrFail($request->input('patch_day_id'));
+
+        $protocol = Protocol::create([
+            'project_id' => $project->id,
+            'patch_day_id' => $patch_day->id,
+        ]);
+
+        return $protocol;
     }
 }

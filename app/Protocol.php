@@ -13,6 +13,7 @@ class Protocol extends Model
 
     protected $appends = [
         'date',
+        'price',
     ];
 
     protected $fillable = [
