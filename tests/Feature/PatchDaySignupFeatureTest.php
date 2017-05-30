@@ -25,7 +25,7 @@ class PatchDaySignupFeatureTest extends TestCase
         parent::setUp();
 
         $this->patch_day = PatchDay::create([
-            'date' => Carbon::now()->addWeeks(1)->toDateString(),
+            'date' => Carbon::now()->subWeeks(1)->toDateString(),
         ]);
 
         $this->company = factory(Company::class)->create();
@@ -45,11 +45,21 @@ class PatchDaySignupFeatureTest extends TestCase
             'company_id' => $this->company->id,
         ]);
 
+        // has to be in the future
         $response = $this->json('POST', '/projects/' . $project->id .
-            '/patch-day-signup', [
+            '/patch-days', [
             'patch_day_id' => $this->patch_day->id,
         ]);
+        $response->assertStatus(422);
 
+        $this->patch_day->date = Carbon::parse($this->patch_day->date)
+            ->addWeeks(2);
+        $this->patch_day->save();
+
+        $response = $this->json('POST', '/projects/' . $project->id .
+            '/patch-days', [
+            'patch_day_id' => $this->patch_day->id,
+        ]);
         $response->assertStatus(200)
             ->assertJson([
                 'patch_day_id' => $this->patch_day->id,
