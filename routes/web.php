@@ -30,7 +30,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     // Protocol resource
     Route::get('protocols/upcoming', 'ProtocolController@showUpcoming');
     Route::resource('protocols', 'ProtocolController', [
-        'only' => ['index', 'store', 'show', 'update', 'destroy']
+        'only' => ['index', 'show', 'update', 'destroy']
     ]);
 
     // User resource

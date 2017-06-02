@@ -28,21 +28,16 @@ class ProtocolPolicy
      * Determine whether the user can view the protocol.
      *
      * @param  \App\User $user
-     * @param  \App\Protocol $protocol
      * @return mixed
+     * @param  \App\Protocol $protocol
      */
     public function view(User $user, Protocol $protocol)
     {
-        try {
-            $company = $protocol->patchDay->project->company;
-            if ($user->company && $company) {
-                return $user->company->id === $company->id;
-            } else {
-                return false;
-            }
-        } catch (\Exception $e) {
-            return false;
-        }
+        $userCompany = $user->company;
+        $protocolCompany = $protocol->project->company;
+
+        return $userCompany && $protocolCompany &&
+            $userCompany->id === $protocolCompany->id;
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Company;
 use App\PatchDay;
 use App\Project;
 use App\User;
@@ -17,9 +18,21 @@ class ProtocolTest extends TestCase
     use DatabaseMigrations;
     use DatabaseTransactions;
 
+    protected $company;
+    protected $project;
+    protected $patch_day;
+
     public function setUp()
     {
         parent::setUp();
+
+        $this->company = factory(Company::class)->create();
+
+        $this->project = factory(Project::class)->create([
+            'company_id' => $this->company->id,
+        ]);
+
+        $this->patch_day = factory(PatchDay::class)->create();
 
         // Auth
         $admin = factory(User::class)->create([
@@ -32,9 +45,10 @@ class ProtocolTest extends TestCase
     public function can_see_a_protocol()
     {
         $protocol = factory(Protocol::class)->create([
+            'project_id' => $this->project->id,
+            'patch_day_id' => $this->patch_day->id,
             'comment' => 'It was good.',
             'done' => true,
-            'due_date' => Carbon::now()->toDateTimeString()
         ]);
 
         // request to non existing id
@@ -46,39 +60,10 @@ class ProtocolTest extends TestCase
         $response = $this->json('GET', '/protocols/' . $protocol->id);
         $response
             ->assertStatus(200)
-            ->assertJsonFragment([
+            ->assertJson([
                 'comment' => 'It was good.',
                 'done' => true,
-            ]);
-    }
-
-    /** @test */
-    public function can_create_a_protocol()
-    {
-        $response = $this->json('POST', '/protocols', [
-            'done' => 'yes',
-            'due_date' => 'never'
-        ]);
-        $response
-            ->assertStatus(422)
-            ->assertJson([
-                'due_date' => [
-                    'The due date is not a valid date.'
-                ],
-                'done' => [
-                    'The done field must be true or false.'
-                ]
-            ]);
-
-        $response = $this->json('POST', '/protocols', [
-            'comment' => 'It was good.',
-            'done' => true,
-            'due_date' => (new Carbon('now + 21 days'))->toDateTimeString()
-        ]);
-        $response
-            ->assertStatus(200)
-            ->assertJsonFragment([
-                'success' => true
+                'price' => $this->project->base_price,
             ]);
     }
 
@@ -86,9 +71,10 @@ class ProtocolTest extends TestCase
     public function can_edit_a_protocol()
     {
         $protocol = factory(Protocol::class)->create([
-            'due_date' => Carbon::now()->toDateTimeString(),
-            'done' => false,
+            'project_id' => $this->project->id,
+            'patch_day_id' => $this->patch_day->id,
             'comment' => null,
+            'done' => false,
         ]);
 
         $this->assertFalse($protocol->done);
@@ -111,22 +97,26 @@ class ProtocolTest extends TestCase
     }
 
     /** @test */
-    public function can_see_upcoming_patch_days()
+    public function can_see_upcoming_protocols()
     {
-        $project = factory(Project::class)->create();
+        $project = $this->project;
+
+        $patch_days = factory(PatchDay::class, 3)->create()
+            ->each(function ($patch_day, $index) {
+                $patch_day->date = Carbon::now()->addWeek($index + 1)
+                    ->toDateString();
+                $patch_day->save();
+            });
 
         $protocols = factory(Protocol::class, 3)->create([
             'done' => false,
+            'comment' => null,
         ])
-            ->each(function ($protocol, $index) use ($project) {
-        $patchDay = factory(PatchDay::class)->create([
-            'project_id' => $project->id,
-        ]);
-
-        $protocol->due_date = Carbon::now()->addWeek($index)->toDateString();
-        $protocol->patch_day_id = $patchDay->id;
-        $protocol->save();
-    });
+            ->each(function ($protocol, $index) use ($project, $patch_days) {
+                $protocol->project_id = $project->id;
+                $protocol->patch_day_id = $patch_days[$index]->id;
+                $protocol->save();
+            });
 
         $response = $this->json('GET', '/protocols/upcoming?limit=3');
 
@@ -135,39 +125,30 @@ class ProtocolTest extends TestCase
             ->assertJsonStructure([
                 [
                     'done',
-                    'due_date',
+                    'date',
                     'comment',
-                    'patch_day' => [
-                        'project'
-                    ]
                 ],
                 [
                     'done',
-                    'due_date',
+                    'date',
                     'comment',
-                    'patch_day' => [
-                        'project'
-                    ]
                 ],
                 [
                     'done',
-                    'due_date',
+                    'date',
                     'comment',
-                    'patch_day' => [
-                        'project'
-                    ]
                 ],
             ])
             // assert order
             ->assertJson([
                 [
-                    'id' => $protocols[0]->id
+                    'date' => $patch_days[0]->date
                 ],
                 [
-                    'id' => $protocols[1]->id
+                    'date' => $patch_days[1]->date
                 ],
                 [
-                    'id' => $protocols[2]->id
+                    'date' => $patch_days[2]->date
                 ],
             ]);
     }

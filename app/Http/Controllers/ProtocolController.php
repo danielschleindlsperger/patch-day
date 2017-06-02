@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Protocol\CreateProtocol;
 use App\Http\Requests\Protocol\UpdateProtocol;
 use App\Protocol;
 use Carbon\Carbon;
@@ -29,18 +28,6 @@ class ProtocolController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  CreateProtocol $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(CreateProtocol $request)
-    {
-        Protocol::create($request->all());
-        return ['success' => true];
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  Protocol $protocol
@@ -48,8 +35,8 @@ class ProtocolController extends Controller
      */
     public function show(Protocol $protocol)
     {
-        $protocol->load(['patchDay', 'patchDay.project', 'patchDay.project.company']);
         $this->authorize('view', $protocol);
+
         return $protocol;
     }
 
@@ -63,10 +50,11 @@ class ProtocolController extends Controller
     public function showUpcoming(Request $request)
     {
         $limit = $request->limit ?: 5;
+
         if (Auth::user()->isAdmin()) {
-            $protocols = Protocol::with('patchDay', 'patchDay.project')
+            $protocols = Protocol::join('patch_days', 'protocols.patch_day_id', '=', 'patch_days.id')
                 ->where('done', false)
-                ->orderBy('due_date', 'ASC')
+                ->orderBy('patch_days.date', 'ASC')
                 ->take($limit)
                 ->get();
             return $protocols;

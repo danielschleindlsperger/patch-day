@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class AuthorizationTest extends TestCase
+class AuthorizationFeatureTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;

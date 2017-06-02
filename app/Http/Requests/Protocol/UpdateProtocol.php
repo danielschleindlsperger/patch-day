@@ -27,7 +27,6 @@ class UpdateProtocol extends FormRequest
     public function rules()
     {
         return [
-            'due_date' => 'date',
             'done' => 'boolean',
             'comment' => 'string|nullable'
         ];
