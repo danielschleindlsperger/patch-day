@@ -34,7 +34,7 @@ class CompanyFeatureTest extends TestCase
         ]);
         $response
             ->assertStatus(200)
-            ->assertJsonFragment([
+            ->assertJson([
                 'name' => 'Example company',
             ]);
     }

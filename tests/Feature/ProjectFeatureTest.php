@@ -72,7 +72,8 @@ class ProjectFeatureTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJsonFragment([
-                'created' => true
+                'name' => 'Example Project',
+                'company_id' => $this->company->id,
             ]);
         $project = Project::orderBy('id', 'desc')->first();
 
@@ -89,8 +90,11 @@ class ProjectFeatureTest extends TestCase
         ]);
         $response
             ->assertStatus(200)
-            ->assertJsonFragment([
-                'created' => true
+            ->assertJson([
+                'name' => 'Example Project 2',
+                'base_price' => 40000,
+                'penalty' => 15000,
+                'company_id' => $this->company->id,
             ]);
         $project_2 = Project::orderBy('id', 'desc')->first();
 
@@ -139,8 +143,17 @@ class ProjectFeatureTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJsonFragment([
-                'created' => true
+            ->assertJson([
+                'name' => 'Example Project',
+                'company_id' => $this->company->id,
+                'current_technologies' => [
+                    [
+                        'id' => $latestLaravel->id,
+                    ],
+                    [
+                        'id' => $latestVue->id,
+                    ],
+                ]
             ]);
 
         $project = Project::orderBy('id', 'desc')->first();

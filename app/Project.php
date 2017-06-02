@@ -20,6 +20,10 @@ class Project extends Model
         'current_technologies',
     ];
 
+    protected $with = [
+        'technologies',
+    ];
+
     protected $casts = [
         'company_id' => 'integer',
         'base_price' => 'integer',

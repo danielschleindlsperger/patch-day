@@ -56,7 +56,7 @@ class ProjectController extends Controller
             $project->technologies()->attach($request->technologies);
         }
 
-        return ['created' => true];
+        return $project;
     }
 
     /**
