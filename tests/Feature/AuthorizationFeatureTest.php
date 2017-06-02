@@ -43,12 +43,11 @@ class AuthorizationTest extends TestCase
             'company_id' => $this->company->id,
         ]);
 
-        $this->patch_day = factory(PatchDay::class)->create([
-            'project_id' => $this->project->id,
-        ]);
+        $this->patch_day = factory(PatchDay::class)->create();
 
         $this->protocols = factory(Protocol::class, 3)->create([
             'patch_day_id' => $this->patch_day->id,
+            'project_id' => $this->project->id,
         ]);
     }
 
@@ -157,17 +156,10 @@ class AuthorizationTest extends TestCase
     /** @test */
     public function client_cannot_access_forbidden_protocol_routes()
     {
-
-        // CANNOT CREATE PROTOCOL
-        $countBefore = Protocol::all()->count();
-        $response = $this->json('POST', '/protocols', []);
-        $response->assertStatus(403);
-        $this->assertCount($countBefore, Protocol::all());
-
-
         // CANNOT UPDATE PROTOCOL
         $protocol = factory(Protocol::class)->create([
             'patch_day_id' => $this->patch_day->id,
+            'project_id' => $this->project->id,
             'comment' => 'Fake comment',
             'done' => false,
         ]);
@@ -186,13 +178,6 @@ class AuthorizationTest extends TestCase
         $this->assertFalse($updatedProtocol->done);
         // cleanup
         $this->client->company()->dissociate();
-
-
-        // CANNOT DELETE PROTOCOL
-        $countBefore = Protocol::all()->count();
-        $this->json('DELETE', 'protocols/' . $this->protocols->first()->id)
-            ->assertStatus(403);
-        $this->assertCount($countBefore, Protocol::all());
     }
 
     /** @test */
@@ -201,8 +186,8 @@ class AuthorizationTest extends TestCase
         $protocol = factory(Protocol::class)->create([
             'comment' => 'It was good.',
             'done' => true,
-            'due_date' => Carbon::now()->toDateTimeString(),
             'patch_day_id' => $this->patch_day->id,
+            'project_id' => $this->project->id,
         ]);
 
         // company not associated with client, so should fail
