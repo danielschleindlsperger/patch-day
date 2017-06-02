@@ -15,11 +15,25 @@ class ProjectsTableSeeder extends Seeder
         $companies = \App\Company::all();
 
         foreach ($companies as $company) {
-            factory(\App\Project::class, rand(1, 5))->create()->each(function ($project) use ($company, $faker) {
+            factory(\App\Project::class, rand(1, 5))->create([
+                'company_id' => $company->id,
+            ])->each(function ($project) use ($faker) {
                 $project->name = $faker->words(2, true);
-                $project->company_id = $company->id;
                 $project->save();
             });
+        }
+
+        // attach default technologies to projects
+        $technologies = \App\Technology::all();
+        $projects = \App\Project::all();
+        $tech_ids = [];
+        $technologies->shuffle()->unique('name')->splice(0,
+            rand(2, 4))->each(function ($tech) use (&$tech_ids) {
+            array_push($tech_ids, $tech->id);
+        });
+
+        foreach ($projects as $project) {
+            $project->technologies()->attach($tech_ids);
         }
     }
 }
