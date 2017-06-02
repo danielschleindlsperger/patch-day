@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class ProtocolTest extends TestCase
+class ProtocolFeatureTest extends TestCase
 {
     use DatabaseMigrations;
     use DatabaseTransactions;
