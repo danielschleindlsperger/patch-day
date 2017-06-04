@@ -19,23 +19,23 @@
                                 max-height="320"
                                 :rules="rules.company"
                         />
-                        <v-row>
-                            <v-col xs12 md6>
+                        <v-layout>
+                            <v-flex xs12 md6>
                                 <v-text-field
                                         name="cost"
                                         label="Price/PatchDay in Cents*"
                                         v-model="project.patch_day.cost"
                                         type="number"
                                 ></v-text-field>
-                            </v-col>
-                            <v-col xs12 md6>
+                            </v-flex>
+                            <v-flex xs12 md6>
                                 <v-switch primary
                                           success
                                           hide-details
                                           label="Active*"
                                           v-model="project.patch_day.active"/>
-                            </v-col>
-                        </v-row>
+                            </v-flex>
+                        </v-layout>
                         <v-subheader>
                             Every {{ project.patch_day.interval
                             }} months.* (Between 1 and 12)

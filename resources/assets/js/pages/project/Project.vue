@@ -20,8 +20,8 @@
                         </v-btn>
                     </div>
                 </div>
-                <v-row class="info-wrapper">
-                    <v-col xs12 md4 class="info-item">
+                <v-layout class="info-wrapper">
+                    <v-flex xs12 md4 class="info-item">
                         <v-icon large
                                 class="grey--text text--darken-2 pr-3"
                         >
@@ -31,8 +31,8 @@
                             Price/PatchDay: {{ patchDay.cost |
                         currency('EUR', true) }}
                         </h6>
-                    </v-col>
-                    <v-col xs12 md4 class="info-item">
+                    </v-flex>
+                    <v-flex xs12 md4 class="info-item">
                         <v-icon large
                                 class="grey--text text--darken-2 pr-3"
                         >
@@ -41,8 +41,8 @@
                         <h6 class="ma-0">
                             Every {{ patchDay.interval }} months
                         </h6>
-                    </v-col>
-                    <v-col xs12 md4 class="info-item">
+                    </v-flex>
+                    <v-flex xs12 md4 class="info-item">
                         <h6 class="ma-0">
                             Active:
                         </h6>
@@ -51,8 +51,8 @@
                         >
                             {{ patchDay.active | checkIcon }}
                         </v-icon>
-                    </v-col>
-                </v-row>
+                    </v-flex>
+                </v-layout>
             </div>
             <hr>
             <div class="projects">

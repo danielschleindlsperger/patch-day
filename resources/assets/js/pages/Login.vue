@@ -1,7 +1,7 @@
 <template>
     <v-container>
-        <v-row>
-            <v-col xs12 lg8 xl6 class="card-wrapper">
+        <v-layout>
+            <v-flex xs12 lg8 xl6 class="card-wrapper">
                 <v-card>
                     <v-card-row>
                         <v-card-title>
@@ -29,8 +29,8 @@
                         </div>
                     </v-card-text>
                 </v-card>
-            </v-col>
-        </v-row>
+            </v-flex>
+        </v-layout>
     </v-container>
 </template>
 

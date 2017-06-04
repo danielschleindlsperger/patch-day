@@ -1,6 +1,8 @@
 <template>
-    <v-sidebar drawer v-model="sidebar.open"
-               :close-on-click="true">
+    <v-navigation-drawer v-model="sidebar.open"
+                         :close-on-click="true"
+                         persistent light clipped
+                         enable-resize-watcher>
         <v-list>
             <v-list-item v-for="(item,i) in items" :key="i">
                 <v-list-tile router :href="item.href">
@@ -8,7 +10,7 @@
                 </v-list-tile>
             </v-list-item>
         </v-list>
-    </v-sidebar>
+    </v-navigation-drawer>
 </template>
 
 <script>
@@ -31,7 +33,9 @@
     .list__tile {
         color: darken(white, 25%);
         &.list__tile--active {
-            color: white;
+            > .list__tile__title {
+                font-weight: bold;
+            }
         }
     }
 </style>

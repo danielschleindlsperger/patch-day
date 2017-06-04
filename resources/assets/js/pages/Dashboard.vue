@@ -1,13 +1,13 @@
 <template>
     <v-container>
-        <v-row>
-            <v-col xs12 lg6>
+        <v-layout>
+            <v-flex xs12 lg6>
                 <upcoming></upcoming>
-            </v-col>
-            <v-col xs12 lg6>
+            </v-flex>
+            <v-flex xs12 lg6>
                 <quick-create></quick-create>
-            </v-col>
-        </v-row>
+            </v-flex>
+        </v-layout>
     </v-container>
 </template>
 

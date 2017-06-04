@@ -1,9 +1,9 @@
 <template>
     <v-app id="patch-day" class="elevation-1" top-toolbar left-fixed-sidebar
            sidebar-under-toolbar>
+        <side-bar :sidebar="sidebar"></side-bar>
         <v-toolbar class="primary">
             <v-toolbar-side-icon
-                    class="hidden-lg-and-up"
                     @click.native.stop="sidebar.open = !sidebar.open"/>
             <v-toolbar-title class="hidden-sm-and-down">PatchDay
             </v-toolbar-title>
@@ -20,12 +20,9 @@
             </v-toolbar-items>
         </v-toolbar>
         <main>
-            <side-bar :sidebar="sidebar"></side-bar>
-            <v-content>
-                <v-container fluid>
-                    <router-view></router-view>
-                </v-container>
-            </v-content>
+            <v-container fluid>
+                <router-view></router-view>
+            </v-container>
         </main>
         <info-bar></info-bar>
     </v-app>
