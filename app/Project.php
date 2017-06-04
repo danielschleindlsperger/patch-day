@@ -19,6 +19,11 @@ class Project extends Model
         'technologies',
     ];
 
+    protected $appends = [
+        'current_technologies',
+        'technology_history',
+    ];
+
     protected $hidden = [
         'technologies',
     ];
@@ -76,7 +81,7 @@ class Project extends Model
         return $this->technologies()
             ->orderBy('name', 'ASC')
             ->orderBy('version', 'DESC')
-            ->orderBy('protocol_id', 'DESC')
+            ->orderBy('pivot_protocol_id', 'DESC')
             ->groupBy('name')
             ->get();
     }

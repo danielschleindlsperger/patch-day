@@ -6,13 +6,15 @@
             </v-card-title>
         </v-card-row>
         <v-card-text>
-            <v-btn primary @click.native="createCompanyModal($event)">
+            <v-btn primary @click.native="createCompanyModal($event)"
+                   class="white--text">
                 Create Company
             </v-btn>
-            <v-btn primary @click.native="createProjectModal($event)">
+            <v-btn primary @click.native="createProjectModal($event)"
+                   class="white--text">
                 Create Project
             </v-btn>
-            <v-btn primary>Create User</v-btn>
+            <v-btn primary class="white--text">Create User</v-btn>
         </v-card-text>
         <create-company></create-company>
         <create-project></create-project>
