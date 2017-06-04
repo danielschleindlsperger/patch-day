@@ -21,36 +21,27 @@
                     </div>
                 </div>
                 <v-layout class="info-wrapper">
-                    <v-flex xs12 md4 class="info-item">
+                    <v-flex xs12 md6 class="info-item">
                         <v-icon large
                                 class="grey--text text--darken-2 pr-3"
                         >
                             attach_money
                         </v-icon>
                         <h6 class="ma-0">
-                            Price/PatchDay: {{ patchDay.cost |
+                            Price/PatchDay: {{ project.base_price |
                         currency('EUR', true) }}
                         </h6>
                     </v-flex>
-                    <v-flex xs12 md4 class="info-item">
+                    <v-flex xs12 md6 class="info-item">
                         <v-icon large
                                 class="grey--text text--darken-2 pr-3"
                         >
-                            access_time
+                            attach_money
                         </v-icon>
                         <h6 class="ma-0">
-                            Every {{ patchDay.interval }} months
+                            Penalty: {{ project.penalty |
+                        currency('EUR', true) }}
                         </h6>
-                    </v-flex>
-                    <v-flex xs12 md4 class="info-item">
-                        <h6 class="ma-0">
-                            Active:
-                        </h6>
-                        <v-icon large
-                                class="grey--text text--darken-2 pl-3"
-                        >
-                            {{ patchDay.active | checkIcon }}
-                        </v-icon>
                     </v-flex>
                 </v-layout>
             </div>
@@ -59,20 +50,19 @@
                 <h3 class="text-xs-center">PatchDays</h3>
                 <v-data-table
                         :headers="tableHeaders"
-                        v-model="project.patch_day.protocols"
+                        :items="project.protocols"
                         hide-actions
                         class="elevation-1"
                 >
                     <template slot="items" scope="props">
                         <td>
-                            <router-link :to="'/protocols/' +
-                                    props.item.id">
+                            <router-link :to="'/protocols/' + props.item.id">
                                 PatchDay
-                                #{{ props.item.protocol_number }}
+                                #{{ props.item.patch_day_id }}
                             </router-link>
                         </td>
                         <td class="text-xs-right">
-                            {{ props.item.due_date | Date }}
+                            {{ props.item.date | Date }}
                         </td>
                         <td class="text-xs-right">
                             <v-icon>
@@ -103,13 +93,13 @@
     data() {
       return {
         project: {
+          base_price: 0,
+          penalty: 0,
+          name: '',
           company: {
             name: ''
           },
-          patch_day: {
-            active: false,
-            protocols: []
-          }
+          protocols: []
         },
         tableHeaders: [
           {
@@ -118,8 +108,8 @@
             value: 'name',
           },
           {
-            text: 'Due Date',
-            value: 'due_date',
+            text: 'Date',
+            value: 'date',
             sortable: true,
           },
           {
@@ -129,11 +119,6 @@
           },
         ]
       }
-    },
-    computed: {
-      patchDay() {
-        return this.project.patch_day
-      },
     },
     methods: {
       deleteProject(event) {
