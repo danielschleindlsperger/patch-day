@@ -19,7 +19,7 @@ $factory->define(App\Project::class, function (Faker\Generator $faker) {
     return [
         'name' => 'Fake Project',
         'base_price' => random_int(10000, 80000),
-        'penalty' => random_int(50000, 500000),
+        'penalty' => random_int(5000, 50000),
     ];
 });
 
