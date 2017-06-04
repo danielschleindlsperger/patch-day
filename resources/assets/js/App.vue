@@ -1,11 +1,10 @@
 <template>
-    <v-app id="patch-day" class="elevation-1" top-toolbar left-fixed-sidebar
-           sidebar-under-toolbar>
+    <v-app id="patch-day" class="elevation-1">
         <side-bar :sidebar="sidebar"></side-bar>
         <v-toolbar class="primary">
-            <v-toolbar-side-icon
+            <v-toolbar-side-icon class="white--text"
                     @click.native.stop="sidebar.open = !sidebar.open"/>
-            <v-toolbar-title class="hidden-sm-and-down">PatchDay
+            <v-toolbar-title class="hidden-sm-and-down white--text">PatchDay
             </v-toolbar-title>
             <v-toolbar-items class="hidden-xs-and-down">
                 <v-toolbar-item ripple router href="/">
@@ -49,12 +48,4 @@
 
 <style lang="scss">
 
-    main {
-        position: relative;
-        padding-left: 0 !important;
-    }
-
-    .content {
-        padding: 1rem;
-    }
 </style>
