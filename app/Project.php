@@ -15,12 +15,11 @@ class Project extends Model
         'name', 'company_id', 'base_price', 'penalty',
     ];
 
-    protected $appends = [
-        'technology_history',
-        'current_technologies',
+    protected $with = [
+        'technologies',
     ];
 
-    protected $with = [
+    protected $hidden = [
         'technologies',
     ];
 
