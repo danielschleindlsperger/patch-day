@@ -204,4 +204,41 @@ class AuthorizationFeatureTest extends TestCase
                 'done' => true,
             ]);
     }
+
+    /** @test */
+    public function client_cannot_access_forbidden_user_routes()
+    {
+        // CANNOT ACCESS USERS INDEX
+        $response = $this->json('GET', '/users');
+        $response->assertStatus(403);
+
+
+        // CANNOT CREATE USER
+        $response = $this->json('POST', '/users', [
+            'name' => 'Example Project',
+            'email' => 'fake@example.com'
+        ]);
+        $response->assertStatus(403);
+
+
+        // CANNOT UPDATE USER
+        $user = factory(User::class)->create([
+            'name' => 'Fake Fakerson',
+        ]);
+        $response = $this->json('PUT', '/users/' . $user->id, [
+            'name' => 'Updated User'
+        ])->assertStatus(403);
+        $user = User::find($user->id);
+        $this->assertNotEquals('Updated User', $user->name);
+
+
+        // CANNOT DELETE USER
+        $response = $this->json('DELETE', '/users/' . $user->id);
+        $response->assertStatus(403);
+        $user = User::find($user->id);
+        $this->assertNotNull($user);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals('Fake Fakerson', $user->name);
+
+    }
 }

@@ -9,9 +9,11 @@ use App\Policies\PatchDayPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\ProtocolPolicy;
 use App\Policies\TechnologyPolicy;
+use App\Policies\UserPolicy;
 use App\Project;
 use App\Protocol;
 use App\Technology;
+use App\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
@@ -30,6 +32,7 @@ class AuthServiceProvider extends ServiceProvider
         Project::class => ProjectPolicy::class,
         Protocol::class => ProtocolPolicy::class,
         Technology::class => TechnologyPolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**

@@ -24,13 +24,17 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $this->authorize('index', User::class);
+
+        $users = User::all()->with('company');
+
+        return $users;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  CreateUser $request
      * @return \Illuminate\Http\Response
      */
     public function store(CreateUser $request)
@@ -81,11 +85,15 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $this->authorize('delete', $user);
+
+        $user->delete();
+
+        return ['sucess' => true];
     }
 }

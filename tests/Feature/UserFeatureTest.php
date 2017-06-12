@@ -152,4 +152,40 @@ class UserFeatureTest extends TestCase
             }
         );
     }
+
+    /** @test */
+    public function admin_can_see_all_users_and_their_company()
+    {
+        $company_1 = factory(Company::class)->create();
+        $company_2 = factory(Company::class)->create();
+
+        $user_1 = factory(User::class)->create([
+            'company_id' => $company_1->id,
+        ]);
+        $user_2 = factory(User::class)->create([
+            'company_id' => $company_2->id,
+        ]);
+
+        $response = $this->json('GET', '/users');
+
+        $response->assertStatus(200)
+                 ->assertJson([
+                     [
+                         'name' => $user_2->name,
+                         'id' => $user_2->id,
+                         'company_id' => $company_2->id,
+                         'company' => [
+                             'name' => $company_2->name,
+                         ]
+                     ],
+                     [
+                         'name' => $user_1->name,
+                         'id' => $user_1->id,
+                         'company_id' => $company_1->id,
+                         'company' => [
+                             'name' => $company_1->name,
+                         ]
+                     ],
+                 ]);
+    }
 }
