@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer v-model="sidebar.open"
+    <v-navigation-drawer v-model="sidebarOpen"
                          :close-on-click="true"
                          persistent light clipped
                          enable-resize-watcher>
@@ -14,10 +14,12 @@
 </template>
 
 <script>
+  import eventBus from 'components/event-bus'
   export default {
     name: 'side-bar',
     data () {
       return {
+        sidebarOpen: false,
         items: [
           {title: 'Dashboard', href: '/'},
           {title: 'Companies', href: '/companies'},
@@ -26,7 +28,11 @@
         ],
       }
     },
-    props: ['sidebar']
+    mounted() {
+      eventBus.$on('sidebar.toggle', () => {
+        this.sidebarOpen = !this.sidebarOpen
+      })
+    },
   }
 </script>
 

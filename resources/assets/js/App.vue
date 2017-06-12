@@ -1,6 +1,6 @@
 <template>
     <v-app id="patch-day" class="elevation-1">
-        <side-bar :sidebar="sidebar"></side-bar>
+        <side-bar></side-bar>
         <tool-bar></tool-bar>
         <main>
             <v-container fluid>
@@ -18,11 +18,7 @@
 
   export default {
     data() {
-      return {
-        sidebar: {
-          open: false,
-        }
-      }
+      return {}
     },
     components: {
       ToolBar,

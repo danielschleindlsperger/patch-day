@@ -1,7 +1,6 @@
 <template>
     <v-toolbar class="primary" light>
-        <v-toolbar-side-icon light
-                             @click.native.stop="sidebar.open = !sidebar.open"/>
+        <v-toolbar-side-icon light @click.native.stop="toggleSidebar()"/>
         <v-toolbar-title>PatchDay</v-toolbar-title>
         <v-toolbar-items>
             <v-toolbar-item class="hidden-sm-and-down"
@@ -38,23 +37,27 @@
 </template>
 
 <script>
-    export default {
-      name: 'tool-bar',
-      data() {
-        return {}
+  import eventBus from 'components/event-bus'
+  export default {
+    name: 'tool-bar',
+    data() {
+      return {}
+    },
+    methods: {
+      logout() {
+        this.$http.post('/logout')
+          .then(response => {
+            this.$root.user = {}
+            this.$router.push('/login')
+          })
+          .catch(error => {
+            console.error(error)
+            eventBus.$emit('info.snackbar', error.response.data.error)
+          })
       },
-      methods: {
-        logout() {
-          this.$http.post('/logout')
-            .then(response => {
-              this.$root.user = {}
-              this.$router.push('/login')
-            })
-            .catch(error => {
-              console.error(error)
-              eventBus.$emit('info.snackbar', error.response.data.error)
-            })
-        }
-      },
-    }
+      toggleSidebar() {
+        eventBus.$emit('sidebar.toggle')
+      }
+    },
+  }
 </script>
