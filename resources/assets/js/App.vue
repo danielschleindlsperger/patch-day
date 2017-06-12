@@ -6,7 +6,7 @@
                     @click.native.stop="sidebar.open = !sidebar.open"/>
             <v-toolbar-title class="hidden-sm-and-down white--text">PatchDay
             </v-toolbar-title>
-            <v-toolbar-items class="hidden-xs-and-down">
+            <v-toolbar-items class="hidden-sm-and-down">
                 <v-toolbar-item ripple router href="/">
                     Dashboard
                 </v-toolbar-item>
