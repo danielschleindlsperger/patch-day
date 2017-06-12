@@ -19,4 +19,11 @@ class AuthController extends Controller
             abort(422, __('auth.failed'));
         }
     }
+
+    public function logout()
+    {
+        Auth::logout();
+
+        return ['success' => true];
+    }
 }

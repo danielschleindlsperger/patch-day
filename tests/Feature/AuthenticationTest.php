@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\User;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -44,9 +45,32 @@ class AuthenticationTest extends TestCase
         ]);
     }
 
+    /** @test */
     public function a_user_can_logout()
     {
-        // TODO: write test
+        // unauthenticated
+        $this->assertTrue(Auth::guest());
+        $this->json('GET', '/users/me')->assertStatus(401);
+
+        // "logging in"
+        $user = factory(User::class)->create();
+        $this->actingAs($user);
+
+        // authenticated
+        $this->assertFalse(Auth::guest());
+        $this->assertEquals($user->id, Auth::user()->id);
+        $this->json('GET', '/users/me')->assertStatus(200);
+
+        // logging out
+        $this->json('POST', '/logout')
+             ->assertStatus(200)
+             ->assertJson([
+                 'success' => true,
+             ]);
+
+        // unauthenticated again
+        $this->assertTrue(Auth::guest());
+        $this->json('GET', '/users/me')->assertStatus(401);
     }
 
     /** @test */

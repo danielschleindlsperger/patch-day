@@ -8,6 +8,7 @@ Route::get('/', function () {
 //Auth::routes();
 
 Route::post('/login', ['as' => 'login', 'uses' => 'Auth\AuthController@authenticate']);
+Route::post('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@logout']);
 
 Route::group(['middleware' => ['web', 'auth']], function () {
 
