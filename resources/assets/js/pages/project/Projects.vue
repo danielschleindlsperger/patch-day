@@ -3,7 +3,7 @@
         <v-container>
             <div class="button-row">
                 <v-btn primary dark
-                       @click.native="openCreateProjectModal">
+                       @click.native="openCreateProjectModal($event)">
                     <v-icon class="white--text text--darken-2">
                         add_circle
                     </v-icon>
@@ -88,7 +88,7 @@
         event.stopPropagation()
         eventBus.$emit('project.delete.modal', item);
       },
-      openCreateProjectModal() {
+      openCreateProjectModal(event) {
         event.preventDefault()
         event.stopPropagation()
         eventBus.$emit('project.create.modal')
