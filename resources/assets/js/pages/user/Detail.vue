@@ -30,6 +30,7 @@
         </div>
 
         <delete-user></delete-user>
+        <edit-user></edit-user>
     </div>
 </template>
 
@@ -37,10 +38,12 @@
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
   import DeleteUser from 'pages/user/DeleteUser'
+  import EditUser from 'pages/user/EditUser'
 
   export default {
     components: {
       DeleteUser,
+      EditUser,
     },
     data() {
       return {
@@ -61,8 +64,12 @@
       eventBus.$on('user.deleted', item => {
         // this user was deleted
         if (item.id === this.user.id) {
-          this.$router.push('/projects')
+          this.$router.push('/users')
         }
+      })
+
+      eventBus.$on('user.edited', user => {
+        this.getUser()
       })
     },
     methods: {
@@ -84,6 +91,11 @@
         event.preventDefault()
         event.stopPropagation()
         eventBus.$emit('user.delete.modal', this.user);
+      },
+      editUserModal(event) {
+        event.preventDefault()
+        event.stopPropagation()
+        eventBus.$emit('user.edit.modal', this.user);
       },
     }
   }

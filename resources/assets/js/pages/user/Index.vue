@@ -3,7 +3,7 @@
         <h1 class="display-2 text-xs-center">Users</h1>
 
         <!-- TODO: fix search for company name -->
-        <div class="search-wrapper">
+        <div class="action-wrapper">
             <v-text-field
                     append-icon="search"
                     label="Search"
@@ -112,7 +112,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .search-wrapper {
+    .action-wrapper {
         display: flex;
         justify-content: flex-end;
         > div {
