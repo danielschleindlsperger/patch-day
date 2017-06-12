@@ -19,8 +19,11 @@
                         {{ props.item.company.name }}
                     </router-link>
                 </td>
-                <td class="text-xs-right">{{
-                  props.item.created_at | DateTime }}
+                <td>
+                    {{ props.item.role }}
+                </td>
+                <td class="text-xs-right">
+                    {{ props.item.created_at | DateTime }}
                 </td>
             </template>
         </v-data-table>
@@ -54,6 +57,12 @@
           {
             text: 'Company',
             value: 'company.name',
+            sortable: true,
+            left: true,
+          },
+          {
+            text: 'Role',
+            value: 'role',
             sortable: true,
             left: true,
           },
