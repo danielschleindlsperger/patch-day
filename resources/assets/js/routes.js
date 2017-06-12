@@ -10,6 +10,8 @@ import Projects from 'pages/project/Projects'
 import Project from 'pages/project/Project'
 // patch-day/protocols
 import PatchDay from 'pages/patch-day/PatchDay'
+// users
+import UsersIndex from 'pages/user/Index'
 
 export default [
   {
@@ -32,6 +34,9 @@ export default [
   },
   {
     path: '/protocols/:id', component: PatchDay,
+  },
+  {
+    path: '/users', component: UsersIndex,
   },
   {
     path: '*', component: NotFoundPage, name: 'not-found'

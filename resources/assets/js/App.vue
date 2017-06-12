@@ -16,6 +16,9 @@
                 <v-toolbar-item ripple router href="/projects">
                     Projects
                 </v-toolbar-item>
+                <v-toolbar-item ripple router href="/users">
+                    Users
+                </v-toolbar-item>
             </v-toolbar-items>
         </v-toolbar>
         <main>

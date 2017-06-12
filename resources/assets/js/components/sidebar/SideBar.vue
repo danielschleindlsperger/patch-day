@@ -22,6 +22,7 @@
           {title: 'Dashboard', href: '/'},
           {title: 'Companies', href: '/companies'},
           {title: 'Projects', href: '/projects'},
+          {title: 'Users', href: '/users'},
         ],
       }
     },

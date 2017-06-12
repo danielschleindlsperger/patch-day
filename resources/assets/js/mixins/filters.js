@@ -5,6 +5,9 @@ export default {
     Date(date) {
       return moment(date).format('DD.MM.YYYY')
     },
+    DateTime(date) {
+      return moment(date).format('DD.MM.YYYY k:mm')
+    },
     ISODate(date) {
       return moment(date).format('YYYY-MM-DD')
     },
