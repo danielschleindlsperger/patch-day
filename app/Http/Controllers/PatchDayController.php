@@ -7,6 +7,7 @@ use App\Http\Requests\PatchDay\CreateProject;
 use App\Http\Requests\PatchDay\UpdatePatchDay;
 use App\PatchDay;
 use App\Project;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\ApacheRequest;
@@ -28,6 +29,21 @@ class PatchDayController extends Controller
         $this->authorize('index', PatchDay::class);
 
         return PatchDay::orderBy('date', 'DESC')->get();
+    }
+
+    /**
+     * Display a listing of all upcoming patch-days.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function upcoming()
+    {
+        $today = Carbon::now()->toDateString();
+
+        $patch_days = PatchDay::where('date', '>=', $today)
+                                ->orderBy('date', 'ASC')->get();
+
+        return $patch_days;
     }
 
     /**

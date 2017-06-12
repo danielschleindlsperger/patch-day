@@ -24,6 +24,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     ]);
 
     // PatchDay resource
+    Route::get('patch-days/upcoming', 'PatchDayController@upcoming');
     Route::resource('patch-days', 'PatchDayController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);

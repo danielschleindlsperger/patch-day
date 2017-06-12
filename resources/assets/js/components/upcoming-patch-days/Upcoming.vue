@@ -42,7 +42,7 @@
       }
     },
     mounted() {
-      this.$http.get('/patch-days')
+      this.$http.get('/patch-days/upcoming')
         .then(response => {
           this.patch_days = response.data
         })
