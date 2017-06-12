@@ -7,21 +7,18 @@
         </v-card-row>
         <v-card-text>
             <v-list>
-                <v-list-item v-for="protocol in protocols"
-                             :key="protocol.id">
+                <v-list-item v-for="patch_day in patch_days"
+                             :key="patch_day.id">
                     <v-list-tile router avatar
-                                 :href="'/protocols/' + protocol.id">
-                        <v-list-tile-avatar>
-                            <img src="/img/company_dummy.png"/>
-                        </v-list-tile-avatar>
+                                 :href="'/patch-days/' + patch_day.id">
                         <v-list-tile-content>
                             <v-list-tile-title>
-                                {{ protocol.patch_day.project.name }}
+                                PatchDay #{{ patch_day.id}}
                             </v-list-tile-title>
                             <v-list-tile-sub-title>
                                 <!-- Display in days from now aswell -->
-                                Due on {{ protocol.due_date | Date }}
-                                ({{ protocol.due_date | DaysFromNow }})
+                                On {{ patch_day.date | Date }}
+                                ({{ patch_day.date | DaysFromNow }})
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                         <v-list-tile-action>
@@ -41,14 +38,13 @@
     mixins: [filters],
     data() {
       return {
-        protocols: {},
+        patch_days: {},
       }
     },
     mounted() {
-      this.$http.get('/protocols/upcoming')
+      this.$http.get('/patch-days')
         .then(response => {
-          this.protocols = response.data
-          console.log(response.data)
+          this.patch_days = response.data
         })
         .catch(error => {
           console.error(error)
