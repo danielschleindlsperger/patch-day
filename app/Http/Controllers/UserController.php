@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of all users with their companies.
      *
      * @return \Illuminate\Http\Response
      */
@@ -26,7 +26,7 @@ class UserController extends Controller
     {
         $this->authorize('index', User::class);
 
-        $users = User::all()->with('company');
+        $users = User::orderBy('id', 'DESC')->with('company')->get();
 
         return $users;
     }
