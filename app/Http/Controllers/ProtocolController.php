@@ -39,30 +39,7 @@ class ProtocolController extends Controller
 
         return $protocol;
     }
-
-    /**
-     * Return upcoming patch-days for admins
-     *
-     * @param Request $request
-     * @return mixed
-     * @throws AuthenticationException
-     */
-    public function showUpcoming(Request $request)
-    {
-        $limit = $request->limit ?: 5;
-
-        if (Auth::user()->isAdmin()) {
-            $protocols = Protocol::join('patch_days', 'protocols.patch_day_id', '=', 'patch_days.id')
-                ->where('done', false)
-                ->orderBy('patch_days.date', 'ASC')
-                ->take($limit)
-                ->get();
-            return $protocols;
-        } else {
-            throw new AuthenticationException();
-        }
-    }
-
+    
     /**
      * Update the specified resource in storage.
      *
