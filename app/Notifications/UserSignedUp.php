@@ -18,6 +18,7 @@ class UserSignedUp extends Notification
     public function __construct($user)
     {
         $this->user = $user;
+        $user->load('company');
     }
 
     /**
@@ -52,6 +53,7 @@ class UserSignedUp extends Notification
                         'Name' => $user->name,
                         'E-Mail' => $user->email,
                         'Role' => $user->role,
+                        'Company' => $user->company->name,
                     ]);
             })
             ->from('BOT', ':robot_face:');
@@ -71,6 +73,7 @@ class UserSignedUp extends Notification
             'name' => $this->user->name,
             'email' => $this->user->email,
             'role' => $this->user->role,
+            'company' => $this->user->company->name,
         ];
     }
 }
