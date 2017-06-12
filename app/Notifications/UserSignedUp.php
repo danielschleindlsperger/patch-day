@@ -46,7 +46,7 @@ class UserSignedUp extends Notification
             ->content('New user signed up!')
             ->attachment(function ($attachment) use ($user) {
 
-                $url = url()->full() . '#/users/' . $user->id;
+                $url = url('/') . '/#/users/' . $user->id;
 
                 $attachment->title('User', $url)
                     ->fields([
@@ -69,7 +69,7 @@ class UserSignedUp extends Notification
     {
         return [
             'content' => 'New user signed up!',
-            'url' => url()->full() . '#/users/' . $this->user->id,
+            'url' => url('/') . '/#/users/' . $this->user->id,
             'name' => $this->user->name,
             'email' => $this->user->email,
             'role' => $this->user->role,
