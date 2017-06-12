@@ -1,10 +1,23 @@
 <template>
     <v-container>
         <h1 class="display-2 text-xs-center">Users</h1>
+
+        <!-- TODO: fix search for company name -->
+        <div class="search-wrapper">
+            <v-text-field
+                    append-icon="search"
+                    label="Search"
+                    single-line
+                    hide-details
+                    v-model="search"
+            ></v-text-field>
+        </div>
+
         <v-data-table
                 :loading="loading"
-                v-bind:headers="tableHeaders"
+                :headers="tableHeaders"
                 :items="users"
+                :search="search"
                 hide-actions
                 class="elevation-1"
         >
@@ -14,7 +27,7 @@
                         {{ props.item.name }}
                     </router-link>
                 </td>
-                <td >
+                <td>
                     <router-link :to="'/companies/' + props.item.company.id">
                         {{ props.item.company.name }}
                     </router-link>
@@ -39,6 +52,7 @@
     data() {
       return {
         loading: true,
+        search: '',
         users: [
           {
             name: '',
@@ -98,5 +112,12 @@
 </script>
 
 <style lang="scss" scoped>
-
+    .search-wrapper {
+        display: flex;
+        justify-content: flex-end;
+        > div {
+            width: 100%;
+            max-width: 200px;
+        }
+    }
 </style>
