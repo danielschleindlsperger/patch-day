@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
         $admin = DB::table('users')->where('email', 'admin@patch-day.dev')
             ->first();
         if (!$admin) {
-            DB::table('users')->insert([
+            factory(\App\User::class)->create([
                 'name' => 'Admin',
                 'email' => 'admin@patch-day.dev',
                 'password' => bcrypt('secret'),
@@ -33,7 +33,7 @@ class UsersTableSeeder extends Seeder
         $client = DB::table('users')->where('email', 'client@example.com')
             ->first();
         if (!$client) {
-            DB::table('users')->insert([
+            factory(\App\User::class)->create([
                 'name' => 'Fake Fakerson',
                 'email' => 'client@example.com',
                 'password' => bcrypt('secret'),
