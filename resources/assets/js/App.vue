@@ -1,5 +1,5 @@
 <template>
-    <v-app id="patch-day" class="elevation-1">
+    <v-app id="patch-day">
         <side-bar></side-bar>
         <tool-bar></tool-bar>
         <main>
