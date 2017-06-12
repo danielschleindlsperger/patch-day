@@ -1,34 +1,35 @@
 <template>
     <div>
-        <v-layout justify-center child-flex[-sm]>
-            <h1 class="display-1 text-xs-center flex">{{ user.name }}</h1>
-            <v-btn class="flex"
-                   flat="flat" icon ripple
-                   @click.native="editUserModal($event)">
-                <v-icon class="grey--text">
-                    mode_edit
-                </v-icon>
-            </v-btn>
+        <v-container>
+            <v-layout justify-center child-flex[-sm]>
+                <h1 class="display-1 text-xs-center flex">{{ user.name }}</h1>
+                <v-btn class="flex"
+                       flat="flat" icon ripple
+                       @click.native="editUserModal($event)">
+                    <v-icon class="grey--text">
+                        mode_edit
+                    </v-icon>
+                </v-btn>
 
-            <v-btn  class="flex"
-                    flat="flat" icon ripple
-                   @click.native="deleteUserModal($event)">
-                <v-icon class="grey--text">
-                    delete
-                </v-icon>
-            </v-btn>
-        </v-layout>
+                <v-btn class="flex"
+                       flat="flat" icon ripple
+                       @click.native="deleteUserModal($event)">
+                    <v-icon class="grey--text">
+                        delete
+                    </v-icon>
+                </v-btn>
+            </v-layout>
 
-        <div class="subheading">Company:
-            <router-link :to="'/companies/' + user.company.id">
-                {{ user.company.name }}
-            </router-link>
-        </div>
-        <div class="subheading">Role: {{ user.role }}</div>
-        <div class="subheading">E-Mail:
-            <a :href="`mailto:${user.email}`">{{ user.email }}</a>
-        </div>
-
+            <div class="subheading">Company:
+                <router-link :to="'/companies/' + user.company.id">
+                    {{ user.company.name }}
+                </router-link>
+            </div>
+            <div class="subheading">Role: {{ user.role }}</div>
+            <div class="subheading">E-Mail:
+                <a :href="`mailto:${user.email}`">{{ user.email }}</a>
+            </div>
+        </v-container>
         <delete-user></delete-user>
         <edit-user></edit-user>
     </div>
