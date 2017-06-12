@@ -3,7 +3,7 @@
               class="create-user-modal">
         <v-card>
             <v-card-row>
-                <v-card-title>Edit User</v-card-title>
+                <v-card-title>Create User</v-card-title>
             </v-card-row>
 
             <v-card-row>
