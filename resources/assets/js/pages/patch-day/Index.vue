@@ -37,7 +37,7 @@
         </v-container>
 
         <delete-project></delete-project>
-        <create-project></create-project>
+        <create-patch-day></create-patch-day>
     </div>
 </template>
 
@@ -46,12 +46,12 @@
   import filters from 'mixins/filters'
 
   import DeleteProject from 'pages/project/DeleteProject'
-  import CreateProject from 'pages/project/CreateProject'
+  import CreatePatchDay from 'pages/patch-day/CreatePatchDay'
 
   export default {
     components: {
       DeleteProject,
-      CreateProject,
+      CreatePatchDay,
     },
     mixins: [filters],
     data() {
