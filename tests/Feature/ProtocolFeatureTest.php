@@ -80,7 +80,7 @@ class ProtocolFeatureTest extends TestCase
         $this->assertFalse($protocol->done);
         $this->assertNull($protocol->comment);
 
-        $response = $this->json('PUT', '/protocols/' . $protocol->id, [
+        $response = $this->json('PUT', "/protocols/{$protocol->id}", [
             'comment' => '<p>It was good.</p>',
             'done' => true,
         ]);

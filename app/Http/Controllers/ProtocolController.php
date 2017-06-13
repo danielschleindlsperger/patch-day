@@ -44,12 +44,15 @@ class ProtocolController extends Controller
      * Update the specified resource in storage.
      *
      * @param  UpdateProtocol $request
-     * @param  Protocol $protocol
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProtocol $request, Protocol $protocol)
+    public function update(UpdateProtocol $request, $id)
     {
+        $protocol = Protocol::findOrFail($id);
+
         $protocol->update($request->all());
+
         return ['updated' => true];
     }
 
