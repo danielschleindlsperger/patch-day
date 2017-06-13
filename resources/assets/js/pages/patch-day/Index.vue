@@ -4,7 +4,7 @@
             <h1 class="display-2 text-xs-center">Patch Days</h1>
             <div class="button-row">
                 <v-btn primary dark
-                       @click.native="openCreatePatchDayModal($event)">
+                       @click.native="createPatchDayModal($event)">
                     <v-icon class="white--text text--darken-2">
                         add_circle
                     </v-icon>
@@ -25,7 +25,8 @@
                         </v-list-tile-content>
                         <v-list-tile-action>
                             <v-btn icon ripple
-                                   @click.native="deleteItem($event, project)">
+                                   @click.native="deletePatchDayModal($event,
+                                    patch_day)">
                                 <v-icon class="grey--text">
                                     delete
                                 </v-icon>
@@ -36,7 +37,7 @@
             </v-list>
         </v-container>
 
-        <delete-project></delete-project>
+        <delete-patch-day></delete-patch-day>
         <create-patch-day></create-patch-day>
     </div>
 </template>
@@ -45,12 +46,12 @@
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
 
-  import DeleteProject from 'pages/project/DeleteProject'
+  import DeletePatchDay from 'pages/patch-day/DeletePatchDay'
   import CreatePatchDay from 'pages/patch-day/CreatePatchDay'
 
   export default {
     components: {
-      DeleteProject,
+      DeletePatchDay,
       CreatePatchDay,
     },
     mixins: [filters],
@@ -65,6 +66,10 @@
       eventBus.$on('patch_day.created', () => {
         this.getPatchDays()
       })
+
+      eventBus.$on('patch_day.deleted', () => {
+        this.getPatchDays()
+      })
     },
     methods: {
       getPatchDays() {
@@ -76,7 +81,12 @@
             error.response.data
           })
       },
-      openCreatePatchDayModal(event) {
+      deletePatchDayModal(event, patch_day) {
+        event.preventDefault()
+        event.stopPropagation()
+        eventBus.$emit('patch_day.delete.modal', patch_day)
+      },
+      createPatchDayModal(event) {
         event.preventDefault()
         event.stopPropagation()
         eventBus.$emit('patch_day.create.modal')
