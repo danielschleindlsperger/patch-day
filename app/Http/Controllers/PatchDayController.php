@@ -47,7 +47,7 @@ class PatchDayController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified patch day.
      *
      * @param  PatchDay $patchDay
      * @return \Illuminate\Http\Response
@@ -59,7 +59,7 @@ class PatchDayController extends Controller
     }
 
     /**
-     * Create new patch-day.
+     * Create new patch day.
      *
      * @param CreatePatchDay $request
      * @return array
@@ -72,7 +72,7 @@ class PatchDayController extends Controller
     }
 
     /**
-     * Update the specified patch-day.
+     * Update the specified patch day.
      *
      * @param  UpdatePatchDay $request
      * @param  PatchDay $patchDay
@@ -86,7 +86,7 @@ class PatchDayController extends Controller
     }
 
     /**
-     * Remove the specified patch-day.
+     * Remove the specified patch day.
      *
      * @param  PatchDay $patchDay
      * @return \Illuminate\Http\Response

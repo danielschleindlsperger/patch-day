@@ -8,8 +8,8 @@ import Company from 'pages/company/Company'
 // project
 import Projects from 'pages/project/Projects'
 import Project from 'pages/project/Project'
-// patch-day/protocols
-import PatchDay from 'pages/patch-day/PatchDay'
+// protocols
+import Protocol from 'pages/protocol/Protocol'
 // users
 import UsersIndex from 'pages/user/Index'
 import UserDetail from 'pages/user/Detail'
@@ -34,7 +34,7 @@ export default [
     path: '/projects/:id', component: Project,
   },
   {
-    path: '/protocols/:id', component: PatchDay,
+    path: '/protocols/:id', component: Protocol,
   },
   {
     path: '/users', component: UsersIndex,

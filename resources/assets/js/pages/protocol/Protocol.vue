@@ -49,9 +49,9 @@
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
 
-  import CheckOffProtocol from 'pages/patch-day/CheckOffProtocol'
-  import DeleteProtocol from 'pages/patch-day/DeleteProtocol'
-  import EditProtocol from 'pages/patch-day/EditProtocol'
+  import CheckOffProtocol from 'pages/protocol/CheckOffProtocol'
+  import DeleteProtocol from 'pages/protocol/DeleteProtocol'
+  import EditProtocol from 'pages/protocol/EditProtocol'
 
   export default {
     components: {
