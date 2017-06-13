@@ -25,11 +25,6 @@ class Protocol extends Model
         'patch_day',
     ];
 
-    protected $hidden = [
-        'project',
-        'patch_day',
-    ];
-
     protected $casts = [
         'done' => 'boolean',
         'patch_day_id' => 'integer',
