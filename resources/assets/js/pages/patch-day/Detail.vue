@@ -25,6 +25,8 @@
                 {{ patch_day.date | Date }}
             </h2>
 
+            <v-subheader>Signed up</v-subheader>
+
             <v-list>
                 <v-list-item v-for="protocol in patch_day.protocols"
                              :key="protocol.id">
@@ -32,21 +34,9 @@
                                  :href="`/protocols/${protocol.id}`">
                         <v-list-tile-content>
                             <v-list-tile-title>
-                                PatchDay #{{ patch_day.id }}
-                            </v-list-tile-title>
-                            <v-list-tile-sub-title>
                                 {{ protocol.project.name }}
-                            </v-list-tile-sub-title>
+                            </v-list-tile-title>
                         </v-list-tile-content>
-                        <!--<v-list-tile-action>-->
-                            <!--<v-btn icon ripple-->
-                                   <!--@click.native="deletePatchDayModal($event,-->
-                                    <!--patch_day)">-->
-                                <!--<v-icon class="grey&#45;&#45;text">-->
-                                    <!--delete-->
-                                <!--</v-icon>-->
-                            <!--</v-btn>-->
-                        <!--</v-list-tile-action>-->
                     </v-list-tile>
                 </v-list-item>
             </v-list>
