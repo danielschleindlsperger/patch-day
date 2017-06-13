@@ -1,0 +1,117 @@
+<template>
+    <div>
+        <v-container>
+            <v-layout justify-center child-flex[-sm]>
+                <h1 class="display-1 text-xs-center flex">
+                PatchDay #{{ patch_day.id }}</h1>
+                <v-btn class="flex"
+                       flat="flat" icon ripple
+                       @click.native="editPatchDayModal($event)">
+                    <v-icon class="grey--text">
+                        mode_edit
+                    </v-icon>
+                </v-btn>
+
+                <v-btn class="flex"
+                       flat="flat" icon ripple
+                       @click.native="deletePatchDayModal($event)">
+                    <v-icon class="grey--text">
+                        delete
+                    </v-icon>
+                </v-btn>
+            </v-layout>
+
+            <h2 class="headline text-xs-center flex">
+                {{ patch_day.date | Date }}
+            </h2>
+
+            <v-list>
+                <v-list-item v-for="protocol in patch_day.protocols"
+                             :key="protocol.id">
+                    <v-list-tile router
+                                 :href="`/protocols/${protocol.id}`">
+                        <v-list-tile-content>
+                            <v-list-tile-title>
+                                PatchDay #{{ patch_day.id }}
+                            </v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{ protocol.project.name }}
+                            </v-list-tile-sub-title>
+                        </v-list-tile-content>
+                        <!--<v-list-tile-action>-->
+                            <!--<v-btn icon ripple-->
+                                   <!--@click.native="deletePatchDayModal($event,-->
+                                    <!--patch_day)">-->
+                                <!--<v-icon class="grey&#45;&#45;text">-->
+                                    <!--delete-->
+                                <!--</v-icon>-->
+                            <!--</v-btn>-->
+                        <!--</v-list-tile-action>-->
+                    </v-list-tile>
+                </v-list-item>
+            </v-list>
+        </v-container>
+
+        <delete-patch-day></delete-patch-day>
+        <create-patch-day></create-patch-day>
+    </div>
+</template>
+
+<script>
+  import eventBus from 'components/event-bus'
+  import filters from 'mixins/filters'
+
+  import DeletePatchDay from 'pages/patch-day/DeletePatchDay'
+  import CreatePatchDay from 'pages/patch-day/CreatePatchDay'
+
+  export default {
+    components: {
+      DeletePatchDay,
+      CreatePatchDay,
+    },
+    mixins: [filters],
+    data() {
+      return {
+        patch_day: {
+          id: null,
+          date: '',
+          protocols: []
+        },
+      }
+    },
+    mounted() {
+      this.getPatchDay()
+    },
+    methods: {
+      getPatchDay() {
+        const ID = this.$route.params.id
+        this.$http.get(`/patch-days/${ID}`)
+          .then(response => {
+            this.patch_day = response.data
+          })
+          .catch(error => {
+            console.error(error.response.data)
+            eventBus.$emit('info.snackbar', error.response.data.error)
+          })
+      },
+      deletePatchDayModal(event, patch_day) {
+        event.preventDefault()
+        event.stopPropagation()
+        eventBus.$emit('patch_day.delete.modal', patch_day)
+      },
+      createPatchDayModal(event) {
+        event.preventDefault()
+        event.stopPropagation()
+        eventBus.$emit('patch_day.create.modal')
+      }
+    }
+  }
+</script>
+
+<style lang="scss" scoped>
+    .button-row {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-end;
+    }
+</style>

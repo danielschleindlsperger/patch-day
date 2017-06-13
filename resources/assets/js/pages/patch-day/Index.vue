@@ -78,7 +78,8 @@
             this.patch_days = response.data
           })
           .catch(error => {
-            error.response.data
+            console.error(error.response.data)
+            eventBus.$emit('info.snackbar', error.response.data.error)
           })
       },
       deletePatchDayModal(event, patch_day) {
