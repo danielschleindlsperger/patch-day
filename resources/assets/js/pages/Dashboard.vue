@@ -12,8 +12,8 @@
 </template>
 
 <script>
-  import Upcoming from 'components/upcoming-patch-days/Upcoming'
-  import QuickCreate from 'components/quick-create/QuickCreate'
+  import Upcoming from 'components/UpcomingPatchDays'
+  import QuickCreate from 'components/QuickCreate'
   export default {
     components: {
       Upcoming,
