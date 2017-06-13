@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Company;
 use App\PatchDay;
 use App\Project;
+use App\Protocol;
 use App\Technology;
 use App\User;
 use Carbon\Carbon;
@@ -84,9 +85,46 @@ class PatchDayFeatureTest extends TestCase
     }
 
     /** @test */
-    public function admin_can_see_patch_day_with_all_projects()
+    public function admin_can_see_patch_day_with_all_protocols_and_projects()
     {
-        // first signup projects for patch-days
+        $company = factory(Company::class)->create();
+
+        $projects = factory(Project::class, 2)->create([
+            'company_id' => $company->id,
+        ]);
+
+        $patch_day = factory(PatchDay::class)->create([
+            'date' => Carbon::now()->addWeeks(2)->toDateString(),
+        ]);
+
+        $protocol_1 = factory(Protocol::class)->create([
+            'project_id' => $projects[0]->id,
+            'patch_day_id' => $patch_day->id,
+        ]);
+
+        $protocol_2 = factory(Protocol::class)->create([
+            'project_id' => $projects[1]->id,
+            'patch_day_id' => $patch_day->id,
+        ]);
+
+        $response = $this->json('GET', "/patch-days/{$patch_day->id}");
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'date',
+                'id',
+                'protocols' => [
+                    [
+                        'date',
+                        'done',
+                        'price',
+                        'project_id',
+                        'project' => [
+                            'name',
+                        ]
+                    ]
+                ]
+            ]);
     }
 
     /** @test */
@@ -147,7 +185,7 @@ class PatchDayFeatureTest extends TestCase
     {
         $patch_day_1 = factory(PatchDay::class)->create([
             'date' => Carbon::now()->addWeeks(1)
-                                   ->subMonths(1)->toDateString(),
+                ->subMonths(1)->toDateString(),
         ]);
 
         $patch_day_2 = factory(PatchDay::class)->create([
@@ -156,28 +194,28 @@ class PatchDayFeatureTest extends TestCase
 
         $patch_day_3 = factory(PatchDay::class)->create([
             'date' => Carbon::now()->addWeeks(1)
-                                   ->addMonths(1)->toDateString(),
+                ->addMonths(1)->toDateString(),
         ]);
 
         $patch_day_4 = factory(PatchDay::class)->create([
             'date' => Carbon::now()->addWeeks(1)
-                                   ->addMonths(2)->toDateString(),
+                ->addMonths(2)->toDateString(),
         ]);
 
         $response = $this->json('GET', '/patch-days/upcoming');
         // only patch days in the future are returned
         // ordered by ascending date
         $response->assertStatus(200)
-                 ->assertJson([
-                     [
-                         'id' => $patch_day_2->id,
-                     ],
-                     [
-                         'id' => $patch_day_3->id,
-                     ],
-                     [
-                         'id' => $patch_day_4->id,
-                     ],
-                 ]);
+            ->assertJson([
+                [
+                    'id' => $patch_day_2->id,
+                ],
+                [
+                    'id' => $patch_day_3->id,
+                ],
+                [
+                    'id' => $patch_day_4->id,
+                ],
+            ]);
     }
 }

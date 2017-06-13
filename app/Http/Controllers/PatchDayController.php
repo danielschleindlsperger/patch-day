@@ -55,6 +55,9 @@ class PatchDayController extends Controller
     public function show(PatchDay $patchDay)
     {
         $this->authorize('view', $patchDay);
+
+        $patchDay->load('protocols', 'protocols.project');
+
         return $patchDay;
     }
 
