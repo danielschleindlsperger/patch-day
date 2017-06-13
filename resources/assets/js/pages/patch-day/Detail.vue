@@ -3,7 +3,7 @@
         <v-container>
             <v-layout justify-center child-flex[-sm]>
                 <h1 class="display-1 text-xs-center flex">
-                PatchDay #{{ patch_day.id }}</h1>
+                    PatchDay #{{ patch_day.id }}</h1>
                 <v-btn class="flex"
                        flat="flat" icon ripple
                        @click.native="editPatchDayModal($event)">
@@ -25,25 +25,30 @@
                 {{ patch_day.date | Date }}
             </h2>
 
-            <v-subheader>Signed up</v-subheader>
+            <div v-if="patch_day.protocols.length > 0">
+                <v-subheader>Signed up</v-subheader>
 
-            <v-list>
-                <v-list-item v-for="protocol in patch_day.protocols"
-                             :key="protocol.id">
-                    <v-list-tile router
-                                 :href="`/protocols/${protocol.id}`">
-                        <v-list-tile-content>
-                            <v-list-tile-title>
-                                {{ protocol.project.name }}
-                            </v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-                </v-list-item>
-            </v-list>
+                <v-list>
+                    <v-list-item v-for="protocol in patch_day.protocols"
+                                 :key="protocol.id">
+                        <v-list-tile router
+                                     :href="`/protocols/${protocol.id}`">
+                            <v-list-tile-content>
+                                <v-list-tile-title>
+                                    {{ protocol.project.name }}
+                                </v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                    </v-list-item>
+                </v-list>
+            </div>
+            <div v-else>
+                Nobody signed up yet.
+            </div>
         </v-container>
 
+        <edit-patch-day></edit-patch-day>
         <delete-patch-day></delete-patch-day>
-        <create-patch-day></create-patch-day>
     </div>
 </template>
 
@@ -52,12 +57,12 @@
   import filters from 'mixins/filters'
 
   import DeletePatchDay from 'pages/patch-day/DeletePatchDay'
-  import CreatePatchDay from 'pages/patch-day/CreatePatchDay'
+  import EditPatchDay from 'pages/patch-day/EditPatchDay'
 
   export default {
     components: {
       DeletePatchDay,
-      CreatePatchDay,
+      EditPatchDay,
     },
     mixins: [filters],
     data() {
@@ -71,6 +76,17 @@
     },
     mounted() {
       this.getPatchDay()
+
+      eventBus.$on('patch_day.edited', () => {
+        this.getPatchDay()
+      })
+
+      eventBus.$on('patch_day.deleted', patch_day => {
+        // this protocol was deleted
+        if (patch_day.id === this.patch_day.id) {
+          this.$router.push(`/patch-days`)
+        }
+      })
     },
     methods: {
       getPatchDay() {
@@ -81,18 +97,20 @@
           })
           .catch(error => {
             console.error(error.response.data)
-            eventBus.$emit('info.snackbar', error.response.data.error)
+            if (error.response.status === 404) {
+              this.$router.push({name: 'not-found'})
+            }
           })
       },
-      deletePatchDayModal(event, patch_day) {
+      deletePatchDayModal(event) {
         event.preventDefault()
         event.stopPropagation()
-        eventBus.$emit('patch_day.delete.modal', patch_day)
+        eventBus.$emit('patch_day.delete.modal', this.patch_day)
       },
-      createPatchDayModal(event) {
+      editPatchDayModal(event) {
         event.preventDefault()
         event.stopPropagation()
-        eventBus.$emit('patch_day.create.modal')
+        eventBus.$emit('patch_day.edit.modal', this.patch_day)
       }
     }
   }

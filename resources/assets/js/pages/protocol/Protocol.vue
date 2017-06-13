@@ -120,10 +120,6 @@
     mounted() {
       this.getProtocol()
 
-      eventBus.$on('protocol.checked-off', () => {
-        this.getProtocol()
-      })
-
       eventBus.$on('protocol.edited', protocol => {
         this.protocol = Object.assign({}, protocol)
       })

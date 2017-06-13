@@ -64,7 +64,7 @@ class PatchDayFeatureTest extends TestCase
             'date' => '2017-03-30',
         ]);
 
-        $this->json('POST', '/patch-days', [
+        $response = $this->json('PUT', '/patch-days/' . $patch_day->id, [
             'date' => 'asdf'
         ])
             ->assertStatus(422)
