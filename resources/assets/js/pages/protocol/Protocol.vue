@@ -42,11 +42,6 @@
             <div v-if="protocol.comment">
                 Comment: {{ protocol.comment }}
             </div>
-            <div v-if="!protocol.done">
-                <v-btn primary light @click.native="checkOffModal($event)">
-                    Check-off
-                </v-btn>
-            </div>
         </v-container>
         <delete-protocol></delete-protocol>
         <edit-protocol></edit-protocol>
