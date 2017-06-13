@@ -24,6 +24,7 @@
           {title: 'Dashboard', href: '/'},
           {title: 'Companies', href: '/companies'},
           {title: 'Projects', href: '/projects'},
+          {title: 'Patch Days', href: '/patch-days'},
           {title: 'Users', href: '/users'},
         ],
       }

@@ -16,6 +16,10 @@
                 Projects
             </v-toolbar-item>
             <v-toolbar-item class="hidden-sm-and-down"
+                            ripple router href="/patch-days">
+                Patch Days
+            </v-toolbar-item>
+            <v-toolbar-item class="hidden-sm-and-down"
                             ripple router href="/users">
                 Users
             </v-toolbar-item>

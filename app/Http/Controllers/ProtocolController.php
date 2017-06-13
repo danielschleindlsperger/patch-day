@@ -36,7 +36,7 @@ class ProtocolController extends Controller
     public function show(Protocol $protocol)
     {
         $this->authorize('view', $protocol);
-        
+
         return $protocol;
     }
     

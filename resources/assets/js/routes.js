@@ -13,6 +13,8 @@ import Protocol from 'pages/protocol/Protocol'
 // users
 import UsersIndex from 'pages/user/Index'
 import UserDetail from 'pages/user/Detail'
+// patch days
+import PatchDayIndex from 'pages/patch-day/Index'
 
 export default [
   {
@@ -41,6 +43,9 @@ export default [
   },
   {
     path: '/users/:id', component: UserDetail,
+  },
+  {
+    path: '/patch-days', component: PatchDayIndex,
   },
   {
     path: '*', component: NotFoundPage, name: 'not-found'
