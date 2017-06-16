@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-container>
-            <v-layout justify-center child-flex[-sm]>
+            <v-layout justify-center child-flex[-sm] class="mb-5">
                 <h1 class="display-1 text-xs-center flex">{{ project.name }}</h1>
                 <v-btn class="flex"
                        flat="flat" icon ripple
@@ -25,17 +25,24 @@
                     Price/PatchDay:
                     {{ project.base_price | currency('EUR', true) }}
                 </div>
-                <div class="headline mb-5">
+                <div class="headline mb-4">
                     Penalty:
                     {{ project.penalty | currency('EUR', true) }}
                 </div>
 
                 <div class="mb-5">
-                    <h3 class="headline">Technologies</h3>
+                    <h3 class="headline mb-0">Technologies</h3>
                     <v-chip class="text-xs-center"
-                            v-for="technology in project.current_technologies">
+                            v-for="technology in project.current_technologies"
+                            :key="technology.id">
                         {{ technology.name }}&nbsp;{{ technology.version }}
                     </v-chip>
+                    <div>
+                        <v-btn dark default
+                               @click.native="techHistoryModal($event)">
+                            History
+                        </v-btn>
+                    </div>
                 </div>
             </div>
 
@@ -72,6 +79,7 @@
         </v-container>
         <delete-project></delete-project>
         <edit-project></edit-project>
+        <tech-history-modal></tech-history-modal>
     </div>
 </template>
 
@@ -80,11 +88,13 @@
   import filters from 'mixins/filters'
   import DeleteProject from 'pages/project/DeleteProject'
   import EditProject from 'pages/project/EditProject'
+  import TechHistoryModal from 'components/modals/TechHistoryModal'
 
   export default {
     components: {
       DeleteProject,
       EditProject,
+      TechHistoryModal,
     },
     mixins: [filters],
     data() {
@@ -121,12 +131,17 @@
       deleteProject(event) {
         event.preventDefault()
         event.stopPropagation()
-        eventBus.$emit('project.delete.modal', this.project);
+        eventBus.$emit('project.delete.modal', this.project)
       },
       editProjectModal(event) {
         event.preventDefault()
         event.stopPropagation()
-        eventBus.$emit('project.edit.modal', this.project);
+        eventBus.$emit('project.edit.modal', this.project)
+      },
+      techHistoryModal(event) {
+        event.preventDefault()
+        event.stopPropagation()
+        eventBus.$emit('tech_history.view.modal', this.project.technology_history)
       },
     },
     mounted() {
@@ -141,11 +156,10 @@
         this.project = JSON.parse(JSON.stringify(project))
       })
 
-      const projectId = this.$route.params.id
-      this.$http.get(`/projects/${projectId}`)
+      const ID = this.$route.params.id
+      this.$http.get(`/projects/${ID}`)
         .then(response => {
           this.project = response.data
-          console.log(response.data)
         })
         .catch(error => {
           console.error(error)
