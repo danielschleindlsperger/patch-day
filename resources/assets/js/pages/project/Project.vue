@@ -1,77 +1,74 @@
 <template>
     <div>
         <v-container>
-            <div class="card-head">
-                <h2 class="text-xs-center">{{ project.name }}</h2>
-                <div class="info-wrapper">
-                    <h3>{{ project.company.name }}</h3>
-                    <div class="button-row">
-                        <v-btn flat="flat" icon ripple
-                               @click.native="editProjectModal($event)">
-                            <v-icon class="grey--text">
-                                mode_edit
-                            </v-icon>
-                        </v-btn>
-                        <v-btn flat="flat" icon ripple
-                               @click.native="deleteProject($event)">
-                            <v-icon class="grey--text">
-                                delete
-                            </v-icon>
-                        </v-btn>
-                    </div>
+            <v-layout justify-center child-flex[-sm]>
+                <h1 class="display-1 text-xs-center flex">{{ project.name }}</h1>
+                <v-btn class="flex"
+                       flat="flat" icon ripple
+                       @click.native="editProjectModal($event)">
+                    <v-icon class="grey--text">
+                        mode_edit
+                    </v-icon>
+                </v-btn>
+
+                <v-btn class="flex"
+                       flat="flat" icon ripple
+                       @click.native="deleteProject($event)">
+                    <v-icon class="grey--text">
+                        delete
+                    </v-icon>
+                </v-btn>
+            </v-layout>
+
+            <div class="info-wrapper">
+                <div class="headline">
+                    Price/PatchDay:
+                    {{ project.base_price | currency('EUR', true) }}
                 </div>
-                <v-layout class="info-wrapper">
-                    <v-flex xs12 md6 class="info-item">
-                        <v-icon large
-                                class="grey--text text--darken-2 pr-3"
-                        >
-                            attach_money
-                        </v-icon>
-                        <h6 class="ma-0">
-                            Price/PatchDay: {{ project.base_price |
-                        currency('EUR', true) }}
-                        </h6>
-                    </v-flex>
-                    <v-flex xs12 md6 class="info-item">
-                        <v-icon large
-                                class="grey--text text--darken-2 pr-3"
-                        >
-                            attach_money
-                        </v-icon>
-                        <h6 class="ma-0">
-                            Penalty: {{ project.penalty |
-                        currency('EUR', true) }}
-                        </h6>
-                    </v-flex>
-                </v-layout>
+                <div class="headline mb-5">
+                    Penalty:
+                    {{ project.penalty | currency('EUR', true) }}
+                </div>
+
+                <div class="mb-5">
+                    <h3 class="headline">Technologies</h3>
+                    <v-chip class="text-xs-center"
+                            v-for="technology in project.current_technologies">
+                        {{ technology.name }}&nbsp;{{ technology.version }}
+                    </v-chip>
+                </div>
             </div>
-            <hr>
-            <div class="projects">
-                <h3 class="text-xs-center">PatchDays</h3>
-                <v-data-table
-                        :headers="tableHeaders"
-                        :items="project.protocols"
-                        hide-actions
-                        class="elevation-1"
-                >
-                    <template slot="items" scope="props">
-                        <td>
-                            <router-link :to="'/protocols/' + props.item.id">
-                                PatchDay
-                                #{{ props.item.patch_day_id }}
-                            </router-link>
-                        </td>
-                        <td class="text-xs-right">
-                            {{ props.item.date | Date }}
-                        </td>
-                        <td class="text-xs-right">
-                            <v-icon>
-                                {{ props.item.done | checkIcon }}
-                            </v-icon>
-                        </td>
-                    </template>
-                </v-data-table>
-            </div>
+
+            <v-card class="projects">
+                <v-card-title>
+                    <h3 class="text-xs-center display-1 mb-0">PatchDays</h3>
+                </v-card-title>
+                <v-card-text>
+                    <v-data-table
+                            :headers="tableHeaders"
+                            :items="project.protocols"
+                            hide-actions
+                    >
+                        <template slot="items" scope="props">
+                            <td>
+                                <router-link
+                                        :to="'/protocols/' + props.item.id">
+                                    PatchDay
+                                    #{{ props.item.patch_day_id }}
+                                </router-link>
+                            </td>
+                            <td class="text-xs-right">
+                                {{ props.item.date | Date }}
+                            </td>
+                            <td class="text-xs-right">
+                                <v-icon>
+                                    {{ props.item.done | checkIcon }}
+                                </v-icon>
+                            </td>
+                        </template>
+                    </v-data-table>
+                </v-card-text>
+            </v-card>
         </v-container>
         <delete-project></delete-project>
         <edit-project></edit-project>
@@ -162,35 +159,13 @@
 </script>
 
 <style lang="scss" scoped>
-    h1 {
-        font-size: 48px;
-        text-align: center;
-    }
 
-    .info-wrapper {
-        width: 100%;
+    .info-item {
         display: flex;
-        flex-flow: row wrap;
-        justify-content: space-between;
-        h3 {
-            font-size: 32px;
+        align-items: center;
+        justify-content: center;
+        h6 {
+            display: inline-block;
         }
-        .button-row {
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: flex-end;
-        }
-        .info-item {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            h6 {
-                display: inline-block;
-            }
-        }
-    }
-
-    hr {
-        margin: 1rem 0 3rem;
     }
 </style>
