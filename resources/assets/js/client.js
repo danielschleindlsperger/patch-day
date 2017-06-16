@@ -7,7 +7,7 @@ import routes from './routes.js'
 import auth from './auth.js'
 
 Vue.prototype.$http = axios;
-Vue.component('app', require('./App.vue'));
+Vue.component('app', require('./Client.vue'));
 Vue.use(VueRouter)
 Vue.use(Vuetify)
 

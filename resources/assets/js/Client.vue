@@ -12,8 +12,8 @@
 </template>
 
 <script>
-  import ToolBar from 'components/navigation/Toolbar'
-  import SideBar from 'components/navigation/SideBar'
+  import ToolBar from 'components/navigation/ClientToolBar'
+  import SideBar from 'components/navigation/ClientSideBar'
   import InfoBar from 'components/InfoBar'
 
   export default {
