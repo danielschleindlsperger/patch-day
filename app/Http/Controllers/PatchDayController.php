@@ -41,7 +41,7 @@ class PatchDayController extends Controller
         $today = Carbon::now()->toDateString();
 
         $patch_days = PatchDay::where('date', '>=', $today)
-                                ->orderBy('date', 'ASC')->get();
+            ->orderBy('date', 'ASC')->get();
 
         return $patch_days;
     }
@@ -56,7 +56,7 @@ class PatchDayController extends Controller
     {
         $this->authorize('view', $patchDay);
 
-        $patchDay->load('protocols', 'protocols.project');
+        $patchDay->load('protocols', 'protocols.project', 'protocols.project.company');
 
         return $patchDay;
     }

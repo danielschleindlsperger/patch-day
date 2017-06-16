@@ -35,7 +35,10 @@
                                      :href="`/protocols/${protocol.id}`">
                             <v-list-tile-content>
                                 <v-list-tile-title>
-                                    {{ protocol.project.name }}
+                                    <strong>
+                                        {{ protocol.project.company.name }}
+                                    </strong>
+                                    / {{ protocol.project.name }}
                                 </v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
@@ -117,9 +120,5 @@
 </script>
 
 <style lang="scss" scoped>
-    .button-row {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-end;
-    }
+
 </style>
