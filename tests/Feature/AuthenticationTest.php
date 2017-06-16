@@ -63,10 +63,7 @@ class AuthenticationTest extends TestCase
 
         // logging out
         $this->json('POST', '/logout')
-             ->assertStatus(200)
-             ->assertJson([
-                 'success' => true,
-             ]);
+             ->assertRedirect('/');
 
         // unauthenticated again
         $this->assertTrue(Auth::guest());
