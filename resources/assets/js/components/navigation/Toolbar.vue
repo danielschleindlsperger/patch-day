@@ -52,7 +52,6 @@
         this.$http.post('/logout')
           .then(response => {
             this.$root.user = {}
-            this.$router.push('/login')
           })
           .catch(error => {
             console.error(error)
