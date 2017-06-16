@@ -14,6 +14,7 @@ class Protocol extends Model
     protected $appends = [
         'date',
         'price',
+        'technology_updates',
     ];
 
     protected $fillable = [
@@ -90,5 +91,23 @@ class Protocol extends Model
         $price = $base_price + ($penalty * $missedProtocols);
 
         return $price;
+    }
+
+    /**
+     * Get all the Technologies that were upgraded with this protocol.
+     *
+     * @return mixed
+     */
+    public function getTechnologyUpdatesAttribute()
+    {
+        $id = $this->id;
+
+        $upgrades = Technology::where('id', '=', function($query) use ($id) {
+            $query->select('id')
+                  ->from('project_technology')
+                  ->where('protocol_id', '=', $id);
+        })->get();
+
+        return $upgrades;
     }
 }
