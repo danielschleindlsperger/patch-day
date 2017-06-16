@@ -21,7 +21,7 @@
                                             version)">
                                         <v-list-tile-content>
                                             <v-list-tile-title>
-                                                {{ version.name }}&nbsp;{{ version.version }}
+                                                {{ version.version }}
                                             </v-list-tile-title>
                                         </v-list-tile-content>
                                         <v-list-tile-action
@@ -73,7 +73,6 @@
         })
 
         this.items = items
-
         this.isOpen = true
       })
     },
