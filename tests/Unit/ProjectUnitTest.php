@@ -212,11 +212,15 @@ class ProjectUnitTest extends TestCase
         ]);
 
         $project->technologies()->attach([
-            $this->vue_2->id => ['protocol_id' => $protocol->id],
             $this->laravel_2->id => ['protocol_id' => $protocol->id],
         ]);
 
+        $project->technologies()->attach([
+            $this->vue_2->id => ['protocol_id' => $protocol->id],
+        ]);
+
         $current_techs = $project->current_technologies;
+
         $this->assertCount(2, $current_techs);
         $this->assertInstanceOf(Technology::class, $current_techs[0]);
         $this->assertEquals('Laravel', $current_techs[0]->name);

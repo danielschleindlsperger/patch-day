@@ -73,7 +73,8 @@ class Project extends Model
     }
 
     /**
-     * return only the latest version for each technology based on name.
+     * return only the latest version for each technology for each unique
+     * technlogy (based on name).
      *
      * @return Collection technologies
      */
@@ -81,10 +82,10 @@ class Project extends Model
     {
         return $this->technologies()
             ->orderBy('name', 'ASC')
-            ->orderBy('version', 'DESC')
-            ->orderBy('pivot_protocol_id', 'DESC')
-            ->groupBy('name')
-            ->get();
+            ->orderBy('protocol_id', 'DESC')
+            ->get()
+            ->unique('name')
+            ->values();
     }
 
     /**
