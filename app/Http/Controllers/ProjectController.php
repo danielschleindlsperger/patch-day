@@ -25,6 +25,7 @@ class ProjectController extends Controller
     public function index()
     {
         $this->authorize('index', Project::class);
+
         return Project::orderBy('name', 'ASC')->get();
     }
 
@@ -40,6 +41,8 @@ class ProjectController extends Controller
         $this->authorize('view', $project);
 
         $project->load('company', 'protocols');
+
+        $project->makeVisible(['technology_history']);
 
         return $project;
     }

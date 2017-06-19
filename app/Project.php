@@ -25,6 +25,7 @@ class Project extends Model
     ];
 
     protected $hidden = [
+        'technology_history',
         'technologies',
     ];
 
