@@ -27,12 +27,13 @@ class ProjectsTableSeeder extends Seeder
         $technologies = \App\Technology::all();
         $projects = \App\Project::all();
         $tech_ids = [];
-        $technologies->shuffle()->unique('name')->splice(0,
-            rand(2, 4))->each(function ($tech) use (&$tech_ids) {
-            array_push($tech_ids, $tech->id);
-        });
 
         foreach ($projects as $project) {
+            $technologies->shuffle()->unique('name')->splice(0,
+                rand(2, 4))->each(function ($tech) use (&$tech_ids) {
+                array_push($tech_ids, $tech->id);
+            });
+
             $project->technologies()->attach($tech_ids);
         }
     }
