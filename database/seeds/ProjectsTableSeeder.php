@@ -26,11 +26,12 @@ class ProjectsTableSeeder extends Seeder
         // attach default technologies to projects
         $technologies = \App\Technology::all();
         $projects = \App\Project::all();
-        $tech_ids = [];
 
         foreach ($projects as $project) {
-            $technologies->shuffle()->unique('name')->splice(0,
-                rand(2, 4))->each(function ($tech) use (&$tech_ids) {
+            $tech_ids = [];
+
+            $technologies->unique('name')->shuffle()->splice(0,
+                rand(2, 5))->each(function ($tech) use (&$tech_ids) {
                 array_push($tech_ids, $tech->id);
             });
 

@@ -25,7 +25,10 @@ class TechnologyUpdatesSeeder extends Seeder
             ->get();
 
         foreach ($protocols as $protocol) {
-            $updatedTechs = $protocol->project->technologies->pluck('name');
+            $techs = $protocol->project->technologies->unique('name')->pluck('name');
+            $maxUpdates = $techs->count() - 1;
+
+            $updatedTechs = $techs->shuffle()->splice(0, rand(1, $maxUpdates));
 
             foreach ($updatedTechs as $tech) {
                 $technology = factory(\App\Technology::class)->create([
