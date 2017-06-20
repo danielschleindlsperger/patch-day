@@ -100,12 +100,15 @@ class Protocol extends Model
      */
     public function getTechnologyUpdatesAttribute()
     {
-        $id = $this->id;
+        $protocolId = $this->id;
+        $projectId = $this->project->id;
 
-        $upgrades = Technology::where('id', '=', function($query) use ($id) {
-            $query->select('id')
-                  ->from('project_technology')
-                  ->where('protocol_id', '=', $id);
+        $upgrades = Technology::whereIn('id',
+            function($query) use ($protocolId, $projectId) {
+                $query->select('technology_id')
+                    ->from('project_technology')
+                    ->where('protocol_id', '=', $protocolId)
+                    ->where('project_id', '=', $projectId);
         })->get();
 
         return $upgrades;
