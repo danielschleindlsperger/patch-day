@@ -31,20 +31,31 @@
                 </router-link>
             </h2>
 
-            <div>
+            <div class="info-item">
                 Done:
                 <v-icon>
                     {{ protocol.done | checkIcon }}
                 </v-icon>
             </div>
-            <div>
+            <div class="info-item">
                 Price: {{ protocol.price | currency('EUR', true) }}
             </div>
-            <div>
+            <div class="info-item">
                 Date: {{ protocol.date | Date }}
             </div>
-            <div v-if="protocol.comment">
-                Comment: {{ protocol.comment }}
+            <div v-if="protocol.comment" class="info-item">
+                <h3 class="subheading mb-0">Comment:</h3>
+                <div class="body-2">
+                    {{ protocol.comment }}
+                </div>
+            </div>
+            <div class="info-item">
+                <h3 class="subheading mb-0">Version updates:</h3>
+                <div v-for="update in protocol.technology_updates">
+                    <span>{{ update.name }}</span>
+                    <v-icon>trending_flat</v-icon>
+                    <span>{{ update.version }}</span>
+                </div>
             </div>
         </v-container>
         <delete-protocol></delete-protocol>
@@ -141,5 +152,8 @@
 <style lang="scss" scoped>
     .uppercase {
         text-transform: uppercase;
+    }
+    .info-item {
+        margin-bottom: 1em;
     }
 </style>
