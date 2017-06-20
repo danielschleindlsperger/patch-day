@@ -24,7 +24,11 @@
             </v-layout>
 
             <h2 class="headline text-xs-center">
-                Protocol for <span class="uppercase">{{ project.name }}</span>
+                Protocol for
+                <router-link class="uppercase"
+                             :to="`/projects/${project.id}`">
+                    {{ project.name }}
+                </router-link>
             </h2>
 
             <div>
