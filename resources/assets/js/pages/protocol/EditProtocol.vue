@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="isOpen" width="640">
+    <v-dialog v-model="isOpen" width="640" persistent>
         <v-card>
             <v-card-row>
                 <v-card-title>Edit Protocol (Check-off)</v-card-title>
@@ -13,10 +13,47 @@
                                 multi-line
                                 v-model="protocol.comment"
                         ></v-text-field>
+
+                        <v-select
+                                label="Software updates"
+                                v-bind:items="technologies"
+                                v-model="upgraded_techs"
+                                item-value="id"
+                                multiple
+                                chips
+                                dark
+                                max-height="500"
+                                autocomplete
+                                hint="Pick the updated software versions."
+                                persistent-hint
+                        >
+                            <template slot="selection" scope="data">
+                                <v-chip
+                                        close
+                                        @input="data.parent.selectItem(data.item)"
+                                        @click.native.stop
+                                        class="chip--select-multi"
+                                        :key="data.item"
+                                >
+                                    {{ data.item.name }}
+                                    {{ data.item.version }}
+                                </v-chip>
+                            </template>
+
+                            <template slot="item" scope="data">
+                                <v-list-tile-content>
+                                    <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
+                                    <v-list-tile-sub-title
+                                            v-html="data.item.version"></v-list-tile-sub-title>
+                                </v-list-tile-content>
+                            </template>
+                        </v-select>
+
                         <v-checkbox
                                 label="Done"
                                 primary
                                 v-model="protocol.done"/>
+
                     </v-container>
                 </v-card-text>
             </v-card-row>
@@ -51,12 +88,28 @@
           project: {
             name: '',
           }
-        }
+        },
+        technologies: [],
+        upgraded_techs: [],
       }
     },
     mounted () {
+      this.$http.get(`/technologies`)
+        .then(response => {
+          this.technologies = response.data
+        })
+        .catch(error => {
+          console.error(error)
+          eventBus.$emit('info.snackbar', error.response.data.error)
+        })
+
       eventBus.$on('protocol.edit.modal', protocol => {
         this.protocol = Object.assign({}, protocol)
+
+        protocol.technology_updates.forEach(tech => {
+          this.upgraded_techs.push(tech.id)
+        })
+
         this.isOpen = true
       })
     },
@@ -65,6 +118,7 @@
         this.$http.put(`/protocols/${this.protocol.id}`, {
           comment: this.protocol.comment,
           done: this.protocol.done,
+          technology_updates: this.upgraded_techs,
         })
           .then(response => {
             if (response.status === 200) {
