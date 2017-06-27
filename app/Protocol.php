@@ -115,7 +115,12 @@ class Protocol extends Model
         return $upgrades;
     }
 
-    public function syncTechnologies($newTech)
+    /**
+     * Set the projects technologies that are updated with this protocol.
+     *
+     * @param array $newTechs
+     */
+    public function syncTechnologies($newTechs)
     {
         $currentTechs = DB::table('project_technology')
                             ->where('protocol_id', '=', $this->id)
@@ -126,7 +131,7 @@ class Protocol extends Model
         });
 
         $this->project->technologies()->detach($techIds);
-        $this->project->technologies()->attach($newTech, [
+        $this->project->technologies()->attach($newTechs, [
             'protocol_id' => $this->id
         ]);
     }
