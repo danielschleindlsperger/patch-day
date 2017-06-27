@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Company;
 use App\PatchDay;
 use App\Project;
+use App\Technology;
 use App\User;
 use App\Protocol;
 use Carbon\Carbon;
@@ -94,5 +95,54 @@ class ProtocolFeatureTest extends TestCase
 
         $this->assertEquals('<p>It was good.</p>', $updatedProtocol->comment);
         $this->assertTrue($updatedProtocol->done);
+    }
+
+    /** @test */
+    public function can_edit_a_protocols_tech_updates()
+    {
+        $protocol = factory(Protocol::class)->create([
+            'project_id' => $this->project->id,
+            'patch_day_id' => $this->patch_day->id,
+            'comment' => null,
+            'done' => false,
+        ]);
+
+        $tech = factory(Technology::class)->create([
+            'name' => 'Laravel',
+            'version' => '5.4.30',
+        ]);
+
+        $this->project->technologies()->attach([
+            $tech->id => ['protocol_id' => $protocol->id]
+        ]);
+
+        $techs = $this->project->technologies()->get();
+
+        $this->assertCount(1, $techs);
+        $this->assertEquals('Laravel', $techs[0]->name);
+        $this->assertEquals('5.4.30', $techs[0]->version);
+
+        $updatedTech = factory(Technology::class)->create([
+            'name' => 'Laravel',
+            'version' => '5.5.0',
+        ]);
+
+        $response = $this->json('PUT', "/protocols/{$protocol->id}", [
+            'technology_updates' => [
+                $updatedTech->id,
+            ],
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'updated' => true
+            ]);
+
+        $updatedTechs = $this->project->technologies()->get();
+
+        $this->assertCount(1, $updatedTechs);
+        $this->assertEquals('Laravel', $updatedTechs[0]->name);
+        $this->assertEquals('5.5.0', $updatedTechs[0]->version);
     }
 }

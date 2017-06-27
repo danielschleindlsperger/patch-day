@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Protocol extends Model
 {
@@ -112,5 +113,21 @@ class Protocol extends Model
         })->get();
 
         return $upgrades;
+    }
+
+    public function syncTechnologies($newTech)
+    {
+        $currentTechs = DB::table('project_technology')
+                            ->where('protocol_id', '=', $this->id)
+                            ->get();
+
+        $techIds = $currentTechs->map(function ($tech) {
+            return (int) $tech->technology_id;
+        });
+
+        $this->project->technologies()->detach($techIds);
+        $this->project->technologies()->attach($newTech, [
+            'protocol_id' => $this->id
+        ]);
     }
 }

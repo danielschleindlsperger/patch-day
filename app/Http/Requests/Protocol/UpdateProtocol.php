@@ -28,7 +28,9 @@ class UpdateProtocol extends FormRequest
     {
         return [
             'done' => 'boolean',
-            'comment' => 'string|nullable'
+            'comment' => 'string|nullable',
+            'technology_updates' => 'array',
+            'technology_updates.*' => 'integer|exists:technologies,id',
         ];
     }
 }

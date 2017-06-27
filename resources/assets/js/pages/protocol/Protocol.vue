@@ -137,6 +137,7 @@
 
       eventBus.$on('protocol.edited', protocol => {
         this.protocol = Object.assign({}, protocol)
+        this.getProtocol()
       })
 
       eventBus.$on('protocol.deleted', protocol => {

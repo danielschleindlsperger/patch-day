@@ -218,4 +218,61 @@ class ProtocolUnitTest extends TestCase
         $this->assertEquals('Vue.js', $protocol->technology_updates[1]->name);
         $this->assertEquals('2.2.1', $protocol->technology_updates[1]->version);
     }
+
+    /** @test */
+    public function a_protocol_has_can_sync_its_upgraded_technologies()
+    {
+        $company = factory(Company::class)->create();
+        $project = factory(Project::class)->create([
+            'company_id' => $company->id,
+        ]);
+        $patch_day = factory(PatchDay::class)->create();
+
+        $tech_1 = Technology::create([
+            'name' => 'Laravel',
+            'version' => '5.3.12',
+        ]);
+        $tech_2 = Technology::create([
+            'name' => 'Vue.js',
+            'version' => '2.2.1',
+        ]);
+
+        $protocol = factory(Protocol::class)->create([
+            'project_id' => $project->id,
+            'patch_day_id' => $patch_day->id,
+        ]);
+
+        // update projects technologies
+        $project->technologies()->attach($tech_1->id, [
+            'protocol_id' => $protocol->id,
+        ]);
+        $project->technologies()->attach($tech_2->id, [
+            'protocol_id' => $protocol->id,
+        ]);
+
+
+
+        $this->assertEquals('Laravel', $protocol->technology_updates[0]->name);
+        $this->assertEquals('5.3.12', $protocol->technology_updates[0]->version);
+
+        $this->assertEquals('Vue.js', $protocol->technology_updates[1]->name);
+        $this->assertEquals('2.2.1', $protocol->technology_updates[1]->version);
+
+        // update technologies
+        $tech_3 = Technology::create([
+            'name' => 'Laravel',
+            'version' => '5.5.0',
+        ]);
+        $protocol->syncTechnologies([$tech_3->id]);
+        $protocol = $protocol->fresh();
+
+        $this->assertNotNull($protocol->technology_updates);
+        $this->assertCount(1, $protocol->technology_updates);
+
+        $this->assertEquals('Laravel', $protocol->technology_updates[0]->name);
+        $this->assertEquals('5.5.0',
+            $protocol->technology_updates[0]->version);
+
+        $this->assertCount(1, $project->technologies()->get());
+    }
 }

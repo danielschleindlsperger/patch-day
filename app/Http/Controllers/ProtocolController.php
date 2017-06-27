@@ -51,6 +51,12 @@ class ProtocolController extends Controller
     {
         $protocol = Protocol::findOrFail($id);
 
+        if ($request->input('technology_updates')) {
+            $protocol->syncTechnologies($request->technology_updates);
+        }
+
+        $protocol->update($request->except(['technology_updates']));
+
         $protocol->update($request->all());
 
         return ['updated' => true];

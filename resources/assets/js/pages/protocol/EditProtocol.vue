@@ -94,14 +94,8 @@
       }
     },
     mounted () {
-      this.$http.get(`/technologies`)
-        .then(response => {
-          this.technologies = response.data
-        })
-        .catch(error => {
-          console.error(error)
-          eventBus.$emit('info.snackbar', error.response.data.error)
-        })
+
+      this.getTechnologies()
 
       eventBus.$on('protocol.edit.modal', protocol => {
         this.protocol = Object.assign({}, protocol)
@@ -130,6 +124,16 @@
           .catch(error => {
             console.log(error.response.data)
             eventBus.$emit('info.snackbar', error.response.data)
+          })
+      },
+      getTechnologies() {
+        this.$http.get(`/technologies`)
+          .then(response => {
+            this.technologies = response.data
+          })
+          .catch(error => {
+            console.error(error)
+            eventBus.$emit('info.snackbar', error.response.data.error)
           })
       }
     }
