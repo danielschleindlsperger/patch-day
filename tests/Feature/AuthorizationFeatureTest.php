@@ -67,7 +67,6 @@ class AuthorizationFeatureTest extends TestCase
         $response = $this->json('GET', '/companies');
         $response->assertStatus(403);
 
-
         // CANNOT UPDATE COMPANY
         $response = $this->json('PUT', '/companies/' . $this->company->id, [
             'name' => 'Test Firm',
@@ -104,9 +103,29 @@ class AuthorizationFeatureTest extends TestCase
     public function client_cannot_access_forbidden_project_routes()
     {
 
-        // CANNOT ACCESS PROJECTS INDEX
+        // CAN ONLY SEE THEIR OWN PROJECTS
         $response = $this->json('GET', '/projects');
-        $response->assertStatus(403);
+        $response->assertStatus(200)
+                ->assertExactJson([]);
+
+        $this->client->company_id = $this->company->id;
+        $this->client->save();
+
+        $this->actingAs($this->client->fresh());
+
+        $response = $this->json('GET', '/projects');
+        $response->assertStatus(200)
+            ->assertJson([
+                [
+                    'id' => $this->project->id,
+                    'name' => $this->project->name,
+                ]
+            ]);
+
+        // clean up
+        $this->client->company_id = null;
+        $this->client->save();
+        $this->actingAs($this->client->fresh());
 
 
         // CANNOT CREATE PROJECT

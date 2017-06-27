@@ -19,14 +19,22 @@ class ProjectController extends Controller
 {
     /**
      * Display a listing of all projects.
+     * If the user is a client, only show their companies projects.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $this->authorize('index', Project::class);
+        $user = $request->user();
 
-        return Project::orderBy('name', 'ASC')->get();
+        if ($user->isAdmin()) {
+            return Project::orderBy('name', 'ASC')->get();
+        } elseif (isset($user->company)) {
+            return $user->company->projects()->get();
+        } else {
+            return [];
+        }
     }
 
     /**
