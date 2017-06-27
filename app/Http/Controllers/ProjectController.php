@@ -66,13 +66,15 @@ class ProjectController extends Controller
 
     /**
      * @param UpdateProject $request
-     * @param Project $project
+     * @param int $id
      * @return array
      *
      * Update specified projects properties
      */
-    public function update(UpdateProject $request, Project $project)
+    public function update(UpdateProject $request, $id)
     {
+        $project = Project::findOrFail($id);
+
         $project->update($request->except(['technologies']));
 
         if ($request->technologies) {
