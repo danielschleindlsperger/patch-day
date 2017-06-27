@@ -15,33 +15,34 @@
                                 item-value="id"
                                 v-model="project.company"
                                 label="Associated company"
-                                light required auto
+                                required auto
                                 max-height="320"
+                                dark
                                 :rules="rules.company"
                         />
                         <v-layout>
                             <v-flex xs12 md6>
                                 <v-text-field
                                         name="cost"
-                                        label="Price/PatchDay in Cents*"
-                                        v-model="project.patch_day.cost"
+                                        label="Base price/PatchDay*"
+                                        v-model="project.base_price"
                                         type="number"
+                                        min="0"
+                                        suffix="Cents"
                                 ></v-text-field>
                             </v-flex>
                             <v-flex xs12 md6>
-                                <v-switch primary
-                                          success
-                                          hide-details
-                                          label="Active*"
-                                          v-model="project.patch_day.active"/>
+                                <v-text-field
+                                        name="cost"
+                                        label="Penalty for missed PatchDays*"
+                                        v-model="project.penalty"
+                                        type="number"
+                                        min="0"
+                                        suffix="Cents"
+                                >
+                                </v-text-field>
                             </v-flex>
                         </v-layout>
-                        <v-subheader>
-                            Every {{ project.patch_day.interval
-                            }} months.* (Between 1 and 12)
-                        </v-subheader>
-                        <v-slider v-model="project.patch_day.interval"
-                                  :min="1" :max="12" :step="1" light/>
                         <small>*indicates required field</small>
                     </v-container>
                 </v-card-text>
@@ -67,19 +68,16 @@
         isOpen: false,
         project: {
           name: '',
-          company: {},
-          patch_day: {
-            cost: 20000,
-            active: false,
-            interval: 2,
-          }
+          company: null,
+          base_price: 20000,
+          penalty: 10000,
         },
         companies: [],
         rules: {
           company: [
             () => {
               return this.project.company &&
-                Number.isInteger(this.project.company.id)
+                Number.isInteger(this.project.company)
                 || 'Please select an entry'
             },
           ]
@@ -95,7 +93,7 @@
     },
     methods: {
       createProject() {
-        this.project.company_id = this.project.company.id
+        this.project.company_id = this.project.company
 
         this.$http.post('/projects', this.project)
           .then(response => {

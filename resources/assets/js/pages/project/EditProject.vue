@@ -14,37 +14,35 @@
                                 :items="companies"
                                 item-text="name"
                                 item-value="id"
-                                v-model="project.company"
+                                v-model="project.company_id"
                                 label="Associated company"
-                                light required auto
+                                dark required auto
                                 max-height="320"
                                 :rules="rules.company"
                         />
-                        <div v-if="project.patch_day">
-                            <v-layout>
-                                <v-flex xs12 md6>
-                                    <v-text-field
-                                            name="cost"
-                                            label="Price/PatchDay in Cents*"
-                                            v-model="project.patch_day.cost"
-                                            type="number"
-                                    ></v-text-field>
-                                </v-flex>
-                                <v-flex xs12 md6>
-                                    <v-switch primary
-                                              success
-                                              hide-details
-                                              label="Active*"
-                                              v-model="project.patch_day.active"/>
-                                </v-flex>
-                            </v-layout>
-                            <v-subheader>
-                                Every {{ project.patch_day.interval
-                                }} months.* (Between 1 and 12)
-                            </v-subheader>
-                            <v-slider v-model="project.patch_day.interval"
-                                      :min="1" :max="12" :step="1" light/>
-                        </div>
+                        <v-layout>
+                            <v-flex xs12 md6>
+                                <v-text-field
+                                        name="cost"
+                                        label="Base price/PatchDay*"
+                                        v-model="project.base_price"
+                                        type="number"
+                                        min="0"
+                                        suffix="Cents"
+                                ></v-text-field>
+                            </v-flex>
+                            <v-flex xs12 md6>
+                                <v-text-field
+                                        name="cost"
+                                        label="Penalty for missed PatchDays*"
+                                        v-model="project.penalty"
+                                        type="number"
+                                        min="0"
+                                        suffix="Cents"
+                                >
+                                </v-text-field>
+                            </v-flex>
+                        </v-layout>
                         <small>*indicates required field</small>
                     </v-container>
                 </v-card-text>
@@ -77,8 +75,8 @@
         rules: {
           company: [
             () => {
-              return this.project.company &&
-                Number.isInteger(this.project.company.id)
+              return this.project.company_id &&
+                Number.isInteger(this.project.company_id)
                 || 'Please select an entry'
             },
           ]
@@ -95,8 +93,14 @@
     },
     methods: {
       editProject() {
-        this.project.company_id = this.project.company.id
-        this.$http.put(`/projects/${this.project.id}`, this.project)
+        const request = {
+          name: this.project.name,
+          base_price: this.project.base_price,
+          penalty: this.project.penalty,
+          company_id: this.project.company_id,
+        }
+
+        this.$http.put(`/projects/${this.project.id}`, request)
           .then(response => {
             if (response.status === 200) {
               eventBus.$emit('project.edited', this.project)
