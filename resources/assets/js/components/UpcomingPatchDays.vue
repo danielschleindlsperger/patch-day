@@ -33,6 +33,7 @@
 
 <script>
   import filters from 'mixins/filters'
+  import eventBus from 'components/event-bus'
   export default {
     name: 'upcoming',
     mixins: [filters],
