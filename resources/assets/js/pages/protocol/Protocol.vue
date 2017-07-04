@@ -67,8 +67,8 @@
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
 
-  import DeleteProtocol from 'pages/protocol/DeleteProtocol'
-  import EditProtocol from 'pages/protocol/EditProtocol'
+  import DeleteProtocol from 'pages/protocol/modals/DeleteProtocol'
+  import EditProtocol from 'pages/protocol/modals/EditProtocol'
 
   export default {
     components: {
