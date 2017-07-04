@@ -35,7 +35,8 @@
                     </v-expansion-panel>
 
                     <v-card-row actions>
-                        <v-btn class="green--text darken-1" flat="flat">
+                        <v-btn class="green--text darken-1" flat="flat"
+                               @click.native="isOpen = false">
                             Close
                         </v-btn>
                     </v-card-row>
