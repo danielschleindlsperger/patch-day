@@ -2,7 +2,8 @@
     <div>
         <v-container>
             <v-layout justify-center child-flex[-sm] class="mb-5">
-                <h1 class="display-1 text-xs-center flex">{{ project.name }}</h1>
+                <h1 class="display-1 text-xs-center flex">{{ project.name
+                    }}</h1>
                 <v-btn class="flex"
                        flat="flat" icon ripple
                        @click.native="editProjectModal($event)">
@@ -46,36 +47,8 @@
                 </div>
             </div>
 
-            <v-card class="projects">
-                <v-card-title>
-                    <h3 class="text-xs-center display-1 mb-0">PatchDays</h3>
-                </v-card-title>
-                <v-card-text>
-                    <v-data-table
-                            :headers="tableHeaders"
-                            :items="project.protocols"
-                            hide-actions
-                    >
-                        <template slot="items" scope="props">
-                            <td>
-                                <router-link
-                                        :to="'/protocols/' + props.item.id">
-                                    PatchDay
-                                    #{{ props.item.patch_day_id }}
-                                </router-link>
-                            </td>
-                            <td class="text-xs-right">
-                                {{ props.item.date | Date }}
-                            </td>
-                            <td class="text-xs-right">
-                                <v-icon>
-                                    {{ props.item.done | checkIcon }}
-                                </v-icon>
-                            </td>
-                        </template>
-                    </v-data-table>
-                </v-card-text>
-            </v-card>
+            <patch-day-table :protocols="project.protocols"></patch-day-table>
+
         </v-container>
         <delete-project></delete-project>
         <edit-project></edit-project>
@@ -89,12 +62,14 @@
   import DeleteProject from 'pages/project/DeleteProject'
   import EditProject from 'pages/project/EditProject'
   import TechHistoryModal from 'components/modals/TechHistoryModal'
+  import PatchDayTable from 'pages/project/components/PatchDayTable'
 
   export default {
     components: {
       DeleteProject,
       EditProject,
       TechHistoryModal,
+      PatchDayTable,
     },
     mixins: [filters],
     data() {
@@ -108,23 +83,6 @@
           },
           protocols: []
         },
-        tableHeaders: [
-          {
-            text: 'Name',
-            left: true,
-            value: 'name',
-          },
-          {
-            text: 'Date',
-            value: 'date',
-            sortable: true,
-          },
-          {
-            text: 'Done',
-            value: 'done',
-            sortable: true,
-          },
-        ]
       }
     },
     methods: {
