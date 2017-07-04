@@ -42,8 +42,8 @@
 <script>
   import eventBus from 'components/event-bus'
 
-  import DeleteProject from 'pages/project/DeleteProject'
-  import CreateProject from 'pages/project/CreateProject'
+  import DeleteProject from 'pages/project/modals/DeleteProject'
+  import CreateProject from 'pages/project/modals/CreateProject'
 
   export default {
     components: {

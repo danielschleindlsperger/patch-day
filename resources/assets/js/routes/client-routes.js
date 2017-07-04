@@ -2,6 +2,7 @@
 import Dashboard from 'pages/Dashboard'
 import NotFoundPage from 'pages/404'
 import Company from 'pages/company/Company'
+import AllProjects from 'pages/project/Projects'
 import Project from 'pages/project/Project'
 import Protocol from 'pages/protocol/Protocol'
 // patch days
@@ -14,6 +15,9 @@ export default [
   },
   {
     path: '/companies/:id', component: Company
+  },
+  {
+    path: '/projects', component: AllProjects,
   },
   {
     path: '/projects/:id', component: Project,

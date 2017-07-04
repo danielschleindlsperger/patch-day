@@ -35,8 +35,8 @@
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
-  import DeleteProject from 'pages/project/DeleteProject'
-  import EditProject from 'pages/project/EditProject'
+  import DeleteProject from 'pages/project/modals/DeleteProject'
+  import EditProject from 'pages/project/modals/EditProject'
   import TechHistoryModal from 'components/modals/TechHistoryModal'
   import ProjectInfo from 'pages/project/components/ProjectInfo'
   import PatchDayTable from 'pages/project/components/PatchDayTable'

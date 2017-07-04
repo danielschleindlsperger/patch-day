@@ -24,7 +24,7 @@
 <script>
   import eventBus from 'components/event-bus.js'
   import CreateCompany from 'pages/company/CreateCompany'
-  import CreateProject from 'pages/project/CreateProject'
+  import CreateProject from 'pages/project/modals/CreateProject'
   import CreateUser from 'pages/user/CreateUser'
 
   export default {
