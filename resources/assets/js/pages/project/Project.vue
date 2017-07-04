@@ -2,8 +2,9 @@
     <div>
         <v-container>
             <v-layout justify-center child-flex[-sm] class="mb-5">
-                <h1 class="display-1 text-xs-center flex">{{ project.name
-                    }}</h1>
+                <h1 class="display-1 text-xs-center flex">
+                    {{ project.name }}
+                </h1>
                 <v-btn class="flex"
                        flat="flat" icon ripple
                        @click.native="editProjectModal($event)">
@@ -21,32 +22,7 @@
                 </v-btn>
             </v-layout>
 
-            <div class="info-wrapper">
-                <div class="headline">
-                    Price/PatchDay:
-                    {{ project.base_price | currency('EUR', true) }}
-                </div>
-                <div class="headline mb-4">
-                    Penalty:
-                    {{ project.penalty | currency('EUR', true) }}
-                </div>
-
-                <div class="mb-5">
-                    <h3 class="headline mb-0">Technologies</h3>
-                    <v-chip class="text-xs-center"
-                            v-for="technology in project.current_technologies"
-                            :key="technology.id">
-                        {{ technology.name }}&nbsp;{{ technology.version }}
-                    </v-chip>
-                    <div>
-                        <v-btn dark default
-                               @click.native="techHistoryModal($event)">
-                            History
-                        </v-btn>
-                    </div>
-                </div>
-            </div>
-
+            <project-info :project="project"></project-info>
             <patch-day-table :protocols="project.protocols"></patch-day-table>
 
         </v-container>
@@ -62,6 +38,7 @@
   import DeleteProject from 'pages/project/DeleteProject'
   import EditProject from 'pages/project/EditProject'
   import TechHistoryModal from 'components/modals/TechHistoryModal'
+  import ProjectInfo from 'pages/project/components/ProjectInfo'
   import PatchDayTable from 'pages/project/components/PatchDayTable'
 
   export default {
@@ -69,6 +46,7 @@
       DeleteProject,
       EditProject,
       TechHistoryModal,
+      ProjectInfo,
       PatchDayTable,
     },
     mixins: [filters],
@@ -129,15 +107,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-
-    .info-item {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        h6 {
-            display: inline-block;
-        }
-    }
-</style>
