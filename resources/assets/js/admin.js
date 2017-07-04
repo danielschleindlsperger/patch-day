@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
 import axios from 'axios'
 
-import routes from './routes.js'
+import routes from './routes/routes.js'
 import auth from './auth.js'
 
 Vue.prototype.$http = axios;
