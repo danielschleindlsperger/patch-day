@@ -8,7 +8,7 @@ import Company from 'pages/company/Company'
 import Projects from 'pages/project/admin/Index'
 import Project from 'pages/project/admin/Project'
 // protocols
-import Protocol from 'pages/protocol/Protocol'
+import Protocol from 'pages/protocol/admin/Protocol'
 // users
 import UsersIndex from 'pages/user/Index'
 import UserDetail from 'pages/user/Detail'
