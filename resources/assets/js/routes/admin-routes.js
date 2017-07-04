@@ -5,7 +5,7 @@ import NotFoundPage from 'pages/404'
 import Companies from 'pages/company/Companies'
 import Company from 'pages/company/Company'
 // project
-import Projects from 'pages/project/admin/Projects'
+import Projects from 'pages/project/admin/Index'
 import Project from 'pages/project/admin/Project'
 // protocols
 import Protocol from 'pages/protocol/Protocol'
