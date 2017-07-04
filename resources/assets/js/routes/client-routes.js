@@ -2,8 +2,8 @@
 import Dashboard from 'pages/Dashboard'
 import NotFoundPage from 'pages/404'
 import Company from 'pages/company/Company'
-import AllProjects from 'pages/project/Projects'
-import Project from 'pages/project/Project'
+import AllProjects from 'pages/project/client/Projects'
+import Project from 'pages/project/client/Project'
 import Protocol from 'pages/protocol/Protocol'
 // patch days
 import PatchDayIndex from 'pages/patch-day/Index'
