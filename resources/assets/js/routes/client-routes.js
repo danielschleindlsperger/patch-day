@@ -1,5 +1,5 @@
 // components
-import Dashboard from 'pages/Dashboard'
+import Dashboard from 'pages/ClientDashboard'
 import NotFoundPage from 'pages/404'
 import Company from 'pages/company/Company'
 import AllProjects from 'pages/project/client/Index'
