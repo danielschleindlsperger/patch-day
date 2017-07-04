@@ -2,7 +2,7 @@
     <v-container>
         <v-layout>
             <v-flex xs12 lg6>
-                <upcoming></upcoming>
+                Client Dashboard
             </v-flex>
             <v-flex xs12 lg6>
             </v-flex>
@@ -11,11 +11,7 @@
 </template>
 
 <script>
-  import Upcoming from 'components/UpcomingPatchDays'
   export default {
-    components: {
-      Upcoming,
-    },
     mounted() {
       this.$http.get('/users/me')
         .then(response => {
