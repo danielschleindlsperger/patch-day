@@ -111,7 +111,7 @@ class PatchDaySignupFeatureTest extends TestCase
         });
 
         $response = $this->json('GET', "/projects/{$project->id}/signup");
-        
+
         $response->assertStatus(200);
         $response->assertJsonFragment([
             'id' => $patch_days[4]->id,

@@ -22,10 +22,12 @@ class SignupController extends Controller
     {
         $patch_day = PatchDay::findOrFail(request('patch_day_id'));
 
-        $today = Carbon::now()->endOfDay();
+        if (!$this->patchDayIsAfterToday($patch_day)) {
+            abort(422, 'Too late to sign up for this PatchDay.');
+        }
 
-        if ($today->greaterThan(Carbon::parse($patch_day->date))) {
-            abort(422, 'Cannot sign up for past patch-day');
+        if ($this->projectIsSignedUpForPatchDay($project, $patch_day)) {
+            abort(422, 'Already signed up for PatchDay.');
         }
 
         $protocol = Protocol::create([
@@ -46,24 +48,24 @@ class SignupController extends Controller
     public function cancel(Project $project)
     {
         $patch_day = PatchDay::findOrFail(request('patch_day_id'));
+
         $protocol = Protocol::where('project_id', '=', $project->id)
                         ->where('patch_day_id', '=', $patch_day->id)
                         ->firstOrFail();
 
         $this->authorize('delete', $protocol);
 
-        $today = Carbon::now()->endOfDay();
-
-        if ($today->greaterThan(Carbon::parse($patch_day->date)->endOfDay())) {
-            abort(422, 'Cannot delete patch-day');
+        if (!$this->patchDayIsAfterToday($patch_day)) {
+            abort(422, 'Too late to delete this PatchDay.');
         }
 
         $protocol->delete();
+
         return ['success' => true];
     }
 
     /**
-     * The PatchDays a project is registered to
+     * The PatchDays a project is registered to.
      * @param Project $project
      * @return Collection
      */
@@ -72,15 +74,45 @@ class SignupController extends Controller
         return $project->patchDays();
     }
 
+    /**
+     * The PatchDays a project can still sign up for.
+     *
+     * @param Project $project
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function possibleSignups(Project $project)
     {
-        $patch_days = PatchDay::whereNotIn('id', function($query) use
-        ($project){
-            $query->select('id')
-                ->from('protocols')
-                ->where('project_id', '=', $project->id);
-        })->get();
+        $patch_days = PatchDay::all();
+        $keys = $project->patchDays()->pluck('id')->toArray();
+
+        $patch_days = $patch_days->filter(function ($patch_day) use ($keys) {
+            return !in_array($patch_day->id, $keys);
+        })->values();
 
         return $patch_days;
+    }
+
+    /**
+     * @param PatchDay $patch_day
+     * @return bool
+     */
+    private function patchDayIsAfterToday($patch_day)
+    {
+        $today = Carbon::now()->endOfDay();
+        $date = Carbon::parse($patch_day->date)->endOfDay();
+
+        return $date->greaterThan($today);
+    }
+
+    /**
+     * @param Project $project
+     * @param PatchDay $patchDay
+     * @return bool
+     */
+    private function projectIsSignedUpForPatchDay($project, $patchDay)
+    {
+        $keys = $project->patchDays()->pluck('id')->toArray();
+
+        return in_array($patchDay->id, $keys);
     }
 }
