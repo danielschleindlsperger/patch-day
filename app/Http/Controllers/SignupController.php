@@ -86,7 +86,8 @@ class SignupController extends Controller
         $keys = $project->patchDays()->pluck('id')->toArray();
 
         $patch_days = $patch_days->filter(function ($patch_day) use ($keys) {
-            return !in_array($patch_day->id, $keys);
+            return !in_array($patch_day->id, $keys) &&
+                $this->patchDayIsAfterToday($patch_day);
         })->values();
 
         return $patch_days;
