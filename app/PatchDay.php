@@ -14,6 +14,10 @@ class PatchDay extends Model
 
     protected $dates = ['date'];
 
+    protected $appends = [
+        'name',
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      *
