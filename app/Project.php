@@ -72,6 +72,15 @@ class Project extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function patchDays()
+    {
+        $project_id = $this->id;
+
+        return PatchDay::whereHas('protocols', function ($query) use ($project_id) {
+            $query->where('project_id', $project_id);
+        })->get();
+    }
+
     /**
      * return only the latest version for each technology for each unique
      * technlogy (based on name).

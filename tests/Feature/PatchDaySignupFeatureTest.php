@@ -67,6 +67,39 @@ class PatchDaySignupFeatureTest extends TestCase
     }
 
     /** @test */
+    function a_client_can_see_the_patch_days_their_project_is_signed_up_for()
+    {
+        $project = factory(Project::class)->create([
+            'company_id' => $this->company->id,
+        ]);
+
+        $patch_days = factory(PatchDay::class, 5)->create()
+            ->each(function ($patch_day, $index) use ($project) {
+                $patch_day->date = Carbon::now()
+                                ->addMonths($index + 1)->toDateString();
+
+                $patch_day->save();
+
+                Protocol::create([
+                    'project_id' => $project->id,
+                    'patch_day_id' => $patch_day->id,
+                ]);
+            });
+
+        $patch_days_relevant_keys = $patch_days->map(function ($patch_day) {
+            return collect($patch_day->toArray())
+                ->only(['id', 'name'])
+                ->all();
+        })->toArray();
+
+        $response = $this->json('GET', "/projects/{$project->id}/registered-patch-days");
+
+        $response->assertStatus(200);
+        $response->assertJson($patch_days_relevant_keys);
+        $this->assertCount(5, $response->json());
+    }
+
+    /** @test */
     public function a_client_can_cancel_a_projects_patch_day()
     {
         $project = factory(Project::class)->create([

@@ -297,4 +297,21 @@ class ProjectUnitTest extends TestCase
         $this->assertEquals('2017-03-30', $history[3]->date);
         $this->assertEquals('2017-04-30', $history[0]->date);
     }
+
+    /** @test*/
+    public function a_project_has_patch_days()
+    {
+        $project = factory(Project::class)->create();
+        $patch_days = factory(PatchDay::class, 5)
+                        ->create()->each(function($patch_day) use ($project) {
+                            Protocol::create([
+                                'project_id' => $project->id,
+                                'patch_day_id' => $patch_day->id,
+                            ]);
+                        });
+
+        $this->assertCount(5, $project->patchDays());
+        $this->assertContainsOnlyInstancesOf(PatchDay::class,
+            $project->patchDays());
+    }
 }

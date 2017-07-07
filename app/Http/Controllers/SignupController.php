@@ -39,10 +39,11 @@ class SignupController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Protocol $protocol
+     * @param Project $project
+     *
      * @return \Illuminate\Http\Response
      */
-    public function cancel(Request $request, Project $project)
+    public function cancel(Project $project)
     {
         $patch_day = PatchDay::findOrFail(request('patch_day_id'));
         $protocol = Protocol::where('project_id', '=', $project->id)
@@ -59,5 +60,10 @@ class SignupController extends Controller
 
         $protocol->delete();
         return ['success' => true];
+    }
+
+    public function registeredPatchDays(Project $project)
+    {
+        return $project->patchDays();
     }
 }
