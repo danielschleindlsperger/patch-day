@@ -19,7 +19,6 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     ]);
 
     // Project resource
-    Route::post('projects/{project}/patch-days', 'ProjectController@projectSignup');
     Route::resource('projects', 'ProjectController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
@@ -46,4 +45,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::resource('technologies', 'TechnologyController', [
         'only' => ['index', 'store', 'update', 'destroy']
     ]);
+
+    // PatchDay Signups
+    Route::post('projects/{project}/signup', 'SignupController@signup');
 });
