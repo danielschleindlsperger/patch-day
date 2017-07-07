@@ -25,6 +25,10 @@
                                    @click.native="signupModal($event)">
                                 Sign up for PatchDay
                             </v-btn>
+                            <v-btn primary light
+                                   @click.native="cancelModal($event)">
+                                Cancel PatchDay
+                            </v-btn>
                         </v-card-text>
                     </v-card>
                 </v-flex>
@@ -34,6 +38,7 @@
         </v-container>
         <tech-history-modal></tech-history-modal>
         <patch-day-signup-modal></patch-day-signup-modal>
+        <patch-day-cancel-modal></patch-day-cancel-modal>
     </div>
 </template>
 
@@ -42,6 +47,7 @@
   import filters from 'mixins/filters'
   import TechHistoryModal from 'components/modals/TechHistoryModal'
   import PatchDaySignupModal from 'components/modals/PatchDaySignupModal'
+  import PatchDayCancelModal from 'components/modals/PatchDayCancelModal'
   import ProjectInfo from 'pages/project/components/ProjectInfo'
   import PatchDayTable from 'pages/project/components/PatchDayTable'
 
@@ -49,6 +55,7 @@
     components: {
       TechHistoryModal,
       PatchDaySignupModal,
+      PatchDayCancelModal,
       ProjectInfo,
       PatchDayTable,
     },
@@ -78,6 +85,12 @@
 
         eventBus.$emit('patch_day_signup.view.modal', this.project)
       },
+      cancelModal(event) {
+        event.preventDefault()
+        event.stopPropagation()
+
+        eventBus.$emit('patch_day_cancel.view.modal', this.project)
+      },
       getProject() {
         const ID = this.$route.params.id
 
@@ -98,6 +111,10 @@
       this.getProject()
 
       eventBus.$on('patch_day.signed_up', () => {
+        this.getProject()
+      })
+
+      eventBus.$on('patch_day.cancelled', () => {
         this.getProject()
       })
     }

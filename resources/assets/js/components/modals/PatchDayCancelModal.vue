@@ -3,7 +3,7 @@
 
         <v-card>
             <v-card-row>
-                <v-card-title>Sign up for PatchDay</v-card-title>
+                <v-card-title>Cancel PatchDay</v-card-title>
             </v-card-row>
             <v-card-row>
                 <v-card-text>
@@ -25,9 +25,9 @@
                                @click.native="isOpen = false">
                             Close
                         </v-btn>
-                        <v-btn class="green--text darken-1" flat="flat"
-                               @click.native="signUp($event)">
-                            Sign Up
+                        <v-btn class="red--text darken-1" flat="flat"
+                               @click.native="cancel($event)">
+                            Cancel PatchDay
                         </v-btn>
                     </v-card-row>
                 </v-card-text>
@@ -42,7 +42,7 @@
   import filters from 'mixins/filters'
 
   export default {
-    name: 'patch-day-signup-modal',
+    name: 'patch-day-cancel-modal',
     mixins: [filters],
     data() {
       return {
@@ -53,7 +53,7 @@
       }
     },
     mounted () {
-      eventBus.$on('patch_day_signup.view.modal', (project) => {
+      eventBus.$on('patch_day_cancel.view.modal', (project) => {
         this.project = project
         this.getPatchDays()
         this.isOpen = true
@@ -61,7 +61,7 @@
     },
     methods: {
       getPatchDays() {
-        this.$http.get(`/projects/${this.project.id}/signup`)
+        this.$http.get(`/projects/${this.project.id}/registered-patch-days`)
           .then(response => {
             this.patch_days = response.data
           })
@@ -73,23 +73,22 @@
             }
           })
       },
-      signUp(event) {
-        this.$http.post(`/projects/${this.project.id}/patch-days`, {
-          patch_day_id: this.patch_day.id
+      cancel(event) {
+        this.$http.delete(`/projects/${this.project.id}/cancel`, {
+          data: {
+            patch_day_id: this.patch_day.id
+          }
         })
           .then(response => {
             eventBus.$emit('info.snackbar',
-              `Successfully signed up for ${this.patch_day.name}!`)
-            eventBus.$emit('patch_day.signed_up')
+              `Successfully cancelled ${this.patch_day.name}!`)
+            eventBus.$emit('patch_day.cancelled')
 
             this.isOpen = false
           })
           .catch(error => {
             console.error(error)
             eventBus.$emit('info.snackbar', error.response.data.error)
-            if (error.response.status === 404) {
-              this.$router.push({name: 'not-found'})
-            }
           })
       }
     }
