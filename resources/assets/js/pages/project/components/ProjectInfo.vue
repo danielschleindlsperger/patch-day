@@ -1,29 +1,38 @@
 <template>
-    <div class="info-wrapper">
-        <div class="headline">
-            Price/PatchDay:
-            {{ project.base_price | currency('EUR', true) }}
-        </div>
-        <div class="headline mb-4">
-            Penalty:
-            {{ project.penalty | currency('EUR', true) }}
-        </div>
+    <v-card>
+        <v-card-row class="primary">
+            <v-card-title>
+                <span class="white--text">Project Info</span>
+            </v-card-title>
+        </v-card-row>
+        <v-card-text>
+            <div class="info-wrapper">
+                <div class="headline">
+                    Price/PatchDay:
+                    {{ project.base_price | currency('EUR', true) }}
+                </div>
+                <div class="headline mb-4">
+                    Penalty:
+                    {{ project.penalty | currency('EUR', true) }}
+                </div>
 
-        <div class="mb-5">
-            <h3 class="headline mb-0">Technologies</h3>
-            <v-chip class="text-xs-center"
-                    v-for="technology in project.current_technologies"
-                    :key="technology.id">
-                {{ technology.name }}&nbsp;{{ technology.version }}
-            </v-chip>
-            <div>
-                <v-btn dark default
-                       @click.native="techHistoryModal($event)">
-                    History
-                </v-btn>
+                <div class="mb-5">
+                    <h3 class="headline mb-0">Technologies</h3>
+                    <v-chip class="text-xs-center"
+                            v-for="technology in project.current_technologies"
+                            :key="technology.id">
+                        {{ technology.name }}&nbsp;{{ technology.version }}
+                    </v-chip>
+                    <div>
+                        <v-btn dark default
+                               @click.native="techHistoryModal($event)">
+                            History
+                        </v-btn>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </v-card-text>
+    </v-card>
 </template>
 
 <script>
