@@ -62,8 +62,25 @@ class SignupController extends Controller
         return ['success' => true];
     }
 
+    /**
+     * The PatchDays a project is registered to
+     * @param Project $project
+     * @return Collection
+     */
     public function registeredPatchDays(Project $project)
     {
         return $project->patchDays();
+    }
+
+    public function possibleSignups(Project $project)
+    {
+        $patch_days = PatchDay::whereNotIn('id', function($query) use
+        ($project){
+            $query->select('id')
+                ->from('protocols')
+                ->where('project_id', '=', $project->id);
+        })->get();
+
+        return $patch_days;
     }
 }

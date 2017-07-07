@@ -50,4 +50,5 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::post('projects/{project}/signup', 'SignupController@signup');
     Route::delete('projects/{project}/cancel', 'SignupController@cancel');
     Route::get('projects/{project}/registered-patch-days', 'SignupController@registeredPatchDays');
+    Route::get('projects/{project}/signup', 'SignupController@possibleSignups');
 });

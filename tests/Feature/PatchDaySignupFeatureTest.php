@@ -74,12 +74,7 @@ class PatchDaySignupFeatureTest extends TestCase
         ]);
 
         $patch_days = factory(PatchDay::class, 5)->create()
-            ->each(function ($patch_day, $index) use ($project) {
-                $patch_day->date = Carbon::now()
-                                ->addMonths($index + 1)->toDateString();
-
-                $patch_day->save();
-
+            ->each(function ($patch_day) use ($project) {
                 Protocol::create([
                     'project_id' => $project->id,
                     'patch_day_id' => $patch_day->id,
@@ -97,6 +92,31 @@ class PatchDaySignupFeatureTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson($patch_days_relevant_keys);
         $this->assertCount(5, $response->json());
+    }
+
+    /** @test */
+    function a_client_can_see_the_patch_days_their_project_can_sign_up_for()
+    {
+        $project = factory(Project::class)->create([
+            'company_id' => $this->company->id,
+        ]);
+
+        $patch_days = factory(PatchDay::class, 5)->create();
+
+        $patch_days->slice(0, 2)->each(function ($patch_day, $index) use ($project) {
+            Protocol::create([
+                'project_id' => $project->id,
+                'patch_day_id' => $patch_day->id,
+            ]);
+        });
+
+        $response = $this->json('GET', "/projects/{$project->id}/signup");
+        
+        $response->assertStatus(200);
+        $response->assertJsonFragment([
+            'id' => $patch_days[4]->id,
+        ]);
+        $this->assertCount(3, $response->json());
     }
 
     /** @test */
