@@ -26,8 +26,6 @@ class PatchDayController extends Controller
      */
     public function index()
     {
-        $this->authorize('index', PatchDay::class);
-
         return PatchDay::orderBy('date', 'DESC')->get();
     }
 

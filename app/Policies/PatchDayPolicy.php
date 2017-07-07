@@ -14,23 +14,9 @@ class PatchDayPolicy
      * Admins can do anything.
      *
      * @param $user
-     * @param $ability
      * @return bool
      */
     public function before($user)
-    {
-        if ($user->isAdmin()) {
-            return true;
-        }
-    }
-
-    /**
-     * Determine whether the user can view the patch-day index resource.
-     *
-     * @param  \App\User $user
-     * @return mixed
-     */
-    public function index(User $user)
     {
         return $user->isAdmin();
     }
