@@ -36,6 +36,16 @@ class PatchDayUnitTest extends TestCase
     }
 
     /** @test */
+    public function a_patch_days_has_a_name()
+    {
+        $patch_day = PatchDay::create([
+            'date' => '2017-03-30',
+        ]);
+
+        $this->assertEquals('PatchDay|March2017', $patch_day->name);
+    }
+
+    /** @test */
     public function a_patch_day_has_its_registered_projects()
     {
         $patch_day = PatchDay::create([

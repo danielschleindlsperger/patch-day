@@ -49,4 +49,16 @@ class PatchDay extends Model
             $query->where('patch_day_id', $patch_day_id);
         })->get();
     }
+
+    /**
+     * PatchDay has a name like this: PatchDay|March2017
+     */
+    public function getNameAttribute()
+    {
+        $carbon = Carbon::parse($this->date);
+        $month = $carbon->format('F');
+        $year = $carbon->format('Y');
+
+        return "PatchDay|{$month}{$year}";
+    }
 }
