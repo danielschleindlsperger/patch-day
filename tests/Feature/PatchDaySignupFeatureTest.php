@@ -86,11 +86,15 @@ class PatchDaySignupFeatureTest extends TestCase
 
         Carbon::setTestNow(Carbon::now()->addWeeks(3));
         // has to be in the future
-        $response = $this->json('DELETE', "/protocols/{$protocol->id}");
+        $response = $this->json('DELETE', "/projects/{$project->id}/cancel", [
+                'patch_day_id' => $patch_day->id,
+            ]);
         $response->assertStatus(422);
 
         Carbon::setTestNow();
-        $response = $this->json('DELETE', "/protocols/{$protocol->id}")
+        $response = $this->json('DELETE',"/projects/{$project->id}/cancel", [
+                'patch_day_id' => $patch_day->id,
+            ])
             ->assertStatus(200);
 
         $this->assertFalse($patch_day->projects->contains($project));

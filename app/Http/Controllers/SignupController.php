@@ -35,4 +35,29 @@ class SignupController extends Controller
 
         return $protocol;
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  Protocol $protocol
+     * @return \Illuminate\Http\Response
+     */
+    public function cancel(Request $request, Project $project)
+    {
+        $patch_day = PatchDay::findOrFail(request('patch_day_id'));
+        $protocol = Protocol::where('project_id', '=', $project->id)
+                        ->where('patch_day_id', '=', $patch_day->id)
+                        ->firstOrFail();
+
+        $this->authorize('delete', $protocol);
+
+        $today = Carbon::now()->endOfDay();
+
+        if ($today->greaterThan(Carbon::parse($patch_day->date)->endOfDay())) {
+            abort(422, 'Cannot delete patch-day');
+        }
+
+        $protocol->delete();
+        return ['success' => true];
+    }
 }

@@ -61,26 +61,4 @@ class ProtocolController extends Controller
 
         return ['updated' => true];
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Protocol $protocol
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Protocol $protocol)
-    {
-        $this->authorize('delete', $protocol);
-
-        $patch_day = $protocol->patch_day;
-
-        $today = Carbon::now()->endOfDay();
-
-        if ($today->greaterThan(Carbon::parse($patch_day->date)->endOfDay())) {
-            abort(422, 'Cannot delete patch-day');
-        }
-
-        $protocol->delete();
-        return ['success' => true];
-    }
 }

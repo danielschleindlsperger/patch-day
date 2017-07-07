@@ -31,7 +31,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 
     // Protocol resource
     Route::resource('protocols', 'ProtocolController', [
-        'only' => ['index', 'show', 'update', 'destroy']
+        'only' => ['index', 'show', 'update']
     ]);
 
     // User resource
@@ -48,4 +48,5 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 
     // PatchDay Signups
     Route::post('projects/{project}/signup', 'SignupController@signup');
+    Route::delete('projects/{project}/cancel', 'SignupController@cancel');
 });
