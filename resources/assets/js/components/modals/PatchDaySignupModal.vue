@@ -74,7 +74,7 @@
           })
       },
       signUp(event) {
-        this.$http.post(`/projects/${this.project.id}/patch-days`, {
+        this.$http.post(`/projects/${this.project.id}/signup`, {
           patch_day_id: this.patch_day.id
         })
           .then(response => {
