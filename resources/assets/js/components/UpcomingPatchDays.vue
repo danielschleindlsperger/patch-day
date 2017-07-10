@@ -18,7 +18,7 @@
                             <v-list-tile-sub-title>
                                 <!-- Display in days from now aswell -->
                                 On {{ patch_day.date | Date }}
-                                ({{ patch_day.date | DaysFromNow }})
+                                ({{ patch_day.date | HumanizeDate }})
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                         <v-list-tile-action>
