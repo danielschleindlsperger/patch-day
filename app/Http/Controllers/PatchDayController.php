@@ -36,9 +36,7 @@ class PatchDayController extends Controller
      */
     public function upcoming()
     {
-        $today = Carbon::now()->toDateString();
-
-        $patch_days = PatchDay::where('date', '>=', $today)
+        $patch_days = PatchDay::where('status', '!=', 'done')
             ->orderBy('date', 'ASC')->get();
 
         return $patch_days;

@@ -185,26 +185,27 @@ class PatchDayFeatureTest extends TestCase
     public function admin_can_see_upcoming_patch_days()
     {
         $patch_day_1 = factory(PatchDay::class)->create([
-            'date' => Carbon::now()->addWeeks(1)
-                ->subMonths(1)->toDateString(),
+            'status' => 'done',
+            'date' => Carbon::now()->subMonths(1)->toDateString(),
         ]);
 
         $patch_day_2 = factory(PatchDay::class)->create([
-            'date' => Carbon::now()->addWeeks(1)->toDateString(),
+            'status' => 'in_progress',
+            'date' => Carbon::now()->toDateString(),
         ]);
 
         $patch_day_3 = factory(PatchDay::class)->create([
-            'date' => Carbon::now()->addWeeks(1)
-                ->addMonths(1)->toDateString(),
+            'status' => 'upcoming',
+            'date' => Carbon::now()->addMonths(1)->toDateString(),
         ]);
 
         $patch_day_4 = factory(PatchDay::class)->create([
-            'date' => Carbon::now()->addWeeks(1)
-                ->addMonths(2)->toDateString(),
+            'status' => 'upcoming',
+            'date' => Carbon::now()->addMonths(2)->toDateString(),
         ]);
 
         $response = $this->json('GET', '/patch-days/upcoming');
-        // only patch days in the future are returned
+        // only patch days that aren't done are returned
         // ordered by ascending date
         $response->assertStatus(200)
             ->assertJson([
