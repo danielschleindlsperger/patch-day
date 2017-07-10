@@ -10,6 +10,11 @@ class PatchDay extends Model
 {
     protected $fillable = [
         'date',
+        'status',
+    ];
+
+    protected $attributes = [
+        'status' => 'upcoming',
     ];
 
     protected $dates = ['date'];

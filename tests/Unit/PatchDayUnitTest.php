@@ -6,6 +6,7 @@ use App\Company;
 use App\PatchDay;
 use App\Project;
 use App\Protocol;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Database\QueryException;
 use Tests\TestCase;
@@ -43,6 +44,14 @@ class PatchDayUnitTest extends TestCase
         ]);
 
         $this->assertEquals('PatchDay|March2017', $patch_day->name);
+    }
+
+    /** @test */
+    public function a_patch_day_has_a_status()
+    {
+        $patch_day = factory(PatchDay::class)->create();
+
+        $this->assertEquals('upcoming', $patch_day->status);
     }
 
     /** @test */
