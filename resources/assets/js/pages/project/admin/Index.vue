@@ -79,6 +79,7 @@
         this.$http.get('/projects')
           .then(response => {
             this.projects = response.data
+            eventBus.$emit('page.loading', false)
           })
           .catch(error => {
             error.response.data

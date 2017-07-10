@@ -79,6 +79,7 @@
         this.$http.get(`/users/${ID}`)
           .then(response => {
             this.user = response.data
+            eventBus.$emit('page.loading', false)
           })
           .catch(error => {
             console.error(error)

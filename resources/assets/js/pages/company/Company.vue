@@ -90,6 +90,7 @@
       this.$http.get(`/companies/${companyId}`)
         .then(response => {
           this.company = response.data
+          eventBus.$emit('page.loading', false)
           console.log(response.data)
         })
         .catch(error => {

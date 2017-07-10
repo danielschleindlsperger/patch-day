@@ -114,6 +114,7 @@
         this.$http.get(`/protocols/${ID}`)
           .then(response => {
             this.protocol = response.data
+            eventBus.$emit('page.loading', false)
           })
           .catch(error => {
             console.error(error)

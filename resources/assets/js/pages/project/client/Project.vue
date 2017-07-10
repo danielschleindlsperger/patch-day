@@ -97,6 +97,7 @@
         this.$http.get(`/projects/${ID}`)
           .then(response => {
             this.project = response.data
+            eventBus.$emit('page.loading', false)
           })
           .catch(error => {
             console.error(error)

@@ -2,16 +2,13 @@
     <v-app id="patch-day">
         <side-bar></side-bar>
         <tool-bar></tool-bar>
-        <main>
-            <v-container fluid>
-                <router-view></router-view>
-            </v-container>
-        </main>
+        <page-wrapper></page-wrapper>
         <info-bar></info-bar>
     </v-app>
 </template>
 
 <script>
+  import PageWrapper from 'pages/PageWrapper'
   import ToolBar from 'components/navigation/AdminToolBar'
   import SideBar from 'components/navigation/AdminSideBar'
   import InfoBar from 'components/InfoBar'
@@ -21,6 +18,7 @@
       return {}
     },
     components: {
+      PageWrapper,
       ToolBar,
       SideBar,
       InfoBar,

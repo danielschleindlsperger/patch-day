@@ -15,6 +15,10 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  eventBus.$emit('page.loading', true)
+  next()
+})
 
 const app = new Vue({
   data() {

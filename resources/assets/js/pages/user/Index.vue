@@ -21,7 +21,6 @@
             </div>
 
             <v-data-table
-                    :loading="loading"
                     :headers="tableHeaders"
                     :items="users"
                     :search="search"
@@ -110,7 +109,7 @@
         this.$http.get('/users')
           .then(response => {
             this.users = response.data
-            this.loading = false
+            eventBus.$emit('page.loading', false)
           })
           .catch(error => {
             console.error(error)

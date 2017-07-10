@@ -79,6 +79,7 @@
         this.$http.get('/companies')
           .then(response => {
             this.companies = response.data
+            eventBus.$emit('page.loading', false)
           })
           .catch(error => {
             error.response.data

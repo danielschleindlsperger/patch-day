@@ -76,6 +76,7 @@
         this.$http.get('/patch-days')
           .then(response => {
             this.patch_days = response.data
+            eventBus.$emit('page.loading', false)
           })
           .catch(error => {
             console.error(error.response.data)
