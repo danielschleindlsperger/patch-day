@@ -4,6 +4,7 @@ namespace App\Http\Requests\PatchDay;
 
 use App\PatchDay;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdatePatchDay extends FormRequest
 {
@@ -28,6 +29,7 @@ class UpdatePatchDay extends FormRequest
     {
         return [
             'date' => 'date',
+            'status' => Rule::in(config('enums.patch_day_status')),
         ];
     }
 }

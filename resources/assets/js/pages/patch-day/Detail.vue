@@ -3,7 +3,7 @@
         <v-container>
             <v-layout justify-center child-flex[-sm]>
                 <h1 class="display-1 text-xs-center flex">
-                    PatchDay #{{ patch_day.id }}</h1>
+                    {{ patch_day.name }}</h1>
                 <v-btn class="flex"
                        flat="flat" icon ripple
                        @click.native="editPatchDayModal($event)">
@@ -23,6 +23,10 @@
 
             <h2 class="headline text-xs-center flex">
                 {{ patch_day.date | Date }}
+            </h2>
+
+            <h2 class="headline text-xs-center flex">
+                Status: {{ patch_day.status }}
             </h2>
 
             <div v-if="patch_day.protocols.length > 0">

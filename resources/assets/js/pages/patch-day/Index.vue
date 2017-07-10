@@ -17,10 +17,11 @@
                                  :href="`/patch-days/${patch_day.id}`">
                         <v-list-tile-content>
                             <v-list-tile-title>
-                                PatchDay #{{ patch_day.id }}
+                                {{ patch_day.name }}
                             </v-list-tile-title>
                             <v-list-tile-sub-title>
                                 {{ patch_day.date | Date }}
+                                {{ patch_day.status }}
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
                         <v-list-tile-action>

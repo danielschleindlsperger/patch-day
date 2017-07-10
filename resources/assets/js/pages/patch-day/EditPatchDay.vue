@@ -8,12 +8,6 @@
 
             <v-card-row>
                 <v-card-text>
-                    Previous PatchDay was on {{ last_patch_day.date | Date }}
-                </v-card-text>
-            </v-card-row>
-
-            <v-card-row>
-                <v-card-text>
                     <v-menu
                         lazy
                         :close-on-content-click="true"
@@ -34,6 +28,16 @@
                                        scrollable>
                         </v-date-picker>
                     </v-menu>
+                    <v-select
+                            :items="status"
+                            v-model="patch_day.status"
+                            item-text="name"
+                            item-value="value"
+                            label="PatchDay status"
+                            required auto
+                            max-height="320"
+                            dark
+                    />
                     <small>*indicates required field</small>
                 </v-card-text>
             </v-card-row>
@@ -60,8 +64,23 @@
       return {
         isOpen: false,
         datePickerOpen: false,
+        status: [
+          {
+            value: 'upcoming',
+            name: 'Upcoming',
+          },
+          {
+            value: 'in_progress',
+            name: 'In progress',
+          },
+          {
+            value: 'done',
+            name: 'Done',
+          },
+        ],
         patch_day: {
           date: '',
+          status: 'upcoming',
         },
         last_patch_day: {
           id: null,
