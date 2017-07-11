@@ -1,27 +1,9 @@
 <template>
     <div>
         <v-container>
-            <v-layout justify-center child-flex[-sm]>
-                <h1 class="display-1 text-xs-center flex">
-                    PatchDay #{{ patch_day.id }}
-                </h1>
-
-                <v-btn class="flex"
-                       flat="flat" icon ripple
-                       @click.native="editProtocolModal($event)">
-                    <v-icon class="grey--text">
-                        mode_edit
-                    </v-icon>
-                </v-btn>
-
-                <v-btn class="flex"
-                       flat="flat" icon ripple
-                       @click.native="deleteProtocolModal($event)">
-                    <v-icon class="grey--text">
-                        delete
-                    </v-icon>
-                </v-btn>
-            </v-layout>
+            <h1 class="display-1 text-xs-center flex">
+                {{ patch_day.name }}
+            </h1>
 
             <h2 class="headline text-xs-center">
                 Protocol for
@@ -58,8 +40,7 @@
                 </div>
             </div>
         </v-container>
-        <delete-protocol></delete-protocol>
-        <edit-protocol></edit-protocol>
+        <fab :protocol="protocol" :fabActions="fabActions"></fab>
     </div>
 </template>
 
@@ -67,13 +48,11 @@
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
 
-  import DeleteProtocol from 'pages/protocol/modals/DeleteProtocol'
-  import EditProtocol from 'pages/protocol/modals/EditProtocol'
+  import Fab from 'pages/protocol/Fab'
 
   export default {
     components: {
-      DeleteProtocol,
-      EditProtocol,
+      Fab,
     },
     mixins: [filters],
     data() {
@@ -90,25 +69,22 @@
             current_technologies: [],
             technology_history: [],
           }
-        }
+        },
+        fabActions: [
+          {
+            icon: 'delete',
+            color: 'red',
+            event: 'protocol.delete.modal'
+          },
+          {
+            icon: 'edit',
+            color: 'green',
+            event: 'protocol.edit.modal',
+          },
+        ],
       }
     },
     methods: {
-      checkOffModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('protocol.checkoff.modal', this.protocol)
-      },
-      deleteProtocolModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('protocol.delete.modal', this.protocol)
-      },
-      editProtocolModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('protocol.edit.modal', this.protocol)
-      },
       getProtocol() {
         const ID = this.$route.params.id
         this.$http.get(`/protocols/${ID}`)
