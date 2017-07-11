@@ -2,20 +2,6 @@
     <div>
         <v-container>
             <h1 class="display-2 text-xs-center">Projects</h1>
-            <v-fab-transition>
-                <v-btn
-                        class="primary"
-                        fab
-                        dark
-                        fixed
-                        bottom
-                        right
-                        v-show="!fab.hidden"
-                        @click.native="openCreateProjectModal($event)"
-                >
-                    <v-icon>add</v-icon>
-                </v-btn>
-            </v-fab-transition>
 
             <v-card>
                 <v-list>
@@ -43,27 +29,27 @@
             </v-card>
         </v-container>
 
-        <delete-project></delete-project>
-        <create-project></create-project>
+        <fab :fabActions="fabActions"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
-
-  import DeleteProject from 'pages/project/modals/DeleteProject'
-  import CreateProject from 'pages/project/modals/CreateProject'
+  import Fab from 'pages/project/components/Fab'
 
   export default {
     components: {
-      DeleteProject,
-      CreateProject,
+      Fab,
     },
     data() {
       return {
-        fab: {
-          hidden: true,
-        },
+        fabActions: [
+          {
+            icon: 'add',
+            color: 'indigo',
+            event: 'project.create.modal',
+          },
+        ],
         projects: [],
         deleteProject: {},
         modalOpen: false,
@@ -90,7 +76,6 @@
         this.$http.get('/projects')
           .then(response => {
             this.projects = response.data
-            this.fab.hidden = false
             eventBus.$emit('page.loading', false)
           })
           .catch(error => {
@@ -102,11 +87,6 @@
         event.stopPropagation()
         eventBus.$emit('project.delete.modal', item);
       },
-      openCreateProjectModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('project.create.modal')
-      }
     }
   }
 </script>

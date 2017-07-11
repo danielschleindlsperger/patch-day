@@ -5,62 +5,6 @@
                 {{ project.name }}
             </h1>
 
-            <v-fab-transition>
-                <v-speed-dial
-                        bottom
-                        right
-                        fixed
-                        transition="slide-y-reverse-transition"
-                        v-model="fab.dialOpen"
-                        v-show="!fab.hidden"
-                >
-
-                    <v-btn
-                            slot="activator"
-                            class="blue darken-2"
-                            dark
-                            fab
-                            hover
-                            v-model="fab.dialOpen"
-                    >
-                        <v-icon>keyboard_arrow_up</v-icon>
-                        <v-icon>close</v-icon>
-                    </v-btn>
-
-
-                    <v-btn
-                            fab
-                            dark
-                            small
-                            class="green"
-                            @click.native="editProjectModal($event, project)"
-                    >
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-
-                    <v-btn
-                            fab
-                            dark
-                            small
-                            class="indigo"
-                            @click.native="createProjectModal($event)"
-                    >
-                        <v-icon>add</v-icon>
-                    </v-btn>
-
-                    <v-btn
-                            fab
-                            dark
-                            small
-                            class="red"
-                            @click.native="deleteProjectModal($event, project)"
-                    >
-                        <v-icon>delete</v-icon>
-                    </v-btn>
-
-                </v-speed-dial>
-            </v-fab-transition>
-
             <v-layout>
                 <project-info :project="project"
                               class="mb-4 pa-4"></project-info>
@@ -68,39 +12,46 @@
             <patch-day-table :protocols="project.protocols"></patch-day-table>
 
         </v-container>
-        <create-project></create-project>
-        <delete-project></delete-project>
-        <edit-project></edit-project>
         <tech-history-modal></tech-history-modal>
+        <fab :project="project" :fabActions="fabActions"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
-  import CreateProject from 'pages/project/modals/CreateProject'
-  import DeleteProject from 'pages/project/modals/DeleteProject'
-  import EditProject from 'pages/project/modals/EditProject'
+  import Fab from 'pages/project/components/Fab'
   import TechHistoryModal from 'components/modals/TechHistoryModal'
   import ProjectInfo from 'pages/project/components/ProjectInfo'
   import PatchDayTable from 'pages/project/components/PatchDayTable'
 
   export default {
     components: {
-      DeleteProject,
-      CreateProject,
-      EditProject,
       TechHistoryModal,
+      Fab,
       ProjectInfo,
       PatchDayTable,
     },
     mixins: [filters],
     data() {
       return {
-        fab: {
-          hidden: false,
-          dialOpen: false,
-        },
+        fabActions: [
+          {
+            icon: 'delete',
+            color: 'red',
+            event: 'project.delete.modal'
+          },
+          {
+            icon: 'add',
+            color: 'indigo',
+            event: 'project.create.modal',
+          },
+          {
+            icon: 'edit',
+            color: 'green',
+            event: 'project.edit.modal',
+          },
+        ],
         project: {
           base_price: 0,
           penalty: 0,
@@ -113,21 +64,6 @@
       }
     },
     methods: {
-      deleteProjectModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('project.delete.modal', this.project)
-      },
-      createProjectModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('project.create.modal', this.project)
-      },
-      editProjectModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('project.edit.modal', this.project)
-      },
       techHistoryModal(event) {
         event.preventDefault()
         event.stopPropagation()
@@ -150,7 +86,6 @@
       this.$http.get(`/projects/${ID}`)
         .then(response => {
           this.project = response.data
-          this.fab.hidden = false
           eventBus.$emit('page.loading', false)
         })
         .catch(error => {
