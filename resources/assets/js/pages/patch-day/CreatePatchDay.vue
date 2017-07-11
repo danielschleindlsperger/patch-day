@@ -2,36 +2,39 @@
     <v-dialog persistent v-model="isOpen" width="640"
               class="create-patch-day-modal">
         <v-card>
-            <v-card-title>Create PatchDay</v-card-title>
+            <v-card-title class="pa-4">
+                <h2 class="title ma-0">Create PatchDay</h2>
+            </v-card-title>
 
             <v-card-text>
                 Previous PatchDay was on {{ last_patch_day.date | Date }}
             </v-card-text>
 
-                <v-card-text>
-                    <v-menu
+            <v-card-text>
+                <v-menu
                         lazy
                         :close-on-content-click="true"
                         v-model="datePickerOpen"
                         transition="v-scale-transition"
                         offset-y
                         :nudge-left="56"
-                    >
-                        <v-text-field
+                >
+                    <v-text-field
                             slot="activator"
                             label="Date"
                             v-model="patch_day.date"
                             prepend-icon="event"
                             required
                             readonly
-                        ></v-text-field>
-                        <v-date-picker v-model="patch_day.date" no-title
-                                       scrollable>
-                        </v-date-picker>
-                    </v-menu>
-                    <small>*indicates required field</small>
-                </v-card-text>
+                    ></v-text-field>
+                    <v-date-picker v-model="patch_day.date" no-title
+                                   scrollable>
+                    </v-date-picker>
+                </v-menu>
+                <small>*indicates required field</small>
+            </v-card-text>
             <v-card-actions>
+                <v-spacer></v-spacer>
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="isOpen = false">Close
                 </v-btn>
@@ -104,6 +107,7 @@
     .create-user-modal .dialog {
         overflow-y: visible;
     }
+
     small {
         display: block;
     }

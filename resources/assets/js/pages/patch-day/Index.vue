@@ -10,11 +10,11 @@
                     </v-icon>
                 </v-btn>
             </div>
-            <v-list>
-                <v-list-item v-for="patch_day in patch_days"
-                             :key="patch_day.id">
-                    <v-list-tile avatar router
-                                 :href="`/patch-days/${patch_day.id}`">
+            <v-card>
+                <v-list two-line>
+                    <v-list-tile v-for="patch_day in patch_days"
+                                 :key="patch_day.id"
+                                 :to="`/patch-days/${patch_day.id}`">
                         <v-list-tile-content>
                             <v-list-tile-title>
                                 {{ patch_day.name }}
@@ -34,8 +34,8 @@
                             </v-btn>
                         </v-list-tile-action>
                     </v-list-tile>
-                </v-list-item>
-            </v-list>
+                </v-list>
+            </v-card>
         </v-container>
 
         <delete-patch-day></delete-patch-day>

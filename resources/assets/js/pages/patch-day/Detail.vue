@@ -1,10 +1,10 @@
 <template>
     <div>
         <v-container>
-            <v-layout justify-center child-flex[-sm]>
+            <v-layout>
                 <h1 class="display-1 text-xs-center flex">
                     {{ patch_day.name }}</h1>
-                <v-btn class="flex"
+                <v-btn class=""
                        flat="flat" icon ripple
                        @click.native="editPatchDayModal($event)">
                     <v-icon class="grey--text">
@@ -12,7 +12,7 @@
                     </v-icon>
                 </v-btn>
 
-                <v-btn class="flex"
+                <v-btn class=""
                        flat="flat" icon ripple
                        @click.native="deletePatchDayModal($event)">
                     <v-icon class="grey--text">
@@ -31,23 +31,21 @@
 
             <div v-if="patch_day.protocols.length > 0">
                 <v-subheader>Signed up</v-subheader>
-
-                <v-list>
-                    <v-list-item v-for="protocol in patch_day.protocols"
-                                 :key="protocol.id">
-                        <v-list-tile router
-                                     :href="`/protocols/${protocol.id}`">
+                <v-card>
+                    <v-list>
+                        <v-list-tile v-for="protocol in patch_day.protocols"
+                                     :key="protocol.id"
+                                     :to="`/protocols/${protocol.id}`">
                             <v-list-tile-content>
                                 <v-list-tile-title>
-                                    <strong>
-                                        {{ protocol.project.company.name }}
-                                    </strong>
-                                    / {{ protocol.project.name }}
+                                    {{ protocol.project.company.name }}
+                                    /
+                                    <strong>{{ protocol.project.name }}</strong>
                                 </v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
-                    </v-list-item>
-                </v-list>
+                    </v-list>
+                </v-card>
             </div>
             <div v-else>
                 Nobody signed up yet.

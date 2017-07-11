@@ -2,53 +2,57 @@
     <v-dialog persistent v-model="isOpen" width="640"
               class="edit-patch-day-modal">
         <v-card>
-            <v-card-row>
-                <v-card-title>Edit PatchDay</v-card-title>
-            </v-card-row>
 
-            <v-card-row>
-                <v-card-text>
-                    <v-menu
+            <v-card-title class="pa-4">
+                <h2 class="title ma-0">Edit PatchDay</h2>
+            </v-card-title>
+
+
+            <v-card-text>
+                <v-menu
                         lazy
                         :close-on-content-click="true"
                         v-model="datePickerOpen"
                         transition="v-scale-transition"
                         offset-y
                         :nudge-left="56"
-                    >
-                        <v-text-field
+                >
+                    <v-text-field
                             slot="activator"
                             label="Date"
                             v-model="patch_day.date"
                             prepend-icon="event"
                             required
                             readonly
-                        ></v-text-field>
-                        <v-date-picker v-model="patch_day.date" no-title
-                                       scrollable>
-                        </v-date-picker>
-                    </v-menu>
-                    <v-select
-                            :items="status"
-                            v-model="patch_day.status"
-                            item-text="name"
-                            item-value="value"
-                            label="PatchDay status"
-                            required auto
-                            max-height="320"
-                            dark
-                    />
-                    <small>*indicates required field</small>
-                </v-card-text>
-            </v-card-row>
-            <v-card-row actions>
+                    ></v-text-field>
+                    <v-date-picker v-model="patch_day.date" no-title
+                                   scrollable>
+                    </v-date-picker>
+                </v-menu>
+                <v-select
+                        :items="status"
+                        v-model="patch_day.status"
+                        item-text="name"
+                        item-value="value"
+                        label="PatchDay status"
+                        required auto
+                        max-height="320"
+                        light
+                />
+                <small>*indicates required field</small>
+            </v-card-text>
+
+            <v-card-actions>
+                <v-spacer></v-spacer>
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="isOpen = false">Close
                 </v-btn>
+
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="editPatchDay()">Save
                 </v-btn>
-            </v-card-row>
+
+            </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
@@ -129,6 +133,7 @@
     .edit-user-modal .dialog {
         overflow-y: visible;
     }
+
     small {
         display: block;
     }
