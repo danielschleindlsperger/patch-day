@@ -23,6 +23,7 @@
                 </v-btn>
 
                 <v-btn v-for="action in fabActions"
+                       :key="action.icon"
                        fab
                        dark
                        small
