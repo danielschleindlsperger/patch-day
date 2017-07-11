@@ -1,10 +1,9 @@
 <template>
     <v-card>
-        <v-card-row class="primary">
-            <v-card-title>
-                <span class="white--text">Project Info</span>
-            </v-card-title>
-        </v-card-row>
+        <v-card-title class="pa-4">
+            <h2 class="display-1 ma-0">Project Info</h2>
+        </v-card-title>
+
         <v-card-text>
             <div class="info-wrapper">
                 <div class="headline">
@@ -18,13 +17,15 @@
 
                 <div class="mb-5">
                     <h3 class="headline mb-0">Technologies</h3>
-                    <v-chip class="text-xs-center"
-                            v-for="technology in project.current_technologies"
-                            :key="technology.id">
-                        {{ technology.name }}&nbsp;{{ technology.version }}
-                    </v-chip>
+                    <div class="mb-3">
+                        <v-chip class="text-xs-center"
+                                v-for="technology in project.current_technologies"
+                                :key="technology.id">
+                            {{ technology.name }}&nbsp;{{ technology.version }}
+                        </v-chip>
+                    </div>
                     <div>
-                        <v-btn dark default
+                        <v-btn primary default
                                @click.native="techHistoryModal($event)">
                             History
                         </v-btn>

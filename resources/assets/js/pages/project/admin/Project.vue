@@ -22,7 +22,10 @@
                 </v-btn>
             </v-layout>
 
-            <project-info :project="project"></project-info>
+            <v-layout>
+                <project-info :project="project"
+                              class="mb-4 pa-4"></project-info>
+            </v-layout>
             <patch-day-table :protocols="project.protocols"></patch-day-table>
 
         </v-container>

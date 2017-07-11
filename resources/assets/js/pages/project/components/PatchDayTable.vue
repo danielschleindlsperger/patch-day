@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-card-title>
-            <h3 class="text-xs-center display-1 mb-0">PatchDays</h3>
+            <h3 class="text-xs-center display-1 mb-0 pa-3">PatchDays</h3>
         </v-card-title>
         <v-card-text>
             <v-data-table
@@ -51,7 +51,7 @@
         tableHeaders: [
           {
             text: 'Name',
-            left: true,
+            align: 'left',
             value: 'name',
           },
           {

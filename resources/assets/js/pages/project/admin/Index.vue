@@ -9,11 +9,11 @@
                     </v-icon>
                 </v-btn>
             </div>
-            <v-list>
-                <v-list-item v-for="project in projects"
-                             :key="project.id">
-                    <v-list-tile avatar router
-                                 :href="'/projects/' + project.id">
+            <v-card>
+                <v-list>
+                    <v-list-tile avatar v-for="project in projects"
+                                 :key="project.id"
+                                 :to="'/projects/' + project.id">
                         <v-list-tile-avatar>
                             <v-icon>business</v-icon>
                         </v-list-tile-avatar>
@@ -31,8 +31,8 @@
                             </v-btn>
                         </v-list-tile-action>
                     </v-list-tile>
-                </v-list-item>
-            </v-list>
+                </v-list>
+            </v-card>
         </v-container>
 
         <delete-project></delete-project>

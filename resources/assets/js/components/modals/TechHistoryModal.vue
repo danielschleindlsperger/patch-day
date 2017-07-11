@@ -2,46 +2,44 @@
     <v-dialog v-model="isOpen" width="640">
 
         <v-card>
-            <v-card-row>
-                <v-card-title>Technology History</v-card-title>
-            </v-card-row>
-            <v-card-row>
-                <v-card-text>
-                    <v-expansion-panel expand>
-                        <v-expansion-panel-content v-for="tech, index in items"
-                                                   :key="index">
-                            <div slot="header">
-                                <v-icon>update</v-icon>{{ tech[0].name }}
-                            </div>
-                            <v-list>
-                                <v-list-item v-for="version in tech"
-                                             :key="version.id">
-                                    <v-list-tile
-                                            @click.native="protocolDetail($event,
+            <v-card-title class="pa-4">
+                <h2 class="title ma-0">Technology History</h2>
+            </v-card-title>
+            <v-card-text>
+                <v-expansion-panel expand>
+                    <v-expansion-panel-content v-for="tech, index in items"
+                                               :key="index">
+                        <div slot="header">
+                            <v-icon>update</v-icon>
+                            {{ tech[0].name }}
+                        </div>
+                        <v-list>
+                            <v-list-tile v-for="version in tech"
+                                         :key="version.id"
+                                         @click.native="protocolDetail($event,
                                             version)">
-                                        <v-list-tile-content>
-                                            <v-list-tile-title>
-                                                {{ version.version }}
-                                            </v-list-tile-title>
-                                        </v-list-tile-content>
-                                        <v-list-tile-action
-                                                v-if="version.pivot.protocol_id">
-                                            <v-icon>navigate_next</v-icon>
-                                        </v-list-tile-action>
-                                    </v-list-tile>
-                                </v-list-item>
-                            </v-list>
-                        </v-expansion-panel-content>
-                    </v-expansion-panel>
+                                <v-list-tile-content>
+                                    <v-list-tile-title>
+                                        {{ version.version }}
+                                    </v-list-tile-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action
+                                        v-if="version.pivot.protocol_id">
+                                    <v-icon>navigate_next</v-icon>
+                                </v-list-tile-action>
+                            </v-list-tile>
 
-                    <v-card-row actions>
-                        <v-btn class="green--text darken-1" flat="flat"
-                               @click.native="isOpen = false">
-                            Close
-                        </v-btn>
-                    </v-card-row>
-                </v-card-text>
-            </v-card-row>
+                        </v-list>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
+
+                <v-card-actions>
+                    <v-btn class="green--text darken-1" flat="flat"
+                           @click.native="isOpen = false">
+                        Close
+                    </v-btn>
+                </v-card-actions>
+            </v-card-text>
 
         </v-card>
     </v-dialog>
@@ -54,8 +52,7 @@
     data() {
       return {
         isOpen: false,
-        items: {
-        }
+        items: {}
       }
     },
     mounted () {
@@ -64,7 +61,7 @@
         let items = {}
 
         history_items.forEach(item => {
-          if(!items[item.name]) {
+          if (!items[item.name]) {
             items[item.name] = []
             items[item.name].push(item)
           } else {
