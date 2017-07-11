@@ -1,70 +1,73 @@
 <template>
     <v-dialog v-model="isOpen" width="640" persistent>
         <v-card>
-            <v-card-row>
-                <v-card-title>Edit Protocol (Check-off)</v-card-title>
-            </v-card-row>
-            <v-card-row>
-                <v-card-text>
-                    <v-container fluid>
-                        <v-text-field
-                                name="comment"
-                                label="Comment"
-                                multi-line
-                                v-model="protocol.comment"
-                        ></v-text-field>
 
-                        <v-select
-                                label="Software updates"
-                                v-bind:items="technologies"
-                                v-model="upgraded_techs"
-                                item-value="id"
-                                multiple
-                                chips
-                                dark
-                                max-height="500"
-                                autocomplete
-                                hint="Pick the updated software versions."
-                                persistent-hint
-                        >
-                            <template slot="selection" scope="data">
-                                <v-chip
-                                        close
-                                        @input="data.parent.selectItem(data.item)"
-                                        @click.native.stop
-                                        class="chip--select-multi"
-                                        :key="data.item"
-                                >
-                                    {{ data.item.name }}
-                                    {{ data.item.version }}
-                                </v-chip>
-                            </template>
+            <v-card-title class="pa-4">
+                <h2 class="title ma-0">Edit Protocol (Check-off)</h2>
+            </v-card-title>
 
-                            <template slot="item" scope="data">
-                                <v-list-tile-content>
-                                    <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
-                                    <v-list-tile-sub-title
-                                            v-html="data.item.version"></v-list-tile-sub-title>
-                                </v-list-tile-content>
-                            </template>
-                        </v-select>
+            <v-card-text>
+                <v-container fluid>
+                    <v-text-field
+                            name="comment"
+                            label="Comment"
+                            multi-line
+                            v-model="protocol.comment"
+                    ></v-text-field>
 
-                        <v-checkbox
-                                label="Done"
-                                primary
-                                v-model="protocol.done"/>
+                    <v-select
+                            label="Software updates"
+                            v-bind:items="technologies"
+                            v-model="upgraded_techs"
+                            item-value="id"
+                            multiple
+                            chips
+                            light
+                            max-height="500"
+                            autocomplete
+                            hint="Pick the updated software versions."
+                            persistent-hint
+                    >
+                        <template slot="selection" scope="data">
+                            <v-chip
+                                    close
+                                    @input="data.parent.selectItem(data.item)"
+                                    @click.native.stop
+                                    class="chip--select-multi"
+                                    :key="data.item"
+                            >
+                                {{ data.item.name }}
+                                {{ data.item.version }}
+                            </v-chip>
+                        </template>
 
-                    </v-container>
-                </v-card-text>
-            </v-card-row>
-            <v-card-row actions>
+                        <template slot="item" scope="data">
+                            <v-list-tile-content>
+                                <v-list-tile-title
+                                        v-html="data.item.name"></v-list-tile-title>
+                                <v-list-tile-sub-title
+                                        v-html="data.item.version"></v-list-tile-sub-title>
+                            </v-list-tile-content>
+                        </template>
+                    </v-select>
+
+                    <v-checkbox
+                            label="Done"
+                            primary
+                            v-model="protocol.done"/>
+
+                </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+                <v-spacer></v-spacer>
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="isOpen = false">Close
                 </v-btn>
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="editProtocol()">Save
                 </v-btn>
-            </v-card-row>
+            </v-card-actions>
         </v-card>
     </v-dialog>
 </template>

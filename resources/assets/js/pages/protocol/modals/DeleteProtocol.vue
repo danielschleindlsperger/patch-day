@@ -1,29 +1,35 @@
 <template>
-    <v-dialog v-model="isOpen">
+    <v-dialog v-model="isOpen" width="640">
         <v-card>
-            <v-card-row>
-                <v-card-title>Delete PatchDay #{{ protocol.protocol_number}}
-                    ?</v-card-title>
-            </v-card-row>
-            <v-card-row>
-                <v-card-text>
-                    Deleting a protocol may have sideeffects and the deletion may not be reversible.
-                </v-card-text>
-            </v-card-row>
-            <v-card-row actions>
+
+            <v-card-title class="pa-4">
+                <h2 class="title ma-0">
+                    Delete {{ protocol.patch_day.name }}?
+                </h2>
+            </v-card-title>
+
+            <v-card-text>
+                Deleting a protocol may have sideeffects and the deletion may not be reversible.
+            </v-card-text>
+
+            <v-card-actions>
+                <v-spacer></v-spacer>
+
                 <v-btn class="green--text darken-1" flat="flat"
-                       @click.native="isOpen = false">PLs no
+                       @click.native="isOpen = false">Cancel
                 </v-btn>
+
                 <v-btn error flat="flat"
                        @click.native="deleteProtocol">Delete
                 </v-btn>
-            </v-card-row>
+            </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
+
   export default {
     name: 'delete-protocol',
     data() {
@@ -31,6 +37,9 @@
         isOpen: false,
         protocol: {
           protocol_number: null,
+          patch_day: {
+            name: ''
+          }
         }
       }
     },
