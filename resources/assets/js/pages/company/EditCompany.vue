@@ -1,25 +1,24 @@
 <template>
     <v-dialog v-model="isOpen">
         <v-card>
-            <v-card-row>
-                <v-card-title>Edit Company</v-card-title>
-            </v-card-row>
-            <v-card-row>
-                <v-card-text>
-                    <v-container fluid>
-                        <v-text-field label="Name" v-model="company.name"/>
-                        <small>*indicates required field</small>
-                    </v-container>
-                </v-card-text>
-            </v-card-row>
-            <v-card-row actions>
+            <v-card-title class="pa-4">
+                <h2 class="title ma-0">Edit Company</h2>
+            </v-card-title>
+            <v-card-text>
+                <v-container fluid>
+                    <v-text-field label="Name" v-model="company.name"/>
+                    <small>*indicates required field</small>
+                </v-container>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="isOpen = false">Close
                 </v-btn>
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="editCompany()">Save
                 </v-btn>
-            </v-card-row>
+            </v-card-actions>
         </v-card>
     </v-dialog>
 </template>

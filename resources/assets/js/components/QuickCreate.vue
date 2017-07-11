@@ -1,10 +1,8 @@
 <template>
     <v-card>
-        <v-card-row class="primary">
-            <v-card-title>
-                <span class="white--text">Quick create</span>
-            </v-card-title>
-        </v-card-row>
+        <v-card-title primary-title class="primary pa-4">
+            <h2 class="title white--text ma-0">Quick create</h2>
+        </v-card-title>
         <v-card-text>
             <v-btn primary @click.native="createCompanyModal($event)"
                    class="white--text">Create Company</v-btn>
@@ -53,3 +51,9 @@
     },
   }
 </script>
+
+<style lang="scss" scoped>
+    .title {
+        margin: .2em;
+    }
+</style>

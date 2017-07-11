@@ -2,17 +2,12 @@
     <v-dialog persistent v-model="isOpen" width="640"
               class="create-patch-day-modal">
         <v-card>
-            <v-card-row>
-                <v-card-title>Create PatchDay</v-card-title>
-            </v-card-row>
+            <v-card-title>Create PatchDay</v-card-title>
 
-            <v-card-row>
-                <v-card-text>
-                    Previous PatchDay was on {{ last_patch_day.date | Date }}
-                </v-card-text>
-            </v-card-row>
+            <v-card-text>
+                Previous PatchDay was on {{ last_patch_day.date | Date }}
+            </v-card-text>
 
-            <v-card-row>
                 <v-card-text>
                     <v-menu
                         lazy
@@ -36,15 +31,14 @@
                     </v-menu>
                     <small>*indicates required field</small>
                 </v-card-text>
-            </v-card-row>
-            <v-card-row actions>
+            <v-card-actions>
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="isOpen = false">Close
                 </v-btn>
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="createPatchDay()">Save
                 </v-btn>
-            </v-card-row>
+            </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
