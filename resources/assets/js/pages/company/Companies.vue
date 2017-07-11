@@ -2,20 +2,6 @@
     <div>
         <v-container>
             <h1 class="display-2 text-xs-center">Companies</h1>
-            <v-fab-transition>
-                <v-btn
-                        class="primary"
-                        fab
-                        dark
-                        fixed
-                        bottom
-                        right
-                        v-show="!fab.hidden"
-                        @click.native="openCreateCompanyModal"
-                >
-                    <v-icon>add</v-icon>
-                </v-btn>
-            </v-fab-transition>
 
             <v-card>
                 <v-list>
@@ -42,29 +28,28 @@
             </v-card>
         </v-container>
 
-        <delete-company></delete-company>
-        <create-company></create-company>
+        <fab :fabActions="fabActions"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
-
-  import DeleteCompany from 'pages/company/DeleteCompany'
-  import CreateCompany from 'pages/company/CreateCompany'
+  import Fab from 'pages/company/Fab'
 
   export default {
     components: {
-      DeleteCompany,
-      CreateCompany,
+      Fab,
     },
     data() {
       return {
-        fab: {
-          hidden: true,
-        },
+        fabActions: [
+          {
+            icon: 'add',
+            color: 'indigo',
+            event: 'company.create.modal',
+          },
+        ],
         companies: [],
-        deleteCompany: {},
         modalOpen: false,
       }
     },
@@ -73,7 +58,6 @@
 
       eventBus.$on('company.deleted', payload => {
         const COMPANY_ID = payload[0].id
-        console.log(COMPANY_ID)
         // remove deleted item from list
         let newList = this.companies.filter((company) => {
           return company.id !== COMPANY_ID
@@ -90,7 +74,6 @@
         this.$http.get('/companies')
           .then(response => {
             this.companies = response.data
-            this.fab.hidden = false
             eventBus.$emit('page.loading', false)
           })
           .catch(error => {
@@ -102,11 +85,6 @@
         event.stopPropagation()
         eventBus.$emit('company.delete.modal', item);
       },
-      openCreateCompanyModal() {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('company.create.modal')
-      }
     }
   }
 </script>

@@ -27,14 +27,15 @@
   import eventBus from 'components/event-bus'
   export default {
     name: 'edit-company',
-    props: ['company'],
     data() {
       return {
         isOpen: false,
+        company: {}
       }
     },
     mounted () {
-      eventBus.$on('company.edit.modal', () => {
+      eventBus.$on('company.edit.modal', (company) => {
+        this.company = company
         this.isOpen = true
       })
     },

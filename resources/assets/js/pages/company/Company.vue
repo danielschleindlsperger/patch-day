@@ -1,64 +1,7 @@
 <template>
     <div>
         <v-container>
-            <v-fab-transition>
-                <v-speed-dial
-                        bottom
-                        right
-                        fixed
-                        transition="slide-y-reverse-transition"
-                        v-model="fab.dialOpen"
-                        v-show="!fab.hidden"
-                >
-
-                    <v-btn
-                            slot="activator"
-                            class="blue darken-2"
-                            dark
-                            fab
-                            hover
-                            v-model="fab.dialOpen"
-                    >
-                        <v-icon>keyboard_arrow_up</v-icon>
-                        <v-icon>close</v-icon>
-                    </v-btn>
-
-
-                    <v-btn
-                            fab
-                            dark
-                            small
-                            class="green"
-                            @click.native="editCompanyModal($event, company)"
-                    >
-                        <v-icon>edit</v-icon>
-                    </v-btn>
-
-                    <v-btn
-                            fab
-                            dark
-                            small
-                            class="indigo"
-                            @click.native="createCompanyModal($event, company)"
-                    >
-                        <v-icon>add</v-icon>
-                    </v-btn>
-
-                    <v-btn
-                            fab
-                            dark
-                            small
-                            class="red"
-                            @click.native="deleteCompanyModal($event, company)"
-                    >
-                        <v-icon>delete</v-icon>
-                    </v-btn>
-
-                </v-speed-dial>
-            </v-fab-transition>
-
             <h1 class="display-2 text-xs-center">{{ company.name }}</h1>
-
             <h3 class="headline">Projects</h3>
             <v-card>
                 <v-list>
@@ -82,50 +25,41 @@
                 </v-list>
             </v-card>
         </v-container>
-        <delete-company></delete-company>
-        <edit-company :company="company"></edit-company>
-        <create-company></create-company>
+
+        <fab :company="company" :fabActions="fabActions"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
-  import DeleteCompany from 'pages/company/DeleteCompany'
-  import EditCompany from 'pages/company/EditCompany'
-  import CreateCompany from 'pages/company/CreateCompany'
+  import Fab from 'pages/company/Fab'
 
   export default {
     components: {
-      DeleteCompany,
-      EditCompany,
-      CreateCompany,
+      Fab,
     },
     data() {
       return {
-        fab: {
-          hidden: true,
-          dialOpen: false,
-        },
+        fabActions: [
+          {
+            icon: 'delete',
+            color: 'red',
+            event: 'company.delete.modal'
+          },
+          {
+            icon: 'add',
+            color: 'indigo',
+            event: 'company.create.modal',
+          },
+          {
+            icon: 'edit',
+            color: 'green',
+            event: 'company.edit.modal',
+          },
+        ],
         company: {},
         projects: [],
       }
-    },
-    methods: {
-      deleteCompanyModal(event, item) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('company.delete.modal', item);
-      },
-      editCompanyModal(event, item) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('company.edit.modal', item);
-      },
-      createCompanyModal(event, item) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('company.create.modal');
-      },
     },
     mounted() {
       eventBus.$on('company.deleted', (payload) => {
@@ -139,7 +73,6 @@
       this.$http.get(`/companies/${companyId}`)
         .then(response => {
           this.company = response.data
-          this.fab.hidden = false
           eventBus.$emit('page.loading', false)
         })
         .catch(error => {
