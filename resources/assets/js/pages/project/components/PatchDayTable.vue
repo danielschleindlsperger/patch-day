@@ -13,8 +13,7 @@
                     <td>
                         <router-link
                                 :to="'/protocols/' + props.item.id">
-                            PatchDay
-                            #{{ props.item.patch_day_id }}
+                            {{ props.item.patch_day.name }}
                         </router-link>
                     </td>
                     <td class="text-xs-right">

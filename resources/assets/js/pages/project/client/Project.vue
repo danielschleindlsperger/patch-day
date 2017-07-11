@@ -1,11 +1,10 @@
 <template>
     <div>
         <v-container>
-            <v-layout justify-center child-flex[-sm] class="mb-5">
-                <h1 class="display-1 text-xs-center flex">
-                    {{ project.name }}
-                </h1>
-            </v-layout>
+
+            <h1 class="display-1 text-xs-center mb-5">
+                {{ project.name }}
+            </h1>
 
             <v-layout mb-5>
 
