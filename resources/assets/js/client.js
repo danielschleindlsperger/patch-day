@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
 import axios from 'axios'
+import eventBus from 'components/event-bus'
 
 import routes from './routes/client-routes.js'
 import auth from './auth.js'
