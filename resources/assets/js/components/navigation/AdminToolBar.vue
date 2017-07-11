@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar class="primary" dark>
+    <v-toolbar class="primary" dark fixed>
 
         <v-toolbar-side-icon light @click.native.stop="toggleSidebar()"/>
 
