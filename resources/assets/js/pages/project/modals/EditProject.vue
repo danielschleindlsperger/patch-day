@@ -15,7 +15,7 @@
                             item-value="id"
                             v-model="project.company_id"
                             label="Associated company"
-                            dark required auto
+                            light required auto
                             max-height="320"
                             :rules="rules.company"
                     />
