@@ -19,21 +19,20 @@
                     </v-btn>
                 </div>
             </div>
-            <hr>
             <div class="projects">
                 <h3 class="text-xs-center">Projects</h3>
-                <v-list>
-                    <v-list-item v-for="item in company.projects"
-                                 :key="item.id">
-                        <v-list-tile avatar router
-                                     :href="'/projects/' + item.id">
+                <v-card>
+                    <v-list>
+                        <v-list-tile v-for="item in company.projects"
+                                     :key="item.id"
+                                     :to="'/projects/' + item.id">
                             <v-list-tile-content>
                                 <v-list-tile-title>{{ item.name }}
                                 </v-list-tile-title>
                             </v-list-tile-content>
                             <v-list-tile-action>
                                 <v-btn icon ripple
-                                       @click.native="deleteProject($event,
+                                       @click.native="deleteCompanyModal($event,
                                            item)">
                                     <v-icon class="grey--text">
                                         delete
@@ -41,8 +40,8 @@
                                 </v-btn>
                             </v-list-tile-action>
                         </v-list-tile>
-                    </v-list-item>
-                </v-list>
+                    </v-list>
+                </v-card>
             </div>
         </v-container>
         <delete-company></delete-company>
@@ -67,7 +66,7 @@
       }
     },
     methods: {
-      deleteCompany(event, item) {
+      deleteCompanyModal(event, item) {
         event.preventDefault()
         event.stopPropagation()
         eventBus.$emit('company.delete.modal', item);
