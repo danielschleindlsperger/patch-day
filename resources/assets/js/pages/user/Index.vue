@@ -3,7 +3,6 @@
         <v-container>
             <h1 class="display-2 text-xs-center">Users</h1>
 
-
             <!-- TODO: fix search for company name -->
             <div class="action-wrapper">
                 <v-text-field
@@ -13,12 +12,6 @@
                         hide-details
                         v-model="search"
                 ></v-text-field>
-                <v-btn icon class="ml-4"
-                       @click.native="openCreateUserModal($event)">
-                    <v-icon class="grey--text">
-                        add_circle
-                    </v-icon>
-                </v-btn>
             </div>
             <v-card>
                 <v-data-table
@@ -50,23 +43,29 @@
                 </v-data-table>
             </v-card>
         </v-container>
-        <create-user></create-user>
+        <fab :fabActions="fabActions"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
-  import CreateUser from 'pages/user/CreateUser'
+  import Fab from 'pages/user/Fab'
 
   export default {
     components: {
-      CreateUser
+      Fab,
     },
     data() {
       return {
-        loading: true,
         search: '',
+        fabActions: [
+          {
+            icon: 'add',
+            color: 'indigo',
+            event: 'user.create.modal',
+          },
+        ],
         users: [
           {
             name: '',
@@ -121,11 +120,6 @@
             }
           })
       },
-      openCreateUserModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('user.create.modal')
-      }
     }
   }
 </script>

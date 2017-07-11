@@ -1,24 +1,8 @@
 <template>
     <div>
         <v-container>
-            <v-layout justify-center child-flex[-sm]>
-                <h1 class="display-1 text-xs-center flex">{{ user.name }}</h1>
-                <v-btn class="flex"
-                       flat="flat" icon ripple
-                       @click.native="editUserModal($event)">
-                    <v-icon class="grey--text">
-                        mode_edit
-                    </v-icon>
-                </v-btn>
 
-                <v-btn class="flex"
-                       flat="flat" icon ripple
-                       @click.native="deleteUserModal($event)">
-                    <v-icon class="grey--text">
-                        delete
-                    </v-icon>
-                </v-btn>
-            </v-layout>
+            <h1 class="display-1 text-xs-center flex">{{ user.name }}</h1>
 
             <div class="subheading">Company:
                 <router-link :to="'/companies/' + user.company.id">
@@ -30,21 +14,19 @@
                 <a :href="`mailto:${user.email}`">{{ user.email }}</a>
             </div>
         </v-container>
-        <delete-user></delete-user>
-        <edit-user></edit-user>
+
+        <fab :user="user" :fabActions="fabActions"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
-  import DeleteUser from 'pages/user/DeleteUser'
-  import EditUser from 'pages/user/EditUser'
+  import Fab from 'pages/user/Fab'
 
   export default {
     components: {
-      DeleteUser,
-      EditUser,
+      Fab,
     },
     data() {
       return {
@@ -56,6 +38,23 @@
             name: '',
           },
         },
+        fabActions: [
+          {
+            icon: 'delete',
+            color: 'red',
+            event: 'user.delete.modal'
+          },
+          {
+            icon: 'add',
+            color: 'indigo',
+            event: 'user.create.modal',
+          },
+          {
+            icon: 'edit',
+            color: 'green',
+            event: 'user.edit.modal',
+          },
+        ],
       }
     },
     mixins: [filters],
@@ -89,20 +88,6 @@
             }
           })
       },
-      deleteUserModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('user.delete.modal', this.user);
-      },
-      editUserModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('user.edit.modal', this.user);
-      },
     }
   }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
