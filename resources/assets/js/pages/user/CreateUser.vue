@@ -2,49 +2,48 @@
     <v-dialog persistent v-model="isOpen" width="640"
               class="create-user-modal">
         <v-card>
-            <v-card-row>
-                <v-card-title>Create User</v-card-title>
-            </v-card-row>
+            <v-card-title class="pa-4">
+                <h2 class="title ma-0">Create User</h2>
+            </v-card-title>
 
-            <v-card-row>
-                <v-card-text>
-                    <v-text-field label="Name" required
-                                  v-model="user.name"/>
-                    <v-text-field label="Password" required type="password"
-                                  v-model="user.password"/>
-                    <v-text-field label="E-Mail" required
-                                  v-model="user.email"/>
-                    <v-select
-                            :items="roles"
-                            item-text="name"
-                            item-value="name"
-                            v-model="user.role"
-                            label="Role"
-                            required auto
-                            max-height="100"
-                            default=""
-                    />
-                    <v-select
-                            :items="companies"
-                            item-text="name"
-                            item-value="id"
-                            v-model="user.company_id"
-                            label="Company"
-                            required auto
-                            max-height="320"
-                            :rules="rules.company"
-                    />
-                    <small>*indicates required field</small>
-                </v-card-text>
-            </v-card-row>
-            <v-card-row actions>
+            <v-card-text>
+                <v-text-field label="Name" required
+                              v-model="user.name"/>
+                <v-text-field label="Password" required type="password"
+                              v-model="user.password"/>
+                <v-text-field label="E-Mail" required
+                              v-model="user.email"/>
+                <v-select
+                        :items="roles"
+                        item-text="name"
+                        item-value="name"
+                        v-model="user.role"
+                        label="Role"
+                        required auto
+                        max-height="100"
+                        default=""
+                />
+                <v-select
+                        :items="companies"
+                        item-text="name"
+                        item-value="id"
+                        v-model="user.company_id"
+                        label="Company"
+                        required auto
+                        max-height="320"
+                        :rules="rules.company"
+                />
+                <small>*indicates required field</small>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="isOpen = false">Close
                 </v-btn>
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="createUser()">Save
                 </v-btn>
-            </v-card-row>
+            </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
@@ -75,7 +74,7 @@
         rules: {
           company: [
             () => {
-              return Number.isInteger(this.user.company_id)|| 'Please select an entry'
+              return Number.isInteger(this.user.company_id) || 'Please select an entry'
             },
           ]
         }
