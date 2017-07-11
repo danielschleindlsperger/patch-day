@@ -1,7 +1,8 @@
 <template>
     <v-card>
-        <v-card-title class="pa-4">
-            <h2 class="display-1 ma-0">Project Info</h2>
+
+        <v-card-title primary-title class="primary pa-4">
+            <h2 class="title white--text ma-0">Project Info</h2>
         </v-card-title>
 
         <v-card-text>

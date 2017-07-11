@@ -6,7 +6,7 @@
                 <h2 class="title ma-0">Technology History</h2>
             </v-card-title>
             <v-card-text>
-                <v-expansion-panel expand>
+                <v-expansion-panel expand class="mb-4">
                     <v-expansion-panel-content v-for="tech, index in items"
                                                :key="index">
                         <div slot="header">
@@ -34,6 +34,7 @@
                 </v-expansion-panel>
 
                 <v-card-actions>
+                    <v-spacer></v-spacer>
                     <v-btn class="green--text darken-1" flat="flat"
                            @click.native="isOpen = false">
                         Close

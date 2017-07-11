@@ -1,21 +1,24 @@
 <template>
     <div>
         <v-container>
-            <v-list>
-                <v-list-item v-for="project in projects"
-                             :key="project.id">
-                    <v-list-tile avatar router
-                                 :href="'/projects/' + project.id">
+            <h1 class="display-2 text-xs-center">Projects</h1>
+
+            <v-card>
+                <v-list>
+                    <v-list-tile avatar v-for="project in projects"
+                                 :key="project.id"
+                                 :to="'/projects/' + project.id">
                         <v-list-tile-avatar>
                             <v-icon>business</v-icon>
                         </v-list-tile-avatar>
                         <v-list-tile-content>
-                            <v-list-tile-title>{{ project.name }}
+                            <v-list-tile-title>
+                                {{ project.name }}
                             </v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
-                </v-list-item>
-            </v-list>
+                </v-list>
+            </v-card>
         </v-container>
     </div>
 </template>
@@ -27,6 +30,8 @@
     data() {
       return {
         projects: [],
+        deleteProject: {},
+        modalOpen: false,
       }
     },
     mounted() {

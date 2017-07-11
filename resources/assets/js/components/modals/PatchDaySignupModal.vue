@@ -2,36 +2,38 @@
     <v-dialog v-model="isOpen" width="640">
 
         <v-card>
-            <v-card-row>
-                <v-card-title>Sign up for PatchDay</v-card-title>
-            </v-card-row>
-            <v-card-row>
-                <v-card-text>
-                    <v-select
-                            :items="patch_days"
-                            v-model="patch_day"
-                            item-value="id"
-                            item-text="name"
-                            label="Select PatchDay"
-                            return-object
-                            dark
-                            single-line
-                            auto
-                    >
-                    </v-select>
+            <v-card-title class="pa-4">
+                <h2 class="title ma-0">Sign up for PatchDay</h2>
+            </v-card-title>
 
-                    <v-card-row actions>
-                        <v-btn class="green--text darken-1" flat="flat"
-                               @click.native="isOpen = false">
-                            Close
-                        </v-btn>
-                        <v-btn class="green--text darken-1" flat="flat"
-                               @click.native="signUp($event)">
-                            Sign Up
-                        </v-btn>
-                    </v-card-row>
-                </v-card-text>
-            </v-card-row>
+            <v-card-text>
+                <v-select
+                        :items="patch_days"
+                        v-model="patch_day"
+                        item-value="id"
+                        item-text="name"
+                        label="Select PatchDay"
+                        return-object
+                        light
+                        single-line
+                        auto
+                >
+                </v-select>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+
+                    <v-btn class="green--text darken-1" flat="flat"
+                           @click.native="isOpen = false">
+                        Close
+                    </v-btn>
+
+                    <v-btn class="green--text darken-1" flat="flat"
+                           @click.native="signUp($event)">
+                        Sign Up
+                    </v-btn>
+                </v-card-actions>
+            </v-card-text>
 
         </v-card>
     </v-dialog>

@@ -11,8 +11,11 @@
 </template>
 
 <script>
+  import eventBus from 'components/event-bus'
+
   export default {
     mounted() {
+      eventBus.$emit('page.loading', false)
       this.$http.get('/users/me')
         .then(response => {
           this.$root.user = response.data

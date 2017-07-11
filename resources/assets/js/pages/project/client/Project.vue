@@ -15,20 +15,23 @@
 
                 <v-flex xs12 lg6>
                     <v-card>
-                        <v-card-row class="primary">
-                            <v-card-title>
-                                <span class="white--text">Project Actions</span>
-                            </v-card-title>
-                        </v-card-row>
+
+                        <v-card-title primary-title class="primary pa-4">
+                            <h2 class="title white--text ma-0">Project Actions</h2>
+                        </v-card-title>
+
                         <v-card-text>
-                            <v-btn primary light
+
+                            <v-btn primary
                                    @click.native="signupModal($event)">
                                 Sign up for PatchDay
                             </v-btn>
-                            <v-btn primary light
+
+                            <v-btn primary
                                    @click.native="cancelModal($event)">
                                 Cancel PatchDay
                             </v-btn>
+
                         </v-card-text>
                     </v-card>
                 </v-flex>

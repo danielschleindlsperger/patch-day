@@ -4,11 +4,10 @@
                          persistent light clipped
                          enable-resize-watcher>
         <v-list>
-            <v-list-item v-for="(item,i) in items" :key="i">
-                <v-list-tile router :href="item.href">
-                    <v-list-tile-title v-text="item.title"/>
-                </v-list-tile>
-            </v-list-item>
+            <v-list-tile v-for="(item,i) in items" :key="i"
+                         :to="item.href">
+                <v-list-tile-title v-text="item.title"/>
+            </v-list-tile>
         </v-list>
     </v-navigation-drawer>
 </template>
