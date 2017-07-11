@@ -2,14 +2,7 @@
     <div>
         <v-container>
             <h1 class="display-2 text-xs-center">Patch Days</h1>
-            <div class="button-row">
-                <v-btn primary dark
-                       @click.native="createPatchDayModal($event)">
-                    <v-icon class="white--text text--darken-2">
-                        add_circle
-                    </v-icon>
-                </v-btn>
-            </div>
+
             <v-card>
                 <v-list two-line>
                     <v-list-tile v-for="patch_day in patch_days"
@@ -38,8 +31,7 @@
             </v-card>
         </v-container>
 
-        <delete-patch-day></delete-patch-day>
-        <create-patch-day></create-patch-day>
+        <fab :fabActions="fabActions"></fab>
     </div>
 </template>
 
@@ -47,17 +39,22 @@
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
 
-  import DeletePatchDay from 'pages/patch-day/DeletePatchDay'
-  import CreatePatchDay from 'pages/patch-day/CreatePatchDay'
+  import Fab from 'pages/patch-day/Fab'
 
   export default {
     components: {
-      DeletePatchDay,
-      CreatePatchDay,
+      Fab,
     },
     mixins: [filters],
     data() {
       return {
+        fabActions: [
+          {
+            icon: 'add',
+            color: 'indigo',
+            event: 'patch_day.create.modal',
+          },
+        ],
         patch_days: [],
       }
     },
@@ -89,11 +86,6 @@
         event.stopPropagation()
         eventBus.$emit('patch_day.delete.modal', patch_day)
       },
-      createPatchDayModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('patch_day.create.modal')
-      }
     }
   }
 </script>

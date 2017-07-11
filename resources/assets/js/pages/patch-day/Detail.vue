@@ -1,31 +1,13 @@
 <template>
     <div>
         <v-container>
-            <v-layout>
-                <h1 class="display-1 text-xs-center flex">
-                    {{ patch_day.name }}</h1>
-                <v-btn class=""
-                       flat="flat" icon ripple
-                       @click.native="editPatchDayModal($event)">
-                    <v-icon class="grey--text">
-                        mode_edit
-                    </v-icon>
-                </v-btn>
+            <h1 class="display-1 text-xs-center">{{ patch_day.name }}</h1>
 
-                <v-btn class=""
-                       flat="flat" icon ripple
-                       @click.native="deletePatchDayModal($event)">
-                    <v-icon class="grey--text">
-                        delete
-                    </v-icon>
-                </v-btn>
-            </v-layout>
-
-            <h2 class="headline text-xs-center flex">
+            <h2 class="headline text-xs-center">
                 {{ patch_day.date | Date }}
             </h2>
 
-            <h2 class="headline text-xs-center flex">
+            <h2 class="headline text-xs-center">
                 Status: {{ patch_day.status }}
             </h2>
 
@@ -52,8 +34,7 @@
             </div>
         </v-container>
 
-        <edit-patch-day></edit-patch-day>
-        <delete-patch-day></delete-patch-day>
+        <fab :patch_day="patch_day" :fabActions="fabActions"></fab>
     </div>
 </template>
 
@@ -61,17 +42,32 @@
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
 
-  import DeletePatchDay from 'pages/patch-day/DeletePatchDay'
-  import EditPatchDay from 'pages/patch-day/EditPatchDay'
+  import Fab from 'pages/patch-day/Fab'
 
   export default {
     components: {
-      DeletePatchDay,
-      EditPatchDay,
+      Fab,
     },
     mixins: [filters],
     data() {
       return {
+        fabActions: [
+          {
+            icon: 'delete',
+            color: 'red',
+            event: 'patch_day.delete.modal'
+          },
+          {
+            icon: 'add',
+            color: 'indigo',
+            event: 'patch_day.create.modal',
+          },
+          {
+            icon: 'edit',
+            color: 'green',
+            event: 'patch_day.edit.modal',
+          },
+        ],
         patch_day: {
           id: null,
           date: '',
@@ -108,20 +104,6 @@
             }
           })
       },
-      deletePatchDayModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('patch_day.delete.modal', this.patch_day)
-      },
-      editPatchDayModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('patch_day.edit.modal', this.patch_day)
-      }
     }
   }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
