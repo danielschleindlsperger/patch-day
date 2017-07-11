@@ -1,14 +1,22 @@
 <template>
     <div>
         <v-container>
-            <div class="button-row">
-                <v-btn primary dark
-                       @click.native="openCreateCompanyModal">
-                    <v-icon class="white--text text--darken-2">
-                        add_circle
-                    </v-icon>
+            <h1 class="display-2 text-xs-center">Companies</h1>
+            <v-fab-transition>
+                <v-btn
+                        class="primary"
+                        fab
+                        dark
+                        fixed
+                        bottom
+                        right
+                        v-show="!fab.hidden"
+                        @click.native="openCreateCompanyModal"
+                >
+                    <v-icon>add</v-icon>
                 </v-btn>
-            </div>
+            </v-fab-transition>
+
             <v-card>
                 <v-list>
                     <v-list-tile avatar v-for="company in companies"
@@ -52,6 +60,9 @@
     },
     data() {
       return {
+        fab: {
+          hidden: true,
+        },
         companies: [],
         deleteCompany: {},
         modalOpen: false,
@@ -79,6 +90,7 @@
         this.$http.get('/companies')
           .then(response => {
             this.companies = response.data
+            this.fab.hidden = false
             eventBus.$emit('page.loading', false)
           })
           .catch(error => {
@@ -98,11 +110,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-    .button-row {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-end;
-    }
-</style>
