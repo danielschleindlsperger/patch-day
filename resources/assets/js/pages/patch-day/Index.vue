@@ -31,13 +31,14 @@
             </v-card>
         </v-container>
 
-        <fab :fabActions="fabActions"></fab>
+        <fab :fabActions="fabActions" :show="showFab"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
+  import repo from 'repository'
 
   import Fab from 'pages/patch-day/Fab'
 
@@ -55,32 +56,27 @@
             event: 'patch_day.create.modal',
           },
         ],
+        showFab: false,
         patch_days: [],
       }
     },
+    beforeRouteEnter (to, from, next) {
+      repo.patch_day.getAll()
+        .then((data) => {
+          next((vm) => {
+            vm.patch_days = data
+            vm.showFab = true
+          })
+        })
+    },
     mounted() {
-      this.getPatchDays()
-
       eventBus.$on('patch_day.created', () => {
-        this.getPatchDays()
-      })
-
-      eventBus.$on('patch_day.deleted', () => {
-        this.getPatchDays()
+        repo.patch_day.getAll()
+      }).$on('patch_day.deleted', () => {
+        repo.patch_day.getAll()
       })
     },
     methods: {
-      getPatchDays() {
-        this.$http.get('/patch-days')
-          .then(response => {
-            this.patch_days = response.data
-            eventBus.$emit('page.loading', false)
-          })
-          .catch(error => {
-            console.error(error.response.data)
-            eventBus.$emit('info.snackbar', error.response.data.error)
-          })
-      },
       deletePatchDayModal(event, patch_day) {
         event.preventDefault()
         event.stopPropagation()

@@ -8,6 +8,7 @@ mix.webpackConfig({
       components: path.resolve(__dirname, 'resources/assets/js/components'),
       pages: path.resolve(__dirname, 'resources/assets/js/pages'),
       mixins: path.resolve(__dirname, 'resources/assets/js/mixins'),
+      repository: path.resolve(__dirname, 'resources/assets/js/repository'),
     }
   }
 });

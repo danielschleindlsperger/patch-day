@@ -6,8 +6,8 @@
                     right
                     fixed
                     transition="slide-y-reverse-transition"
-                    v-model="fab.dialOpen"
-                    v-show="!fab.hidden"
+                    v-model="dialOpen"
+                    v-show="show"
             >
 
                 <v-btn
@@ -16,7 +16,7 @@
                         dark
                         fab
                         hover
-                        v-model="fab.dialOpen"
+                        v-model="dialOpen"
                 >
                     <v-icon>keyboard_arrow_up</v-icon>
                     <v-icon>close</v-icon>
@@ -51,13 +51,10 @@
     name: 'fab',
     data() {
       return {
-        fab: {
-          hidden: true,
           dialOpen: false,
-        },
       }
     },
-    props: ['fabActions', 'patch_day'],
+    props: ['fabActions', 'patch_day', 'show'],
     components: {
       CreatePatchDay,
       DeletePatchDay,
@@ -69,13 +66,6 @@
         event.stopPropagation()
         eventBus.$emit(action.event, this.patch_day)
       }
-    },
-    mounted() {
-      eventBus.$on('page.loading', (loading) => {
-        if (!loading) {
-          this.fab.hidden = false
-        }
-      })
     },
   }
 </script>

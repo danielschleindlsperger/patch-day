@@ -49,6 +49,7 @@
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
+  import repo from 'repository'
 
   export default {
     name: 'create-patch-day',
@@ -66,23 +67,15 @@
       }
     },
     mounted () {
-      this.getPatchDays()
+      repo.patch_day.getAll().then((patch_days) => {
+        this.last_patch_day = patch_days[0]
+      })
 
       eventBus.$on('patch_day.create.modal', () => {
         this.isOpen = true
       })
     },
     methods: {
-      getPatchDays() {
-        this.$http.get('/patch-days')
-          .then(response => {
-            this.last_patch_day = response.data[0]
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data.error)
-          })
-      },
       createPatchDay() {
         this.$http.post('/patch-days', this.patch_day)
           .then(response => {

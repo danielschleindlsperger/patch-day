@@ -34,13 +34,15 @@
             </div>
         </v-container>
 
-        <fab :patch_day="patch_day" :fabActions="fabActions"></fab>
+        <fab :patch_day="patch_day" :fabActions="fabActions"
+             :show="showFab"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
+  import repo from 'repository'
 
   import Fab from 'pages/patch-day/Fab'
 
@@ -68,6 +70,7 @@
             event: 'patch_day.edit.modal',
           },
         ],
+        showFab: false,
         patch_day: {
           id: null,
           date: '',
@@ -75,11 +78,19 @@
         },
       }
     },
+    beforeRouteEnter (to, from, next) {
+      repo.patch_day.get(to.params.id)
+        .then((data) => {
+          next((vm) => {
+            vm.patch_day = data
+            vm.showFab = true
+          })
+        })
+    },
     mounted() {
-      this.getPatchDay()
 
       eventBus.$on('patch_day.edited', () => {
-        this.getPatchDay()
+        repo.patch_day.get(this.patch_day.id)
       })
 
       eventBus.$on('patch_day.deleted', patch_day => {
@@ -89,21 +100,5 @@
         }
       })
     },
-    methods: {
-      getPatchDay() {
-        const ID = this.$route.params.id
-        this.$http.get(`/patch-days/${ID}`)
-          .then(response => {
-            this.patch_day = response.data
-            eventBus.$emit('page.loading', false)
-          })
-          .catch(error => {
-            console.error(error.response.data)
-            if (error.response.status === 404) {
-              this.$router.push({name: 'not-found'})
-            }
-          })
-      },
-    }
   }
 </script>
