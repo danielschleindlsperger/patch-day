@@ -60,6 +60,7 @@
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
+  import repo from 'repository'
 
   export default {
     name: 'edit-patch-day',
@@ -101,29 +102,15 @@
     },
     methods: {
       getPatchDays() {
-        this.$http.get('/patch-days')
-          .then(response => {
-            this.last_patch_day = response.data[0]
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data.error)
-          })
+        repo.patch_day.getAll().then((patch_days) => {
+          this.last_patch_day = patch_days[0]
+        })
       },
       editPatchDay() {
-        this.$http.put(`/patch-days/${this.patch_day.id}`, this.patch_day)
-          .then(response => {
-            if (response.status === 200) {
-              eventBus.$emit('patch_day.edited')
-              eventBus.$emit('info.snackbar', `PatchDay edited successfully!`)
-              this.isOpen = false
-              this.patch_day.date = ''
-            }
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data)
-          })
+        repo.patch_day.edit(this.patch_day.id, this.patch_day).then(() => {
+          this.isOpen = false
+          this.patch_day.date = ''
+        })
       },
     }
   }

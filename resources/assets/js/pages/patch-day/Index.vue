@@ -71,12 +71,17 @@
     },
     mounted() {
       eventBus.$on('patch_day.created', () => {
-        repo.patch_day.getAll()
+        this.getPatchDays()
       }).$on('patch_day.deleted', () => {
-        repo.patch_day.getAll()
+        this.getPatchDays()
       })
     },
     methods: {
+      getPatchDays() {
+        repo.patch_day.getAll().then((patch_days) => {
+          this.patch_days = patch_days
+        })
+      },
       deletePatchDayModal(event, patch_day) {
         event.preventDefault()
         event.stopPropagation()

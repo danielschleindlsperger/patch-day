@@ -28,6 +28,7 @@
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
+  import repo from 'repository'
 
   export default {
     name: 'delete-patch-day',
@@ -47,18 +48,7 @@
     methods: {
       deletePatchDay() {
         this.isOpen = false
-        this.$http.delete(`/patch-days/${this.patch_day.id}`)
-          .then(response => {
-            if (response.status === 200) {
-              eventBus.$emit('patch_day.deleted', this.patch_day)
-              eventBus.$emit('info.snackbar',
-                `PatchDay deleted successfully!`)
-            }
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data)
-          })
+        repo.patch_day.delete(this.patch_day.id)
       }
     }
   }

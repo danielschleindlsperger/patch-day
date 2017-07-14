@@ -77,20 +77,10 @@
     },
     methods: {
       createPatchDay() {
-        this.$http.post('/patch-days', this.patch_day)
-          .then(response => {
-            if (response.status === 200) {
-              eventBus.$emit('patch_day.created')
-              eventBus.$emit('info.snackbar',
-                `PatchDay created successfully!`)
-              this.isOpen = false
-              this.patch_day.date = ''
-            }
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data)
-          })
+        repo.patch_day.create(this.patch_day).then(() => {
+          this.isOpen = false
+          this.patch_day.date = ''
+        })
       },
     }
   }

@@ -90,12 +90,14 @@
     mounted() {
 
       eventBus.$on('patch_day.edited', () => {
-        repo.patch_day.get(this.patch_day.id)
+        repo.patch_day.get(this.patch_day.id).then((patch_day) => {
+          this.patch_day = patch_day
+        })
       })
 
-      eventBus.$on('patch_day.deleted', patch_day => {
+      eventBus.$on('patch_day.deleted', id => {
         // this protocol was deleted
-        if (patch_day.id === this.patch_day.id) {
+        if (id === this.patch_day.id) {
           this.$router.push(`/patch-days`)
         }
       })
