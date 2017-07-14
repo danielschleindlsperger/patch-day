@@ -48,6 +48,7 @@
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
+  import repo from 'repository'
 
   export default {
     mixins: [filters],
@@ -68,27 +69,12 @@
         }
       }
     },
-    methods: {
-      checkOffModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('protocol.checkoff.modal', this.protocol)
-      },
-      getProtocol() {
-        const ID = this.$route.params.id
-        this.$http.get(`/protocols/${ID}`)
-          .then(response => {
-            this.protocol = response.data
-            eventBus.$emit('page.loading', false)
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data.error)
-            if (error.response.status === 404) {
-              this.$router.push({name: 'not-found'})
-            }
-          })
-      }
+    beforeRouteEnter (to, from, next) {
+      repo.protocol.get(to.params.id).then((protocol) => {
+        next((vm) => {
+          vm.protocol = protocol
+        })
+      })
     },
     computed: {
       patch_day() {
@@ -97,9 +83,6 @@
       project() {
         return this.protocol.project
       },
-    },
-    mounted() {
-      this.getProtocol()
     }
   }
 </script>

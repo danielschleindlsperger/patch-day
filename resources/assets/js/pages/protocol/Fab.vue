@@ -6,8 +6,8 @@
                     right
                     fixed
                     transition="slide-y-reverse-transition"
-                    v-model="fab.dialOpen"
-                    v-show="!fab.hidden"
+                    v-model="dialOpen"
+                    v-show="show"
             >
 
                 <v-btn
@@ -16,7 +16,7 @@
                         dark
                         fab
                         hover
-                        v-model="fab.dialOpen"
+                        v-model="dialOpen"
                 >
                     <v-icon>menu</v-icon>
                     <v-icon>close</v-icon>
@@ -35,29 +35,23 @@
             </v-speed-dial>
         </v-fab-transition>
 
-        <delete-protocol></delete-protocol>
         <edit-protocol></edit-protocol>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
-  import DeleteProtocol from 'pages/protocol/modals/DeleteProtocol'
   import EditProtocol from 'pages/protocol/modals/EditProtocol'
 
   export default {
     name: 'fab',
     data() {
       return {
-        fab: {
-          hidden: true,
-          dialOpen: false,
-        },
+        dialOpen: false,
       }
     },
-    props: ['fabActions', 'protocol'],
+    props: ['fabActions', 'protocol', 'show'],
     components: {
-      DeleteProtocol,
       EditProtocol,
     },
     methods: {
@@ -66,13 +60,6 @@
         event.stopPropagation()
         eventBus.$emit(action.event, this.protocol)
       }
-    },
-    mounted() {
-      eventBus.$on('page.loading', (loading) => {
-        if (!loading) {
-          this.fab.hidden = false
-        }
-      })
     },
   }
 </script>

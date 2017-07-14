@@ -40,13 +40,16 @@
                 </div>
             </div>
         </v-container>
-        <fab :protocol="protocol" :fabActions="fabActions"></fab>
+        <fab :protocol="protocol"
+             :fabActions="fabActions"
+             :show="showFab"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
+  import repo from 'repository'
 
   import Fab from 'pages/protocol/Fab'
 
@@ -72,33 +75,27 @@
         },
         fabActions: [
           {
-            icon: 'delete',
-            color: 'red',
-            event: 'protocol.delete.modal'
-          },
-          {
             icon: 'edit',
             color: 'green',
             event: 'protocol.edit.modal',
           },
         ],
+        showFab: false,
       }
+    },
+    beforeRouteEnter (to, from, next) {
+      repo.protocol.get(to.params.id).then((protocol) => {
+        next((vm) => {
+          vm.protocol = protocol
+          vm.showFab = true
+        })
+      })
     },
     methods: {
       getProtocol() {
-        const ID = this.$route.params.id
-        this.$http.get(`/protocols/${ID}`)
-          .then(response => {
-            this.protocol = response.data
-            eventBus.$emit('page.loading', false)
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data.error)
-            if (error.response.status === 404) {
-              this.$router.push({name: 'not-found'})
-            }
-          })
+        repo.protocol.get(this.protocol.id).then((protocol) => {
+          this.protocol = protocol
+        })
       }
     },
     computed: {
@@ -110,16 +107,10 @@
       },
     },
     mounted() {
-      this.getProtocol()
-
       eventBus.$on('protocol.edited', protocol => {
-        this.protocol = Object.assign({}, protocol)
         this.getProtocol()
-      })
-
-      eventBus.$on('protocol.deleted', protocol => {
-        // this protocol was deleted
-        if (protocol.id === this.protocol.id) {
+      }).$on('protocol.deleted', id => {
+        if (id === this.protocol.id) {
           this.$router.push(`/projects/${this.protocol.project.id}`)
         }
       })
@@ -131,6 +122,7 @@
     .uppercase {
         text-transform: uppercase;
     }
+
     .info-item {
         margin-bottom: 1em;
     }

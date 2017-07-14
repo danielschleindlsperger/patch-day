@@ -74,6 +74,8 @@
 
 <script>
   import eventBus from 'components/event-bus'
+  import repo from 'repository'
+
   export default {
     name: 'edit-protocol',
     data() {
@@ -97,10 +99,9 @@
       }
     },
     mounted () {
-
       this.getTechnologies()
 
-      eventBus.$on('protocol.edit.modal', protocol => {
+      eventBus.$on('protocol.edit.modal', (protocol) => {
         this.protocol = Object.assign({}, protocol)
 
         protocol.technology_updates.forEach(tech => {
@@ -112,32 +113,20 @@
     },
     methods: {
       editProtocol() {
-        this.$http.put(`/protocols/${this.protocol.id}`, {
+        const payload = {
           comment: this.protocol.comment,
           done: this.protocol.done,
           technology_updates: this.upgraded_techs,
+        }
+
+        repo.protocol.edit(this.protocol.id, payload).then(() => {
+          this.isOpen = false
         })
-          .then(response => {
-            if (response.status === 200) {
-              eventBus.$emit('protocol.edited', this.protocol)
-              eventBus.$emit('info.snackbar', `Protocol edited successfully!`)
-              this.isOpen = false
-            }
-          })
-          .catch(error => {
-            console.log(error.response.data)
-            eventBus.$emit('info.snackbar', error.response.data)
-          })
       },
       getTechnologies() {
-        this.$http.get(`/technologies`)
-          .then(response => {
-            this.technologies = response.data
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data.error)
-          })
+        repo.technology.getAll().then((technologies) => {
+          this.technologies = technologies
+        })
       }
     }
   }

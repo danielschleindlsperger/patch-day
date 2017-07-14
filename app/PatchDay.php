@@ -64,6 +64,6 @@ class PatchDay extends Model
         $month = $carbon->format('F');
         $year = $carbon->format('Y');
 
-        return "PatchDay|{$month}{$year}";
+        return "PatchDay {$month} {$year}";
     }
 }

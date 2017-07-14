@@ -43,7 +43,7 @@ class PatchDayUnitTest extends TestCase
             'date' => '2017-03-30',
         ]);
 
-        $this->assertEquals('PatchDay|March2017', $patch_day->name);
+        $this->assertEquals('PatchDay March 2017', $patch_day->name);
     }
 
     /** @test */
