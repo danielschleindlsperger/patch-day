@@ -60,6 +60,8 @@
 
 <script>
   import eventBus from 'components/event-bus'
+  import repo from 'repository'
+
   export default {
     name: 'edit-project',
     data() {
@@ -83,7 +85,9 @@
       }
     },
     mounted () {
-      this.getCompanies()
+      repo.company.getAll().then((companies) => {
+        this.companies = companies
+      })
 
       eventBus.$on('project.edit.modal', project => {
         this.project = JSON.parse(JSON.stringify(project))
@@ -92,35 +96,16 @@
     },
     methods: {
       editProject() {
-        const request = {
+        const payload = {
           name: this.project.name,
           base_price: this.project.base_price,
           penalty: this.project.penalty,
           company_id: this.project.company_id,
         }
 
-        this.$http.put(`/projects/${this.project.id}`, request)
-          .then(response => {
-            if (response.status === 200) {
-              eventBus.$emit('project.edited', this.project)
-              eventBus.$emit('info.snackbar',
-                `${this.project.name} edited successfully!`)
-              this.isOpen = false
-            }
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data)
-          })
-      },
-      getCompanies() {
-        this.$http.get('/companies')
-          .then(response => {
-            this.companies = response.data
-          })
-          .catch(error => {
-            console.error(error)
-          })
+        repo.project.edit(this.project.id, payload).then(() => {
+          this.isOpen = false
+        })
       },
     },
   }

@@ -29,13 +29,14 @@
             </v-card>
         </v-container>
 
-        <fab :fabActions="fabActions"></fab>
+        <fab :fabActions="fabActions" :show="showFab"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import Fab from 'pages/project/components/Fab'
+  import repo from 'repository'
 
   export default {
     components: {
@@ -50,37 +51,32 @@
             event: 'project.create.modal',
           },
         ],
+        showFab: false,
         projects: [],
         deleteProject: {},
         modalOpen: false,
       }
     },
-    mounted() {
-      this.getProjects()
-
-      eventBus.$on('project.deleted', project => {
-        const PROJECT_ID = project.id
-        // remove deleted item from list
-        let newList = this.projects.filter((item) => {
-          return item.id !== PROJECT_ID
+    beforeRouteEnter (to, from, next) {
+      repo.project.getAll().then((projects) => {
+        next((vm) => {
+          vm.projects = projects
+          vm.showFab = true
         })
-        this.projects = newList
       })
-
-      eventBus.$on('project.created', () => {
+    },
+    mounted() {
+      eventBus.$on('project.deleted', () => {
+        this.getProjects()
+      }).$on('project.created', () => {
         this.getProjects()
       })
     },
     methods: {
       getProjects() {
-        this.$http.get('/projects')
-          .then(response => {
-            this.projects = response.data
-            eventBus.$emit('page.loading', false)
-          })
-          .catch(error => {
-            error.response.data
-          })
+        repo.project.getAll().then((projects) => {
+          this.projects = projects
+        })
       },
       deleteItem(event, item) {
         event.preventDefault()

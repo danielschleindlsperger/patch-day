@@ -25,29 +25,20 @@
 
 <script>
   import eventBus from 'components/event-bus'
+  import repo from 'repository'
 
   export default {
     data() {
       return {
         projects: [],
-        deleteProject: {},
-        modalOpen: false,
       }
     },
-    mounted() {
-      this.getProjects()
+    beforeRouteEnter (to, from, next) {
+      repo.project.getAll().then((projects) => {
+        next((vm) => {
+          vm.projects = projects
+        })
+      })
     },
-    methods: {
-      getProjects() {
-        this.$http.get('/projects')
-          .then(response => {
-            this.projects = response.data
-            eventBus.$emit('page.loading', false)
-          })
-          .catch(error => {
-            error.response.data
-          })
-      },
-    }
   }
 </script>

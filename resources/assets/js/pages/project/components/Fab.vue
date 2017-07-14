@@ -6,8 +6,8 @@
                     right
                     fixed
                     transition="slide-y-reverse-transition"
-                    v-model="fab.dialOpen"
-                    v-show="!fab.hidden"
+                    v-model="dialOpen"
+                    v-show="show"
             >
 
                 <v-btn
@@ -16,7 +16,7 @@
                         dark
                         fab
                         hover
-                        v-model="fab.dialOpen"
+                        v-model="dialOpen"
                 >
                     <v-icon>menu</v-icon>
                     <v-icon>close</v-icon>
@@ -51,13 +51,10 @@
     name: 'fab',
     data() {
       return {
-        fab: {
-          hidden: true,
-          dialOpen: false,
-        },
+        dialOpen: false,
       }
     },
-    props: ['fabActions', 'project'],
+    props: ['fabActions', 'project', 'show'],
     components: {
       DeleteProject,
       CreateProject,

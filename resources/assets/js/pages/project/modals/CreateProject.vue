@@ -60,6 +60,8 @@
 
 <script>
   import eventBus from 'components/event-bus'
+  import repo from 'repository'
+
   export default {
     name: 'create-project',
     data() {
@@ -84,7 +86,9 @@
       }
     },
     mounted () {
-      this.getCompanies()
+      repo.company.getAll().then((companies) => {
+        this.companies = companies
+      })
 
       eventBus.$on('project.create.modal', () => {
         this.isOpen = true
@@ -94,30 +98,12 @@
       createProject() {
         this.project.company_id = this.project.company
 
-        this.$http.post('/projects', this.project)
-          .then(response => {
-            if (response.status === 200) {
-              eventBus.$emit('project.created')
-              eventBus.$emit('info.snackbar',
-                `${this.project.name} created successfully!`)
-              this.isOpen = false
-              this.project.name = ''
-              this.project.company = {}
-            }
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data)
-          })
-      },
-      getCompanies() {
-        this.$http.get('/companies')
-          .then(response => {
-            this.companies = response.data
-          })
-          .catch(error => {
-            console.error(error)
-          })
+        repo.project.create(this.project).then(() => {
+          this.isOpen = false
+          this.project.name = ''
+          this.project.company = {}
+        })
+        this.project.company_id = this.project.company
       },
     }
   }

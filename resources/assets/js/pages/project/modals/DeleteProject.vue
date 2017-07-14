@@ -23,6 +23,8 @@
 
 <script>
   import eventBus from 'components/event-bus'
+  import repo from 'repository'
+
   export default {
     name: 'delete-project',
     data() {
@@ -40,19 +42,7 @@
     methods: {
       deleteProject() {
         this.isOpen = false
-        this.$http.delete(`/projects/${this.project.id}`)
-          .then(response => {
-            console.log(this.project)
-            if (response.status === 200) {
-              eventBus.$emit('project.deleted', this.project)
-              eventBus.$emit('info.snackbar',
-                `${this.project.name} deleted successfully!`)
-            }
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data)
-          })
+        repo.project.delete(this.project.id)
       }
     }
   }

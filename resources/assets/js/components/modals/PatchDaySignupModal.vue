@@ -42,6 +42,7 @@
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
+  import repo from 'repository'
 
   export default {
     name: 'patch-day-signup-modal',
@@ -57,41 +58,17 @@
     mounted () {
       eventBus.$on('patch_day_signup.view.modal', (project) => {
         this.project = project
-        this.getPatchDays()
+        repo.project.getPossibleSignups(this.project).then((patch_days) => {
+          this.patch_days = patch_days
+        })
         this.isOpen = true
       })
     },
     methods: {
-      getPatchDays() {
-        this.$http.get(`/projects/${this.project.id}/signup`)
-          .then(response => {
-            this.patch_days = response.data
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data.error)
-            if (error.response.status === 404) {
-              this.$router.push({name: 'not-found'})
-            }
-          })
-      },
-      signUp(event) {
-        this.$http.post(`/projects/${this.project.id}/signup`, {
-          patch_day_id: this.patch_day.id
-        })
-          .then(response => {
-            eventBus.$emit('info.snackbar',
-              `Successfully signed up for ${this.patch_day.name}!`)
-            eventBus.$emit('patch_day.signed_up')
-
+      signUp() {
+        repo.project.signUpForPatchDay(this.project, this.patch_day)
+          .then(() => {
             this.isOpen = false
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data.error)
-            if (error.response.status === 404) {
-              this.$router.push({name: 'not-found'})
-            }
           })
       }
     }

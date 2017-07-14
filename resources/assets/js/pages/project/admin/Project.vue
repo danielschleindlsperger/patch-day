@@ -13,13 +13,14 @@
 
         </v-container>
         <tech-history-modal></tech-history-modal>
-        <fab :project="project" :fabActions="fabActions"></fab>
+        <fab :project="project" :fabActions="fabActions" :show="showFab"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
+  import repo from 'repository'
   import Fab from 'pages/project/components/Fab'
   import TechHistoryModal from 'components/modals/TechHistoryModal'
   import ProjectInfo from 'pages/project/components/ProjectInfo'
@@ -52,6 +53,7 @@
             event: 'project.edit.modal',
           },
         ],
+        showFab: false,
         project: {
           base_price: 0,
           penalty: 0,
@@ -59,9 +61,16 @@
           company: {
             name: ''
           },
-          protocols: []
         },
       }
+    },
+    beforeRouteEnter (to, from, next) {
+      repo.project.get(to.params.id).then((project) => {
+        next((vm) => {
+          vm.project = project
+          vm.showFab = true
+        })
+      })
     },
     methods: {
       techHistoryModal(event) {
@@ -71,30 +80,15 @@
       },
     },
     mounted() {
-      eventBus.$on('project.deleted', item => {
-        // this project was deleted
-        if (item.id === this.project.id) {
+      eventBus.$on('project.deleted', (id) => {
+        if (id === this.project.id) {
           this.$router.push('/projects')
         }
-      })
-
-      eventBus.$on('project.edited', project => {
-        this.project = JSON.parse(JSON.stringify(project))
-      })
-
-      const ID = this.$route.params.id
-      this.$http.get(`/projects/${ID}`)
-        .then(response => {
-          this.project = response.data
-          eventBus.$emit('page.loading', false)
+      }).$on('project.edited', () => {
+        repo.project.get(this.project.id).then((project) => {
+          this.project = project
         })
-        .catch(error => {
-          console.error(error)
-          eventBus.$emit('info.snackbar', error.response.data.error)
-          if (error.response.status === 404) {
-            this.$router.push({name: 'not-found'})
-          }
-        })
+      })
     }
   }
 </script>
