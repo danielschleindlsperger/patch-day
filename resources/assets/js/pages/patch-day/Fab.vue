@@ -12,13 +12,13 @@
 
                 <v-btn
                         slot="activator"
-                        class="blue darken-2"
+                        class="orange darken-2"
                         dark
                         fab
                         hover
                         v-model="dialOpen"
                 >
-                    <v-icon>keyboard_arrow_up</v-icon>
+                    <v-icon>menu</v-icon>
                     <v-icon>close</v-icon>
                 </v-btn>
 
