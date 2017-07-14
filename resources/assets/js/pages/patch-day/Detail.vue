@@ -93,9 +93,7 @@
         repo.patch_day.get(this.patch_day.id).then((patch_day) => {
           this.patch_day = patch_day
         })
-      })
-
-      eventBus.$on('patch_day.deleted', id => {
+      }).$on('patch_day.deleted', id => {
         // this protocol was deleted
         if (id === this.patch_day.id) {
           this.$router.push(`/patch-days`)

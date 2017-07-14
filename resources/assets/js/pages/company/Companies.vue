@@ -28,12 +28,13 @@
             </v-card>
         </v-container>
 
-        <fab :fabActions="fabActions"></fab>
+        <fab :fabActions="fabActions" :show="showFab"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
+  import repo from 'repository'
   import Fab from 'pages/company/Fab'
 
   export default {
@@ -49,36 +50,31 @@
             event: 'company.create.modal',
           },
         ],
+        showFab: false,
         companies: [],
         modalOpen: false,
       }
     },
-    mounted() {
-      this.getCompanies()
-
-      eventBus.$on('company.deleted', payload => {
-        const COMPANY_ID = payload[0].id
-        // remove deleted item from list
-        let newList = this.companies.filter((company) => {
-          return company.id !== COMPANY_ID
+    beforeRouteEnter (to, from, next) {
+      repo.company.getAll().then((companies) => {
+        next((vm) => {
+          vm.companies = companies
+          vm.showFab = true
         })
-        this.companies = newList
       })
-
-      eventBus.$on('company.created', () => {
+    },
+    mounted() {
+      eventBus.$on('company.deleted', payload => {
+        this.getCompanies()
+      }).$on('company.created', () => {
         this.getCompanies()
       })
     },
     methods: {
       getCompanies() {
-        this.$http.get('/companies')
-          .then(response => {
-            this.companies = response.data
-            eventBus.$emit('page.loading', false)
-          })
-          .catch(error => {
-            error.response.data
-          })
+        repo.company.getAll().then((companies) => {
+          this.companies = companies
+        })
       },
       deleteItem(event, item) {
         event.preventDefault()

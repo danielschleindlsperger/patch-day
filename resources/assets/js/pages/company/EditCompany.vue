@@ -25,6 +25,8 @@
 
 <script>
   import eventBus from 'components/event-bus'
+  import repo from 'repository'
+
   export default {
     name: 'edit-company',
     data() {
@@ -41,21 +43,9 @@
     },
     methods: {
       editCompany() {
-        this.$http.put(`/companies/${this.company.id}`, {
-          name: this.company.name
+        repo.company.edit(this.company.id, this.company).then(() => {
+          this.isOpen = false
         })
-          .then(response => {
-            if (response.status === 200) {
-              eventBus.$emit('company.edited')
-              eventBus.$emit('info.snackbar',
-                `${this.company.name} edited successfully!`)
-              this.isOpen = false
-            }
-          })
-          .catch(error => {
-            console.log(error.response.data)
-            eventBus.$emit('info.snackbar', error.response.data)
-          })
       }
     }
   }

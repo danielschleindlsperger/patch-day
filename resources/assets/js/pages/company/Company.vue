@@ -26,13 +26,14 @@
             </v-card>
         </v-container>
 
-        <fab :company="company" :fabActions="fabActions"></fab>
+        <fab :company="company" :fabActions="fabActions" :show="showFab"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import Fab from 'pages/company/Fab'
+  import repo from 'repository'
 
   export default {
     components: {
@@ -57,31 +58,26 @@
             event: 'company.edit.modal',
           },
         ],
+        showFab: false,
         company: {},
         projects: [],
       }
     },
+    beforeRouteEnter (to, from, next) {
+      repo.company.get(to.params.id).then((company) => {
+        next((vm) => {
+          vm.company = company
+          vm.showFab = true
+        })
+      })
+    },
     mounted() {
-      eventBus.$on('company.deleted', (payload) => {
+      eventBus.$on('company.deleted', (id) => {
         // this company was deleted
-        if (payload[0].id === this.company.id) {
+        if (id === this.company.id) {
           this.$router.push('/companies')
         }
       })
-
-      const companyId = this.$route.params.id
-      this.$http.get(`/companies/${companyId}`)
-        .then(response => {
-          this.company = response.data
-          eventBus.$emit('page.loading', false)
-        })
-        .catch(error => {
-          console.log(error.response.data)
-          eventBus.$emit('info.snackbar', error.response.data.error)
-          if (error.response.status === 404) {
-            this.$router.push({name: 'not-found'})
-          }
-        })
     }
   }
 </script>
