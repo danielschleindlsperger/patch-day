@@ -67,12 +67,5 @@
         eventBus.$emit(action.event, this.project)
       }
     },
-    mounted() {
-      eventBus.$on('page.loading', (loading) => {
-        if (!loading) {
-          this.fab.hidden = false
-        }
-      })
-    },
   }
 </script>

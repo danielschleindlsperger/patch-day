@@ -11,18 +11,5 @@
 </template>
 
 <script>
-  import eventBus from 'components/event-bus'
-
-  export default {
-    mounted() {
-      eventBus.$emit('page.loading', false)
-      this.$http.get('/users/me')
-        .then(response => {
-          this.$root.user = response.data
-        })
-        .catch(error => {
-          console.error(error.response.data)
-        });
-    }
-  }
+  export default {}
 </script>
