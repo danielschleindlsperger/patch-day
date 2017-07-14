@@ -51,6 +51,9 @@ class PatchDayUnitTest extends TestCase
     {
         $patch_day = factory(PatchDay::class)->create();
 
+        // fetch again from database to get default values
+        $patch_day = $patch_day->fresh();
+
         $this->assertEquals('upcoming', $patch_day->status);
     }
 

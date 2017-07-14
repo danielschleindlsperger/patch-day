@@ -13,10 +13,6 @@ class PatchDay extends Model
         'status',
     ];
 
-    protected $attributes = [
-        'status' => 'upcoming',
-    ];
-
     protected $dates = ['date'];
 
     protected $appends = [
