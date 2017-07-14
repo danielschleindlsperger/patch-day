@@ -50,6 +50,8 @@
 
 <script>
   import eventBus from 'components/event-bus'
+  import repo from 'repository'
+
   export default {
     name: 'create-user',
     data() {
@@ -81,7 +83,9 @@
       }
     },
     mounted () {
-      this.getCompanies()
+      repo.company.getAll().then((companies) => {
+        this.companies = companies
+      })
 
       eventBus.$on('user.create.modal', () => {
         this.isOpen = true
@@ -89,29 +93,10 @@
     },
     methods: {
       createUser() {
-        this.$http.post('/users', this.user)
-          .then(response => {
-            if (response.status === 200) {
-              eventBus.$emit('user.created')
-              eventBus.$emit('info.snackbar',
-                `User ${this.user.name} created successfully!`)
-              this.isOpen = false
-              this.user.name = ''
-            }
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data)
-          })
-      },
-      getCompanies() {
-        this.$http.get('/companies')
-          .then(response => {
-            this.companies = response.data
-          })
-          .catch(error => {
-            console.error(error)
-          })
+        repo.user.create(this.user).then(() => {
+          this.isOpen = false
+          this.user.name = ''
+        })
       },
     }
   }

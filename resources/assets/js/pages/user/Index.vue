@@ -4,12 +4,13 @@
             <h1 class="display-2 text-xs-center">Users</h1>
             <user-table :users="users"></user-table>
         </v-container>
-        <fab :fabActions="fabActions"></fab>
+        <fab :fabActions="fabActions" :show="showFab"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
+  import repo from 'repository'
   import Fab from 'pages/user/Fab'
   import UserTable from 'pages/user/components/UserTable'
 
@@ -17,6 +18,14 @@
     components: {
       Fab,
       UserTable,
+    },
+    beforeRouteEnter (to, from, next) {
+      repo.user.getAll().then((users) => {
+        next((vm) => {
+          vm.users = users
+          vm.showFab = true
+        })
+      })
     },
     data() {
       return {
@@ -28,6 +37,7 @@
             event: 'user.create.modal',
           },
         ],
+        showFab: false,
         users: [
           {
             name: '',
@@ -40,23 +50,16 @@
       }
     },
     mounted() {
-      this.getUsers()
+      eventBus.$on('user.created', () => {
+        this.getUsers()
+      })
     },
     methods: {
       getUsers() {
-        this.$http.get('/users')
-          .then(response => {
-            this.users = response.data
-            eventBus.$emit('page.loading', false)
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data.error)
-            if (error.response.status === 404) {
-              this.$router.push({name: 'not-found'})
-            }
-          })
-      },
+        repo.user.getAll().then((users) => {
+          this.users = users
+        })
+      }
     }
   }
 </script>

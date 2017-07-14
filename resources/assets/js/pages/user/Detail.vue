@@ -15,13 +15,14 @@
             </div>
         </v-container>
 
-        <fab :user="user" :fabActions="fabActions"></fab>
+        <fab :user="user" :fabActions="fabActions" :show="showFab"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import filters from 'mixins/filters'
+  import repo from 'repository'
   import Fab from 'pages/user/Fab'
 
   export default {
@@ -55,15 +56,21 @@
             event: 'user.edit.modal',
           },
         ],
+        showFab: false,
       }
     },
     mixins: [filters],
+    beforeRouteEnter (to, from, next) {
+      repo.user.get(to.params.id).then((user) => {
+        next((vm) => {
+          vm.user = user
+          vm.showFab = true
+        })
+      })
+    },
     mounted() {
-      this.getUser()
-
-      eventBus.$on('user.deleted', item => {
-        // this user was deleted
-        if (item.id === this.user.id) {
+      eventBus.$on('user.deleted', id => {
+        if (id === this.user.id) {
           this.$router.push('/users')
         }
       })
@@ -74,19 +81,9 @@
     },
     methods: {
       getUser() {
-        const ID = this.$route.params.id
-        this.$http.get(`/users/${ID}`)
-          .then(response => {
-            this.user = response.data
-            eventBus.$emit('page.loading', false)
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data.error)
-            if (error.response.status === 404) {
-              this.$router.push({name: 'not-found'})
-            }
-          })
+        repo.user.get(this.user.id).then((user) => {
+          this.user = user
+        })
       },
     }
   }

@@ -23,6 +23,8 @@
 
 <script>
   import eventBus from 'components/event-bus'
+  import repo from 'repository'
+
   export default {
     name: 'delete-user',
     data() {
@@ -32,7 +34,7 @@
       }
     },
     mounted () {
-      eventBus.$on('user.delete.modal', user => {
+      eventBus.$on('user.delete.modal', (user) => {
         this.user = user
         this.isOpen = true
       })
@@ -40,18 +42,7 @@
     methods: {
       deleteProject() {
         this.isOpen = false
-        this.$http.delete(`/users/${this.user.id}`)
-          .then(response => {
-            if (response.status === 200) {
-              eventBus.$emit('user.deleted', this.user)
-              eventBus.$emit('info.snackbar',
-                `User ${this.user.name} deleted successfully!`)
-            }
-          })
-          .catch(error => {
-            console.error(error)
-            eventBus.$emit('info.snackbar', error.response.data)
-          })
+        repo.user.delete(this.user.id)
       }
     }
   }

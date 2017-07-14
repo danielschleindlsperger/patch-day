@@ -3,6 +3,7 @@ import company from './company'
 import project from './project'
 import protocol from './protocol'
 import technology from './technology'
+import user from './user'
 
 const REPO = Object.assign(
   {},
@@ -10,7 +11,8 @@ const REPO = Object.assign(
   company,
   project,
   protocol,
-  technology
+  technology,
+  user
 )
 
 export default REPO
