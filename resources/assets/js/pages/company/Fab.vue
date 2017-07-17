@@ -29,6 +29,8 @@
                        small
                        :class="action.color"
                        @click.native="openModal($event, action)"
+                       v-tooltip:left="{ html: tooltipHtml(action.tooltip), visible:
+                       tooltipVisible(action.tooltip) }"
                 >
                     <v-icon>{{ action.icon }}</v-icon>
                 </v-btn>
@@ -42,12 +44,14 @@
 
 <script>
   import eventBus from 'components/event-bus'
+  import tooltip from 'mixins/tooltip'
   import DeleteCompany from 'pages/company/DeleteCompany'
   import EditCompany from 'pages/company/EditCompany'
   import CreateCompany from 'pages/company/CreateCompany'
 
   export default {
     name: 'fab',
+    mixins: [tooltip],
     data() {
       return {
         dialOpen: false,

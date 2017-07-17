@@ -28,6 +28,8 @@
                        dark
                        small
                        :class="action.color"
+                       v-tooltip:left="{ html: tooltipHtml(action.tooltip), visible:
+                       tooltipVisible(action.tooltip) }"
                        @click.native="openModal($event, action)"
                 >
                     <v-icon>{{ action.icon }}</v-icon>
@@ -43,15 +45,18 @@
 
 <script>
   import eventBus from 'components/event-bus'
+  import tooltip from 'mixins/tooltip'
   import CreatePatchDay from 'pages/patch-day/modals/CreatePatchDay'
   import DeletePatchDay from 'pages/patch-day/modals/DeletePatchDay'
   import EditPatchDay from 'pages/patch-day/modals/EditPatchDay'
 
   export default {
     name: 'fab',
+    mixins: [tooltip],
     data() {
       return {
-          dialOpen: false,
+        dialOpen: false,
+        showTT: false,
       }
     },
     props: ['fabActions', 'patch_day', 'show'],
@@ -65,7 +70,7 @@
         event.preventDefault()
         event.stopPropagation()
         eventBus.$emit(action.event, this.patch_day)
-      }
+      },
     },
   }
 </script>

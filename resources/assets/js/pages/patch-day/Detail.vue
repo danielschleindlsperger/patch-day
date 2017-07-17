@@ -57,17 +57,26 @@
           {
             icon: 'delete',
             color: 'red',
-            event: 'patch_day.delete.modal'
+            event: 'patch_day.delete.modal',
+            tooltip: 'Delete PatchDay',
           },
           {
             icon: 'add',
             color: 'indigo',
             event: 'patch_day.create.modal',
+            tooltip:  'Create PatchDay',
           },
           {
             icon: 'edit',
             color: 'green',
             event: 'patch_day.edit.modal',
+            tooltip:'Edit PatchDay',
+          },
+          {
+            icon: 'update',
+            color: 'yellow',
+            event: '',
+            tooltip: 'Handle PatchDay',
           },
         ],
         showFab: false,

@@ -78,6 +78,7 @@
             icon: 'edit',
             color: 'green',
             event: 'protocol.edit.modal',
+            tooltip: 'Edit Protocol (Checkoff)'
           },
         ],
         showFab: false,

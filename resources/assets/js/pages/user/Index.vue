@@ -35,6 +35,7 @@
             icon: 'add',
             color: 'indigo',
             event: 'user.create.modal',
+            tooltip: 'Create user',
           },
         ],
         showFab: false,

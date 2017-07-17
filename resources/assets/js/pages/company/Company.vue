@@ -45,17 +45,20 @@
           {
             icon: 'delete',
             color: 'red',
-            event: 'company.delete.modal'
+            event: 'company.delete.modal',
+            tooltip: 'Delete Company',
           },
           {
             icon: 'add',
             color: 'indigo',
             event: 'company.create.modal',
+            tooltip: 'Create Company',
           },
           {
             icon: 'edit',
             color: 'green',
             event: 'company.edit.modal',
+            tooltip: 'Edit Company',
           },
         ],
         showFab: false,

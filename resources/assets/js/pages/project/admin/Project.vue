@@ -40,17 +40,20 @@
           {
             icon: 'delete',
             color: 'red',
-            event: 'project.delete.modal'
+            event: 'project.delete.modal',
+            tooltip: 'Delete Project',
           },
           {
             icon: 'add',
             color: 'indigo',
             event: 'project.create.modal',
+            tooltip: 'Create Project',
           },
           {
             icon: 'edit',
             color: 'green',
             event: 'project.edit.modal',
+            tooltip: 'Edit Project',
           },
         ],
         showFab: false,

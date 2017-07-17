@@ -49,6 +49,7 @@
             icon: 'add',
             color: 'indigo',
             event: 'project.create.modal',
+            tooltip: 'Create Project',
           },
         ],
         showFab: false,

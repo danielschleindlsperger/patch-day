@@ -43,17 +43,20 @@
           {
             icon: 'delete',
             color: 'red',
-            event: 'user.delete.modal'
+            event: 'user.delete.modal',
+            tooltip: 'Delete user',
           },
           {
             icon: 'add',
             color: 'indigo',
             event: 'user.create.modal',
+            tooltip: 'Create user',
           },
           {
             icon: 'edit',
             color: 'green',
             event: 'user.edit.modal',
+            tooltip: 'Edit user',
           },
         ],
         showFab: false,

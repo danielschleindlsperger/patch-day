@@ -48,6 +48,7 @@
             icon: 'add',
             color: 'indigo',
             event: 'company.create.modal',
+            tooltip: 'Create Company',
           },
         ],
         showFab: false,

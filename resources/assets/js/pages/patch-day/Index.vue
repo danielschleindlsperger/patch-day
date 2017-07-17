@@ -54,6 +54,7 @@
             icon: 'add',
             color: 'indigo',
             event: 'patch_day.create.modal',
+            tooltip: 'Create PatchDay',
           },
         ],
         showFab: false,
