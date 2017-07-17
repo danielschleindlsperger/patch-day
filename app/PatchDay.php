@@ -66,4 +66,16 @@ class PatchDay extends Model
 
         return "PatchDay {$month} {$year}";
     }
+
+    /**
+     * Check if all the patch-days protocols are done.
+     *
+     * @return bool
+     */
+    public function protocolsDone()
+    {
+        $todoProtocols = $this->protocols()->where('done', '=', false)->count();
+
+        return $todoProtocols === 0;
+    }
 }
