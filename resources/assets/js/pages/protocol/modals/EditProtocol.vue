@@ -1,63 +1,77 @@
 <template>
-    <v-dialog v-model="isOpen" width="640" persistent>
-        <v-card>
+    <div>
+        <v-dialog v-model="isOpen" width="640" persistent>
+            <v-card>
 
-            <v-card-title class="pa-4">
-                <h2 class="title ma-0">Edit Protocol (Check-off)</h2>
-            </v-card-title>
+                <v-card-title class="pa-4">
+                    <h2 class="title ma-0">Edit Protocol (Check-off)</h2>
+                </v-card-title>
 
-            <v-card-text>
-                <v-container fluid>
-                    <v-text-field
-                            name="comment"
-                            label="Comment"
-                            multi-line
-                            v-model="protocol.comment"
-                    ></v-text-field>
+                <v-card-text>
+                    <v-container fluid>
+                        <v-text-field
+                                name="comment"
+                                label="Comment"
+                                multi-line
+                                v-model="protocol.comment"
+                        ></v-text-field>
 
-                    <v-select
-                            label="Software updates"
-                            v-bind:items="technologies"
-                            v-model="upgraded_techs"
-                            item-value="id"
-                            item-text="canonical_name"
-                            multiple
-                            chips
-                            light
-                            max-height="500"
-                            autocomplete
-                            hint="Pick the updated software versions."
-                            persistent-hint
-                    >
-                    </v-select>
+                        <div>
+                            <small>Technology not in list?</small>
+                            <v-btn @click.native="createTechnologyModal($event)">
+                                Create new Tech
+                            </v-btn>
+                        </div>
 
-                    <v-checkbox
-                            label="Done"
-                            primary
-                            v-model="protocol.done"/>
+                        <v-select
+                                label="Software updates"
+                                v-bind:items="technologies"
+                                v-model="upgraded_techs"
+                                item-value="id"
+                                item-text="canonical_name"
+                                multiple
+                                chips
+                                light
+                                max-height="500"
+                                autocomplete
+                                hint="Pick the updated software versions."
+                                persistent-hint
+                        >
+                        </v-select>
 
-                </v-container>
-            </v-card-text>
+                        <v-checkbox
+                                label="Done"
+                                primary
+                                v-model="protocol.done"/>
 
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn class="green--text darken-1" flat="flat"
-                       @click.native="isOpen = false">Close
-                </v-btn>
-                <v-btn class="green--text darken-1" flat="flat"
-                       @click.native="editProtocol()">Save
-                </v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
+                    </v-container>
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn class="green--text darken-1" flat="flat"
+                           @click.native="isOpen = false">Close
+                    </v-btn>
+                    <v-btn class="green--text darken-1" flat="flat"
+                           @click.native="editProtocol()">Save
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <create-technology-modal></create-technology-modal>
+    </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import repo from 'repository'
+  import CreateTechnologyModal from 'components/modals/CreateTechnologyModal'
 
   export default {
     name: 'edit-protocol',
+    components: {
+      CreateTechnologyModal
+    },
     data() {
       return {
         isOpen: false,
@@ -79,14 +93,15 @@
       }
     },
     mounted () {
-      this.getTechnologies()
-
       eventBus.$on('protocol.edit.modal', (protocol) => {
-        this.protocol = Object.assign({}, protocol)
+        this.getTechnologies()
+        if (protocol) {
+          this.protocol = Object.assign({}, protocol)
 
-        protocol.technology_updates.forEach(tech => {
-          this.upgraded_techs.push(tech.id)
-        })
+          protocol.technology_updates.forEach(tech => {
+            this.upgraded_techs.push(tech.id)
+          })
+        }
 
         this.isOpen = true
       })
@@ -107,6 +122,12 @@
         repo.technology.getAll().then((technologies) => {
           this.technologies = technologies
         })
+      },
+      createTechnologyModal(event) {
+        event.preventDefault()
+        event.stopPropagation()
+        this.isOpen = false
+        eventBus.$emit('technology.create.modal')
       }
     }
   }

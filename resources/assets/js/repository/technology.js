@@ -13,5 +13,19 @@ export default {
           eventBus.$emit('info.snackbar', error.response.data.error)
         })
     },
+    create(payload) {
+      return axios.post('/technologies', payload)
+        .then(response => {
+          if (response.status === 200) {
+            eventBus.$emit('technology.created')
+            eventBus.$emit('info.snackbar',
+              `Technology created successfully!`)
+          }
+        })
+        .catch(error => {
+          console.error(error)
+          eventBus.$emit('info.snackbar', error.response.data)
+        })
+    },
   }
 }
