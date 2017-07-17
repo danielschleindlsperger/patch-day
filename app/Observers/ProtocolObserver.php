@@ -16,7 +16,7 @@ class ProtocolObserver
     {
         // set patch-day to done when all protocols are done.
         $patch_day = $protocol->patch_day;
-        if ($patch_day->protocolsDone()) {
+        if ($patch_day && $patch_day->protocolsDone()) {
             $patch_day->status = 'done';
             $patch_day->save();
         }
