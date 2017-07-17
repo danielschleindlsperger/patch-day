@@ -43,9 +43,9 @@
 
 <script>
   import eventBus from 'components/event-bus'
-  import CreatePatchDay from 'pages/patch-day/CreatePatchDay'
-  import DeletePatchDay from 'pages/patch-day/DeletePatchDay'
-  import EditPatchDay from 'pages/patch-day/EditPatchDay'
+  import CreatePatchDay from 'pages/patch-day/modals/CreatePatchDay'
+  import DeletePatchDay from 'pages/patch-day/modals/DeletePatchDay'
+  import EditPatchDay from 'pages/patch-day/modals/EditPatchDay'
 
   export default {
     name: 'fab',
