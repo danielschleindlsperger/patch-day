@@ -13,6 +13,10 @@ class Technology extends Model
         'name', 'version',
     ];
 
+    protected $appends = [
+        'canonical_name',
+    ];
+
     /**
      * get all projects this exact technology is used in.
      *
@@ -27,5 +31,10 @@ class Technology extends Model
     {
         return $this->pivot ?
             Protocol::find($this->pivot->protocol_id)->date : null;
+    }
+
+    public function getCanonicalNameAttribute()
+    {
+        return $this->name . ' ' . $this->version;
     }
 }

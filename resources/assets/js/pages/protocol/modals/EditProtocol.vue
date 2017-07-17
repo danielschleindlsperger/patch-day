@@ -20,6 +20,7 @@
                             v-bind:items="technologies"
                             v-model="upgraded_techs"
                             item-value="id"
+                            item-text="canonical_name"
                             multiple
                             chips
                             light
@@ -28,27 +29,6 @@
                             hint="Pick the updated software versions."
                             persistent-hint
                     >
-                        <template slot="selection" scope="data">
-                            <v-chip
-                                    close
-                                    @input="data.parent.selectItem(data.item)"
-                                    @click.native.stop
-                                    class="chip--select-multi"
-                                    :key="data.item"
-                            >
-                                {{ data.item.name }}
-                                {{ data.item.version }}
-                            </v-chip>
-                        </template>
-
-                        <template slot="item" scope="data">
-                            <v-list-tile-content>
-                                <v-list-tile-title
-                                        v-html="data.item.name"></v-list-tile-title>
-                                <v-list-tile-sub-title
-                                        v-html="data.item.version"></v-list-tile-sub-title>
-                            </v-list-tile-content>
-                        </template>
                     </v-select>
 
                     <v-checkbox

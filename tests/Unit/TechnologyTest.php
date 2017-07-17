@@ -36,4 +36,15 @@ class TechnologyTest extends TestCase
         $this->assertEquals('php', $technology->name);
         $this->assertEquals('7.0.30', $technology->version);
     }
+
+    /** @test */
+    public function a_technology_has_a_canonical_name()
+    {
+        $technology = Technology::create([
+            'name' => 'php',
+            'version' => '7.0.30',
+        ]);
+
+        $this->assertEquals('php 7.0.30', $technology->canonical_name);
+    }
 }
