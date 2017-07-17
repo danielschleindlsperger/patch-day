@@ -22,7 +22,7 @@ class SignupController extends Controller
     {
         $patch_day = PatchDay::findOrFail(request('patch_day_id'));
 
-        if (!$this->patchDayIsAfterToday($patch_day)) {
+        if ($this->patchDayIsOver($patch_day)) {
             abort(422, 'Too late to sign up for this PatchDay.');
         }
 
@@ -55,7 +55,7 @@ class SignupController extends Controller
 
         $this->authorize('delete', $protocol);
 
-        if (!$this->patchDayIsAfterToday($patch_day)) {
+        if ($this->patchDayIsOver($patch_day)) {
             abort(422, 'Too late to delete this PatchDay.');
         }
 
@@ -87,7 +87,7 @@ class SignupController extends Controller
 
         $patch_days = $patch_days->filter(function ($patch_day) use ($keys) {
             return !in_array($patch_day->id, $keys) &&
-                $this->patchDayIsAfterToday($patch_day);
+                !$this->patchDayIsOver($patch_day);
         })->values();
 
         return $patch_days;
@@ -97,12 +97,12 @@ class SignupController extends Controller
      * @param PatchDay $patch_day
      * @return bool
      */
-    private function patchDayIsAfterToday($patch_day)
+    private function patchDayIsOver($patch_day)
     {
         $today = Carbon::now()->endOfDay();
         $date = Carbon::parse($patch_day->date)->endOfDay();
 
-        return $date->greaterThan($today);
+        return !$date->greaterThan($today) || $patch_day->done;
     }
 
     /**
