@@ -52,7 +52,14 @@ class PatchDayController extends Controller
     {
         $this->authorize('view', $patchDay);
 
-        $patchDay->load('protocols', 'protocols.project', 'protocols.project.company');
+        if (request('todo')) {
+            // only load protocols that are not done
+            $patchDay->load(['protocols' => function($query) {
+                $query->where('protocols.done', '!=', true);
+            }, 'protocols.project', 'protocols.project.company']);
+        } else {
+            $patchDay->load('protocols', 'protocols.project', 'protocols.project.company');
+        }
 
         return $patchDay;
     }

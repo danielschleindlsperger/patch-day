@@ -64,18 +64,18 @@
             icon: 'add',
             color: 'indigo',
             event: 'patch_day.create.modal',
-            tooltip:  'Create PatchDay',
+            tooltip: 'Create PatchDay',
           },
           {
             icon: 'edit',
             color: 'green',
             event: 'patch_day.edit.modal',
-            tooltip:'Edit PatchDay',
+            tooltip: 'Edit PatchDay',
           },
           {
             icon: 'update',
             color: 'yellow',
-            event: '',
+            event: 'patch_day.open.todo',
             tooltip: 'Handle PatchDay',
           },
         ],
@@ -107,6 +107,8 @@
         if (id === this.patch_day.id) {
           this.$router.push(`/patch-days`)
         }
+      }).$on('patch_day.open.todo', (patch_day) => {
+        this.$router.push(`/patch-days/${patch_day.id}/todo`)
       })
     },
   }

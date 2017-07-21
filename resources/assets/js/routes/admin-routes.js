@@ -15,6 +15,7 @@ import UserDetail from 'pages/user/Detail'
 // patch days
 import PatchDayIndex from 'pages/patch-day/Index'
 import PatchDayDetail from 'pages/patch-day/Detail'
+import PatchDayTodo from 'pages/patch-day/Todo'
 
 export default [
   {
@@ -46,6 +47,9 @@ export default [
   },
   {
     path: '/patch-days/:id', component: PatchDayDetail,
+  },
+  {
+    path: '/patch-days/:id/todo', component: PatchDayTodo,
   },
   {
     path: '*', component: NotFoundPage, name: 'not-found'

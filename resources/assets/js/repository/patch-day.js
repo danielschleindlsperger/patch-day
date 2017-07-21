@@ -13,6 +13,16 @@ export default {
           eventBus.$emit('info.snackbar', error.response.data.error)
         })
     },
+    getTodo(id) {
+      return axios.get(`/patch-days/${id}?todo=true`)
+        .then(response => {
+          return response.data
+        })
+        .catch(error => {
+          console.error(error.response.data)
+          eventBus.$emit('info.snackbar', error.response.data.error)
+        })
+    },
     getAll() {
       return axios.get('/patch-days')
         .then(response => {

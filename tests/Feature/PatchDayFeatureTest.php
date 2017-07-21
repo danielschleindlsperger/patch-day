@@ -165,6 +165,41 @@ class PatchDayFeatureTest extends TestCase
     }
 
     /** @test */
+    public function can_see_todo_protocols_for_patch_day()
+    {
+        $patch_day = factory(PatchDay::class)->create();
+        $project = factory(Project::class)->create();
+        $protocols = factory(Protocol::class, 3)->create([
+            'patch_day_id' => $patch_day->id,
+            'project_id' => $project->id,
+            'done' => false,
+        ]);
+        $protocols->first()->done = true;
+        $protocols->first()->comment = 'Fake comment';
+        $protocols->first()->save();
+
+        $response = $this->json('GET', "/patch-days/{$patch_day->id}?todo=true");
+        $response->assertStatus(200)
+            ->assertJson([
+                'protocols' => [
+                    [
+                        'id' => $protocols[1]->id,
+                    ],
+                    [
+                        'id' => $protocols[2]->id,
+                    ],
+                ]
+            ])
+            ->assertJsonMissing([
+                [
+                    'id' => $protocols->first()->id,
+                    'done' => true,
+                    'comment' => 'Fake comment',
+                ]
+            ]);
+    }
+
+    /** @test */
     public function admin_can_delete_patch_day()
     {
         $patch_day = PatchDay::create([
