@@ -14,11 +14,14 @@ class ProtocolObserver
      */
     public function updated(Protocol $protocol)
     {
-        // set patch-day to done when all protocols are done.
+        // set patch-day status
         $patch_day = $protocol->patch_day;
-        if ($patch_day && $patch_day->protocolsDone()) {
+        if (!$patch_day) return;
+
+        if ($patch_day->protocolsDone()) {
             $patch_day->status = 'done';
-            $patch_day->save();
         }
+
+        $patch_day->save();
     }
 }

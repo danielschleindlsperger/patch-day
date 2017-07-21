@@ -8,12 +8,13 @@
                     <v-list-tile v-for="patch_day in patch_days"
                                  :key="patch_day.id"
                                  :to="`/patch-days/${patch_day.id}`">
-                        <v-list-tile-content>
+                        <v-list-tile-content
+                                :class="{ faded: patch_day.status === 'done' }">
                             <v-list-tile-title>
                                 {{ patch_day.name }}
                             </v-list-tile-title>
                             <v-list-tile-sub-title>
-                                {{ patch_day.date | Date }}
+                                {{ patch_day.date | Date }} -
                                 {{ patch_day.status }}
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
@@ -93,6 +94,9 @@
 </script>
 
 <style lang="scss" scoped>
+    .faded {
+        opacity: .5;
+    }
     .button-row {
         display: flex;
         flex-flow: row nowrap;
