@@ -6,6 +6,8 @@ use App\PatchDay;
 use App\User;
 use App\Company;
 use App\Project;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -143,5 +145,25 @@ class CompanyFeatureTest extends TestCase
 
         $response = $this->json('GET', '/companies/' . $company->id);
         $response->assertStatus(404);
+    }
+
+    /** @test */
+    public function can_create_company_with_logo()
+    {
+        Storage::fake('public');
+
+        $logo = UploadedFile::fake()->image('random-name.png');
+
+        $response = $this->post('/companies', [
+            'name' => 'Fake Company Inc.',
+            'logo' => $logo,
+        ], ['CONTENT_TYPE' => 'multipart/form-data']);
+        $timestamp = (new \DateTime())->getTimestamp();
+
+        Storage::disk('public')->assertExists("logos/fake-company-inc{$timestamp}.png");
+
+        $company = Company::latest()->first();
+
+        $this->assertEquals('Fake Company Inc.', $company->name);
     }
 }

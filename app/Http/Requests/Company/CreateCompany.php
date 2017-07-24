@@ -26,6 +26,7 @@ class CreateCompany extends FormRequest
     {
         return [
             'name' => 'required|string',
+            'logo' => 'image|max:500',
         ];
     }
 }
