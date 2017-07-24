@@ -10,6 +10,8 @@ Platform for management of periodic updates of software projects.
 - set database credentials in the `.env` file
 - `$ php artisan key:generate`
 - `$ php artisan migrate --seed`
+-  link storage directories
+- `$ php artisan storage:link`
 - `$ phpunit`
 - Hopefully all green and ready to go :v:
 
