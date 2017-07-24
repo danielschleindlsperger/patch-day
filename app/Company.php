@@ -11,6 +11,11 @@ class Company extends Model
 
     protected $fillable = [
         'name',
+        'logo'
+    ];
+
+    protected $attributes = [
+      'logo' => '/img/company_dummy.png',
     ];
 
     /**

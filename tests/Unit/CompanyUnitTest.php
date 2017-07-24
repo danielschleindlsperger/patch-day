@@ -61,4 +61,25 @@ class CompanyUnitTest extends TestCase
         $this->assertInstanceOf(User::class, $company->users->first());
         $this->assertEquals('Fake User 2', $company->users->get(1)->name);
     }
+
+    /** @test */
+    public function a_company_has_a_logo()
+    {
+        $company = Company::create([
+            'name' => 'Fake Company',
+            'logo' => '/public/storage/logos/companies/fake-company.png',
+        ]);
+
+        $this->assertEquals('/public/storage/logos/companies/fake-company.png', $company->logo);
+    }
+
+    /** @test */
+    public function a_company_has_a_default_logo()
+    {
+        $company = Company::create([
+            'name' => 'Fake Company',
+        ]);
+
+        $this->assertEquals('/img/company_dummy.png', $company->logo);
+    }
 }
