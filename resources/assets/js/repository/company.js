@@ -28,6 +28,7 @@ export default {
       let data = new FormData()
       data.append('logo', payload.logo)
       data.append('name', payload.name)
+
       return axios.post('/companies', data)
         .then(response => {
           if (response.status === 200) {
@@ -56,7 +57,11 @@ export default {
         })
     },
     edit(id, payload) {
-      return axios.put(`/companies/${id}`, payload)
+      let data = new FormData()
+      data.append('logo', payload.logo)
+      data.append('name', payload.name)
+
+      return axios.put(`/companies/${id}`, data)
         .then(response => {
           if (response.status === 200) {
             eventBus.$emit('company.edited')

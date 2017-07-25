@@ -8,11 +8,15 @@
                 <v-container fluid>
                     <v-text-field label="Name" required
                                   v-model="company.name"/>
-                    <div class="mb-4">
-                        <small>Logo</small>
-                        <upload-button title="Browse"
-                                       :selectedCallback="fileSelected"></upload-button>
-                    </div>
+                    <v-layout row justify-space-between align-baseline
+                              class="logo-upload-wrapper mb-4">
+                        <span class="file-name" v-if="fileName">{{ fileName }}
+                        </span>
+                        <upload-button title="Select Logo"
+                                       :selectedCallback="fileSelected"
+                                        :class="{ green : fileName }">
+                        </upload-button>
+                    </v-layout>
                     <small>*indicates required field</small>
                 </v-container>
             </v-card-text>
@@ -44,7 +48,8 @@
         isOpen: false,
         company: {
           name: '',
-        }
+        },
+        fileName: '',
       }
     },
     mounted () {
@@ -63,10 +68,17 @@
       fileSelected(file) {
         if (file) {
           this.company.logo = file
+          this.fileName = file.name
         }
-        console.log(file)
-        console.log(this.company)
       }
     }
   }
 </script>
+
+<style lang="scss" scoped>
+    .file-name {
+        max-width: 5em;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+</style>
