@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Company extends Model
 {
@@ -15,7 +16,7 @@ class Company extends Model
     ];
 
     protected $attributes = [
-      'logo' => '/img/company_dummy.png',
+      'logo' => '/img/placeholder_logo.png',
     ];
 
     /**
@@ -43,6 +44,18 @@ class Company extends Model
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    /**
+     * Prepend relevant folder names
+     *
+     * @return string
+     */
+    public function getLogoAttribute($path)
+    {
+        $exists = Storage::disk('public')->exists($path);
+
+        return $exists ? Storage::url($path) : $path;
     }
 
 }

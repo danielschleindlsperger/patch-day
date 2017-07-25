@@ -14,7 +14,7 @@ class AddCompanyLogos extends Migration
     public function up()
     {
         Schema::table('companies', function (Blueprint $table) {
-            $table->string('logo')->nullable();
+            $table->string('logo')->default('/img/placeholder_logo.png');
         });
     }
 

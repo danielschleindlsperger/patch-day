@@ -9,7 +9,7 @@
                                  :key="company.id"
                                  :to="'/companies/' + company.id">
                         <v-list-tile-avatar>
-                            <v-icon>business</v-icon>
+                            <img :src="company.logo" :alt="company.name">
                         </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title>{{ company.name }}

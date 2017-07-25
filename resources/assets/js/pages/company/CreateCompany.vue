@@ -8,6 +8,11 @@
                 <v-container fluid>
                     <v-text-field label="Name" required
                                   v-model="company.name"/>
+                    <div class="mb-4">
+                        <small>Logo</small>
+                        <upload-button title="Browse"
+                                       :selectedCallback="fileSelected"></upload-button>
+                    </div>
                     <small>*indicates required field</small>
                 </v-container>
             </v-card-text>
@@ -27,9 +32,13 @@
 <script>
   import eventBus from 'components/event-bus'
   import repo from 'repository'
+  import UploadButton from 'components/UploadButton'
 
   export default {
     name: 'create-company',
+    components: {
+      UploadButton,
+    },
     data() {
       return {
         isOpen: false,
@@ -45,10 +54,18 @@
     },
     methods: {
       createCompany() {
-        repo.company.create(this.company.id, this.company).then(() => {
+        repo.company.create(this.company).then(() => {
           this.isOpen = false
           this.company.name = ''
+          delete this.company.logo
         })
+      },
+      fileSelected(file) {
+        if (file) {
+          this.company.logo = file
+        }
+        console.log(file)
+        console.log(this.company)
       }
     }
   }

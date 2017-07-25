@@ -166,7 +166,7 @@ class CompanyFeatureTest extends TestCase
         $company = Company::latest()->first();
 
         $this->assertEquals('Fake Company Inc.', $company->name);
-        $this->assertEquals("logos/fake-company-inc{$timestamp}.png",
+        $this->assertEquals(Storage::url("logos/fake-company-inc{$timestamp}.png"),
         $company->logo);
     }
 
@@ -192,7 +192,7 @@ class CompanyFeatureTest extends TestCase
         $company =$company->fresh();
 
         $this->assertEquals('Fake Company Inc.', $company->name);
-        $this->assertEquals("logos/fake-company-inc{$timestamp}.png",
+        $this->assertEquals(Storage::url("logos/fake-company-inc{$timestamp}.png"),
             $company->logo);
     }
 }

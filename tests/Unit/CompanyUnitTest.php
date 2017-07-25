@@ -80,6 +80,6 @@ class CompanyUnitTest extends TestCase
             'name' => 'Fake Company',
         ]);
 
-        $this->assertEquals('/img/company_dummy.png', $company->logo);
+        $this->assertEquals('/img/placeholder_logo.png', $company->logo);
     }
 }

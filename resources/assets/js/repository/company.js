@@ -1,5 +1,6 @@
 import eventBus from 'components/event-bus'
 import axios from 'axios'
+import { forEach } from 'lodash'
 
 export default {
   company: {
@@ -24,7 +25,10 @@ export default {
         })
     },
     create(payload) {
-      return axios.post('/companies', payload)
+      let data = new FormData()
+      data.append('logo', payload.logo)
+      data.append('name', payload.name)
+      return axios.post('/companies', data)
         .then(response => {
           if (response.status === 200) {
             eventBus.$emit('company.created')
