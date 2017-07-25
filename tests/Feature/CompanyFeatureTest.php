@@ -158,6 +158,7 @@ class CompanyFeatureTest extends TestCase
             'name' => 'Fake Company Inc.',
             'logo' => $logo,
         ], ['CONTENT_TYPE' => 'multipart/form-data']);
+
         $timestamp = (new \DateTime())->getTimestamp();
 
         Storage::disk('public')->assertExists("logos/fake-company-inc{$timestamp}.png");

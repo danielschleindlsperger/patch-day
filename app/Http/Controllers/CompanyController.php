@@ -39,13 +39,7 @@ class CompanyController extends Controller
         ];
 
         if ($request->file('logo')) {
-            $ext = '.' . $request->file('logo')->getClientOriginalExtension();
-            $timestamp = (new \DateTime())->getTimestamp();
-            $filename = str_slug($request->name) . $timestamp . $ext;
-            $path = $request->file('logo')
-                ->storeAs('logos', $filename, ['disk' => 'public']);
-
-            $attributes['logo'] = $path;
+            $attributes['logo'] = $this->storeLogo($request);
         }
 
         $company = Company::create($attributes);
@@ -90,5 +84,22 @@ class CompanyController extends Controller
         $this->authorize('delete', $company);
         $company->delete();
         return ['success' => true];
+    }
+
+    /**
+     * Store logo and return the saved path.
+     *
+     * @param Request $request
+     * @return false|string
+     */
+    private function storeLogo(Request $request)
+    {
+        $ext = '.' . $request->file('logo')->getClientOriginalExtension();
+        $timestamp = (new \DateTime())->getTimestamp();
+        $filename = str_slug($request->name) . $timestamp . $ext;
+        $path = $request->file('logo')
+            ->storeAs('logos', $filename, ['disk' => 'public']);
+
+        return $path;
     }
 }

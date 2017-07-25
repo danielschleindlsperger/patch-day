@@ -28,6 +28,7 @@ class UpdateCompany extends FormRequest
     {
         return [
             'name' => 'string',
+            'logo' => 'image|max:500',
         ];
     }
 }
