@@ -1,7 +1,11 @@
 <template>
     <div>
         <v-container>
-            <h1 class="display-2 text-xs-center">{{ company.name }}</h1>
+            <v-layout justify-center align-center class="mb-2">
+                <img :src="company.logo" alt="" class="logo">
+                <h1 class="display-2 text-xs-center mb-0">{{ company.name }}
+                </h1>
+            </v-layout>
             <h3 class="headline">Projects</h3>
             <v-card>
                 <v-list>
@@ -84,3 +88,11 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+    .logo {
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 1em;
+    }
+</style>
