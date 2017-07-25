@@ -7,6 +7,15 @@
             <v-card-text>
                 <v-container fluid>
                     <v-text-field label="Name" v-model="company.name"/>
+                    <v-layout row justify-space-between align-baseline
+                              class="logo-upload-wrapper mb-4">
+                        <span class="file-name" v-if="fileName">{{ fileName }}
+                        </span>
+                        <upload-button title="Select Logo"
+                                       :selectedCallback="fileSelected"
+                                       :class="{ green : fileName }">
+                        </upload-button>
+                    </v-layout>
                     <small>*indicates required field</small>
                 </v-container>
             </v-card-text>
@@ -26,13 +35,18 @@
 <script>
   import eventBus from 'components/event-bus'
   import repo from 'repository'
+  import UploadButton from 'components/UploadButton'
 
   export default {
     name: 'edit-company',
+    components: {
+      UploadButton,
+    },
     data() {
       return {
         isOpen: false,
-        company: {}
+        company: {},
+        fileName: '',
       }
     },
     mounted () {
@@ -43,10 +57,29 @@
     },
     methods: {
       editCompany() {
-        repo.company.edit(this.company.id, this.company).then(() => {
+        const payload = {
+          name: this.company.name,
+          logo: this.company.logo,
+        }
+
+        repo.company.edit(this.company.id, payload).then(() => {
           this.isOpen = false
         })
+      },
+      fileSelected(file) {
+        if (file) {
+          this.company.logo = file
+          this.fileName = file.name
+        }
       }
     }
   }
 </script>
+
+<style lang="scss" scoped>
+    .file-name {
+        max-width: 5em;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+</style>

@@ -1,6 +1,5 @@
 import eventBus from 'components/event-bus'
 import axios from 'axios'
-import { forEach } from 'lodash'
 
 export default {
   company: {
@@ -58,10 +57,13 @@ export default {
     },
     edit(id, payload) {
       let data = new FormData()
-      data.append('logo', payload.logo)
+      data.append('logo', payload.logo, payload.logo.name)
       data.append('name', payload.name)
 
-      return axios.put(`/companies/${id}`, data)
+      // can't send files with PUT method, so fake it with POST
+      data.append('_method', 'PUT')
+
+      return axios.post(`/companies/${id}`, data)
         .then(response => {
           if (response.status === 200) {
             eventBus.$emit('company.edited')
