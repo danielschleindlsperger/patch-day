@@ -166,5 +166,33 @@ class CompanyFeatureTest extends TestCase
         $company = Company::latest()->first();
 
         $this->assertEquals('Fake Company Inc.', $company->name);
+        $this->assertEquals("logos/fake-company-inc{$timestamp}.png",
+        $company->logo);
+    }
+
+    /** @test */
+    public function can_update_company_with_logo()
+    {
+        Storage::fake('public');
+
+        $company = factory(Company::class)->create([
+            'name' => 'Fake Company Inc.',
+        ]);
+
+        $logo = UploadedFile::fake()->image('random-name.png');
+
+        $response = $this->put("/companies/{$company->id}", [
+            'logo' => $logo,
+        ], ['CONTENT_TYPE' => 'multipart/form-data']);
+
+        $timestamp = (new \DateTime())->getTimestamp();
+
+        Storage::disk('public')->assertExists("logos/fake-company-inc{$timestamp}.png");
+
+        $company =$company->fresh();
+
+        $this->assertEquals('Fake Company Inc.', $company->name);
+        $this->assertEquals("logos/fake-company-inc{$timestamp}.png",
+            $company->logo);
     }
 }

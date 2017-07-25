@@ -69,7 +69,18 @@ class CompanyController extends Controller
      */
     public function update(UpdateCompany $request, Company $company)
     {
-        $company->update($request->all());
+        $attributes = [];
+
+        if ($request->file('logo')) {
+            $attributes['logo'] = $this->storeLogo($request, $company->name);
+        }
+
+        if ($request->name) {
+            $attributes['name'] = $request->name;
+        }
+
+        $company->update($attributes);
+
         return ['success' => true];
     }
 
@@ -92,11 +103,13 @@ class CompanyController extends Controller
      * @param Request $request
      * @return false|string
      */
-    private function storeLogo(Request $request)
+    private function storeLogo(Request $request, $name = null)
     {
+        $name = is_null($name) ? $request->name : $name;
+
         $ext = '.' . $request->file('logo')->getClientOriginalExtension();
         $timestamp = (new \DateTime())->getTimestamp();
-        $filename = str_slug($request->name) . $timestamp . $ext;
+        $filename = str_slug($name) . $timestamp . $ext;
         $path = $request->file('logo')
             ->storeAs('logos', $filename, ['disk' => 'public']);
 
