@@ -2,7 +2,9 @@
     <div>
         <v-container>
             <v-layout justify-center align-center class="mb-2">
-                <img :src="company.logo" alt="" class="logo">
+                <div class="logo-mask">
+                    <img :src="company.logo" alt="" class="logo">
+                </div>
                 <h1 class="display-2 text-xs-center mb-0">{{ company.name }}
                 </h1>
             </v-layout>
@@ -90,9 +92,17 @@
 </script>
 
 <style lang="scss" scoped>
-    .logo {
+    .logo-mask {
         height: 40px;
+        width: 40px;
         border-radius: 50%;
         margin-right: 1em;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .logo {
+        height: 100%;
+        width: auto;
     }
 </style>
