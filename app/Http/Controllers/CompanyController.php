@@ -34,16 +34,21 @@ class CompanyController extends Controller
      */
     public function store(CreateCompany $request)
     {
-        $ext = '.' . $request->file('logo')->getClientOriginalExtension();
-        $timestamp = (new \DateTime())->getTimestamp();
-        $filename = str_slug($request->name) . $timestamp . $ext;
-        $path = $request->file('logo')
-            ->storeAs('logos', $filename, ['disk' => 'public']);
-
-        $company = Company::create([
+        $attributes = [
             'name' => $request->name,
-            'logo' => $path,
-        ]);
+        ];
+
+        if ($request->file('logo')) {
+            $ext = '.' . $request->file('logo')->getClientOriginalExtension();
+            $timestamp = (new \DateTime())->getTimestamp();
+            $filename = str_slug($request->name) . $timestamp . $ext;
+            $path = $request->file('logo')
+                ->storeAs('logos', $filename, ['disk' => 'public']);
+
+            $attributes['logo'] = $path;
+        }
+
+        $company = Company::create($attributes);
 
         return $company;
     }
