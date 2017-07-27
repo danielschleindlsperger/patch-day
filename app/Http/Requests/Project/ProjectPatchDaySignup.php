@@ -14,9 +14,8 @@ class ProjectPatchDaySignup extends FormRequest
      */
     public function authorize()
     {
-        $project = Project::find($this->route('project'));
 
-        return $project && $this->user()->can('signup', $project);
+        return (bool) $this->user();
     }
 
     /**

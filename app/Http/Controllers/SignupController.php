@@ -20,6 +20,8 @@ class SignupController extends Controller
      */
     public function signup(ProjectPatchDaySignup $request, Project $project)
     {
+        $this->authorize('signup', $project);
+
         $patch_day = PatchDay::findOrFail(request('patch_day_id'));
 
         if ($this->patchDayIsOver($patch_day)) {
