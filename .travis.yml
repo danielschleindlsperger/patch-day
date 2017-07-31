@@ -3,6 +3,8 @@ os:
 language: php
 php:
   - 7.1
+before_install:
+  - openssl aes-256-cbc -K $encrypted_d987e996700e_key -iv $encrypted_d987e996700e_iv -in deploy-key.enc -out deploy-key -d
 before_script:
   - chmod 777 -R storage
   - cp .env.testing .env
@@ -18,7 +20,6 @@ before_deploy:
   - npm run production
   - sudo apt-get install openssl -y
   - sudo apt-get install rsync -y
-  - openssl aes-256-cbc -K $encrypted_d987e996700e_key -iv $encrypted_d987e996700e_iv -in deploy-key.enc -out deploy-key -d
 deploy:
   - provider: script
     script: ./deploy.sh
