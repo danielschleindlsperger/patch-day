@@ -1,15 +1,17 @@
 <?php
 
-// serve app entry point
-Route::get('/', function () {
-    return view('index');
-});
+Auth::routes();
 
-//Auth::routes();
-
-Route::post('/login', ['as' => 'login', 'uses' => 'Auth\AuthController@authenticate']);
+//Route::get('/login', ['uses' => 'Auth\AuthController@login']);
+//Route::post('/login', ['uses' => 'Auth\AuthController@authenticate']);
+//Route::post('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@logout']);
 
 Route::group(['middleware' => ['web', 'auth']], function () {
+
+    // serve app entry point
+    Route::get('/', function () {
+        return view('index');
+    });
 
     // Company resource
     Route::resource('companies', 'CompanyController', [
@@ -22,14 +24,14 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     ]);
 
     // PatchDay resource
+    Route::get('patch-days/upcoming', 'PatchDayController@upcoming');
     Route::resource('patch-days', 'PatchDayController', [
-        'only' => ['index', 'show','destroy']
+        'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
 
     // Protocol resource
-    Route::get('protocols/upcoming', 'ProtocolController@showUpcoming');
     Route::resource('protocols', 'ProtocolController', [
-        'only' => ['index', 'store', 'show', 'update', 'destroy']
+        'only' => ['index', 'show', 'update']
     ]);
 
     // User resource
@@ -43,4 +45,10 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::resource('technologies', 'TechnologyController', [
         'only' => ['index', 'store', 'update', 'destroy']
     ]);
+
+    // PatchDay Signups
+    Route::post('projects/{project}/signup', 'SignupController@signup');
+    Route::delete('projects/{project}/cancel', 'SignupController@cancel');
+    Route::get('projects/{project}/registered-patch-days', 'SignupController@registeredPatchDays');
+    Route::get('projects/{project}/signup', 'SignupController@possibleSignups');
 });

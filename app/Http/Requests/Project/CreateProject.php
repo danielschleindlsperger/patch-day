@@ -25,13 +25,11 @@ class CreateProject extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|',
-            'company_id' => 'required|exists:companies,id',
-            'patch_day.cost' => 'numeric',
-            'patch_day.active' => 'boolean',
-            'patch_day.start_date' => 'date',
-            'patch_day.technologies' => 'filled',
-            'patch_day.technologies.*' => 'numeric|exists:technologies,id',
+            'name' => 'required|string',
+            'company_id' => 'required|integer|exists:companies,id',
+            'base_price' => 'integer',
+            'penalty' => 'integer',
+            'technologies.*' => 'integer|exists:technologies,id',
         ];
     }
 }

@@ -2,20 +2,38 @@
 
 namespace App;
 
-use App\PatchDay;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class Project extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
-        'name', 'company_id',
+        'name', 'company_id', 'base_price', 'penalty',
+    ];
+
+    protected $with = [
+        'technologies',
+    ];
+
+    protected $appends = [
+        'default_technologies',
+        'current_technologies',
+        'technology_history',
+    ];
+
+    protected $hidden = [
+        'technology_history',
+        'technologies',
     ];
 
     protected $casts = [
         'company_id' => 'integer',
+        'base_price' => 'integer',
+        'penalty' => 'integer',
     ];
 
     /**
@@ -26,13 +44,24 @@ class Project extends Model
     protected $dates = ['deleted_at'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      *
-     * return the projects PatchDay
+     * return the project's Protocols
      */
-    public function patchDay()
+    public function protocols()
     {
-        return $this->hasOne(PatchDay::class);
+        return $this->hasMany(Protocol::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *
+     * return the project's technologies
+     */
+    public function technologies()
+    {
+        return $this->belongsToMany(Technology::class)
+            ->withPivot('action', 'protocol_id');
     }
 
     /**
@@ -43,5 +72,59 @@ class Project extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function patchDays()
+    {
+        $project_id = $this->id;
+
+        return PatchDay::whereHas('protocols', function ($query) use ($project_id) {
+            $query->where('project_id', $project_id);
+        })->get();
+    }
+
+    /**
+     * return only the latest version for each technology for each
+     * technlogy (based on name).
+     *
+     * @return Collection technologies
+     */
+    public function getCurrentTechnologiesAttribute()
+    {
+        return $this->technologies()
+            ->whereIn('action', ['default', 'update'])
+            ->orderBy('name', 'ASC')
+            ->orderBy('protocol_id', 'DESC')
+            ->get()
+            ->unique('name')
+            ->values();
+    }
+
+    /**
+     * return all technologies the project has ever had.
+     *
+     * @return Collection technologies
+     */
+    public function getTechnologyHistoryAttribute()
+    {
+        return $this->technologies()
+            ->orderBy('protocol_id', 'DESC')
+            ->orderBy('name', 'ASC')
+            ->orderBy('version', 'DESC')
+            ->get();
+    }
+
+    /**
+     * The technologies the project has by default before all patches.
+     *
+     * @return mixed
+     */
+    public function getDefaultTechnologiesAttribute()
+    {
+        return $this->technologies()
+            ->where('action', '=', 'default')
+            ->orderBy('name', 'ASC')
+            ->orderBy('version', 'DESC')
+            ->get();
     }
 }

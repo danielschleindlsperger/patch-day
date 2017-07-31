@@ -11,14 +11,22 @@
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     </head>
     <body>
-        <div id="app">
-            <app></app>
-        </div>
-        <script>
-          window.Laravel = {!! json_encode([
-            'csrfToken' => csrf_token(),
-          ]) !!};
-        </script>
-        <script src="{{ mix('js/app.js') }}"></script>
+        @if(!Auth::guest())
+            <div id="app">
+                <app></app>
+            </div>
+            <script>
+              window.Laravel = {!! json_encode([
+                'csrfToken' => csrf_token(),
+              ]) !!};
+            </script>
+            @if(Auth::user()->isAdmin())
+                <script src="{{ mix('/js/admin.js') }}"></script>
+            @else
+                <script src="{{ mix('/js/client.js') }}"></script>
+            @endif
+        @else
+            @include('auth.login')
+        @endif
     </body>
 </html>

@@ -24,6 +24,17 @@ class CompanyPolicy
     }
 
     /**
+     * Determine whether the user can view the company index resource.
+     *
+     * @param  \App\User $user
+     * @return mixed
+     */
+    public function index(User $user)
+    {
+        return $user->isAdmin();
+    }
+
+    /**
      * Determine whether the user can view the company.
      *
      * @param  \App\User $user

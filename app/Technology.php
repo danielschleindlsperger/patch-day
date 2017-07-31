@@ -13,13 +13,28 @@ class Technology extends Model
         'name', 'version',
     ];
 
+    protected $appends = [
+        'canonical_name',
+    ];
+
     /**
-     * get all patch days this exact technology is used in.
+     * get all projects this exact technology is used in.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function patchDays()
+    public function projects()
     {
-        return $this->belongsToMany(PatchDay::class);
+        return $this->belongsToMany(Project::class)->withPivot('protocol_id');
+    }
+
+    public function getDateAttribute()
+    {
+        return $this->pivot ?
+            Protocol::find($this->pivot->protocol_id)->date : null;
+    }
+
+    public function getCanonicalNameAttribute()
+    {
+        return $this->name . ' ' . $this->version;
     }
 }

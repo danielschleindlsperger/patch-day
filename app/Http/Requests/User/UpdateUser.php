@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\User;
 
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUser extends FormRequest
@@ -13,7 +14,9 @@ class UpdateUser extends FormRequest
      */
     public function authorize()
     {
-        return (bool) $this->user()->isAdmin();
+        $user = User::find($this->route('user'));
+
+        return $user && $this->user()->can('update', $user);
     }
 
     /**
@@ -25,7 +28,7 @@ class UpdateUser extends FormRequest
     {
         return [
             'name' => 'max:255',
-            'email' => 'email|max:255|unique:users',
+            'email' => 'email|max:255|unique:users,email,' . $this->user->id,
             'password' => 'min:6',
             'company_id' => 'exists:companies,id',
         ];

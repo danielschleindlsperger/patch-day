@@ -27,12 +27,11 @@ class UpdateProject extends FormRequest
     public function rules()
     {
         return [
-            'company_id' => 'exists:companies,id',
-            'patch_day.cost' => 'numeric',
-            'patch_day.active' => 'boolean',
-            'patch_day.start_date' => 'date',
-            'patch_day.technologies' => 'filled',
-            'patch_day.technologies.*' => 'numeric|exists:technologies,id',
+            'name' => 'string',
+            'company_id' => 'integer|exists:companies,id',
+            'base_price' => 'integer',
+            'penalty' => 'integer',
+            'technologies.*' => 'integer|exists:technologies,id',
         ];
     }
 }

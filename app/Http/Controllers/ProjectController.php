@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Project\CreateProject;
+use App\Http\Requests\Project\ProjectPatchDaySignup;
 use App\Http\Requests\Project\UpdateProject;
 use App\PatchDay;
 use App\Project;
+use App\Protocol;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,16 +18,22 @@ use Illuminate\Support\Facades\Auth;
 class ProjectController extends Controller
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * Display a listing of all projects.
+     * If the user is a client, only show their companies projects.
      *
-     * Return all projects
+     * @param Request $request
+     * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        if (Auth::user() && Auth::user()->isAdmin()) {
-            return Project::all();
+        $user = $request->user();
+
+        if ($user->isAdmin()) {
+            return Project::orderBy('name', 'ASC')->get();
+        } elseif (isset($user->company)) {
+            return $user->company->projects()->get();
         } else {
-            abort(403, 'Not authorized.');
+            return [];
         }
     }
 
@@ -37,8 +46,12 @@ class ProjectController extends Controller
      */
     public function show(Request $request, Project $project)
     {
-        $project->load(['company', 'patchDay', 'patchDay.protocols', 'patchDay.technologies']);
         $this->authorize('view', $project);
+
+        $project->load('company', 'protocols');
+
+        $project->makeVisible(['technology_history']);
+
         return $project;
     }
 
@@ -50,46 +63,49 @@ class ProjectController extends Controller
      */
     public function store(CreateProject $request)
     {
-        $project = Project::create($request->except(['patch_day']));
+        $project = Project::create($request->all());
 
-        if ($project) {
-            $fields = array_merge($request->patch_day, [
-                'project_id' => $project->id,
-            ]);
-            $patchDay = PatchDay::create($fields);
+        if ($request->technologies) {
 
-            if ($request->input('patch_day.technologies')) {
-                $patchDay->technologies()->sync($request->input('patch_day.technologies'));
+            $tech = [];
+
+            foreach($request->technologies as $technology) {
+                $tech[$technology] = ['action' => 'default'];
             }
 
-            return ['created' => true];
+            $project->technologies()->attach($tech);
         }
+
+        return $project;
     }
 
     /**
      * @param UpdateProject $request
-     * @param Project $project
+     * @param int $id
      * @return array
      *
      * Update specified projects properties
      */
-    public function update(UpdateProject $request, Project $project)
+    public function update(UpdateProject $request, $id)
     {
-        $project->load('patchDay');
+        $project = Project::findOrFail($id);
 
-        $project->update($request->except(['patch_day']));
+        $project->update($request->except(['technologies']));
 
-        if ($request->input('patch_day')) {
-            if ($project->patchDay) {
-                if ($request->input('patch_day.technologies')) {
-                    $project->patchDay->technologies()->sync
-                    ($request->input('patch_day.technologies'));
-                }
-                $project->patchDay->update($request->patch_day);
-            } else {
-                abort(422, 'Projects PatchDay not found.');
+        if ($request->technologies) {
+
+            $project->technologies()->where('action', '=', 'default')
+                ->detach();
+
+            $tech = [];
+
+            foreach($request->technologies as $technology) {
+                $tech[$technology] = ['action' => 'default'];
             }
+
+            $project->technologies()->attach($tech);
         }
+
         return ['success' => true];
     }
 

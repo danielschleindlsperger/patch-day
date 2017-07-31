@@ -14,51 +14,43 @@ class PatchDaySeeder extends Seeder
     {
         $faker = Faker\Factory::create();
         $projects = \App\Project::all();
-        $technologies = \App\Technology::all();
 
-        // disable event listeners to not trigger saved events on the
-        // patch day model
-        \App\PatchDay::flushEventListeners();
+        // create patch-day each month
+        $patch_days = factory(\App\PatchDay::class, 15)
+            ->create([
+                'date' => Carbon::now()->subMonths(6)->format('Y-m-d'),
+            ]);
+        $patch_days->each(function ($patch_day, $index) use ($patch_days) {
+            $patch_day->date = Carbon::parse($patch_days[0]->date)
+                ->addMonths($index)->toDateString();
+            $patch_day->save();
+        });
 
         foreach ($projects as $project) {
-            $startDate = $faker->dateTimeThisYear;
 
-            // create one patch day for each project
-            $patchDay = factory(\App\PatchDay::class)->create([
-                'cost' => rand(10000, 50000),
-                'start_date' => $startDate,
-                'interval' => rand(1, 6),
-                'active' => (bool)rand(0, 1),
-                'project_id' => $project->id
-            ]);
+            $intervalStart = Carbon::now()->subMonths(6);
+            $intervalEnd = Carbon::now()->addMonths(2);
 
-            // create default technologies
-            $tech_ids = [];
-            $technologies->shuffle()->unique('name')->splice(0,
-                random_int(2, 4))->each(function ($tech) use (&$tech_ids) {
-                array_push($tech_ids, $tech->id);
-            });
-            $patchDay->technologies()->attach($tech_ids);
+            $timestamp = rand($intervalStart->timestamp,
+                $intervalEnd->timestamp);
 
-            // create random amount of protocols (a.k.a. actual patch
-            // days on specific dates) for patch-day
-            factory(\App\Protocol::class, rand(1, 5))->create([
-                'patch_day_id' => $patchDay->id,
-            ])->each(function ($protocol, $key) use (
-                $patchDay, $startDate,
-                $faker
-            ) {
-                // patch-day assumed done when it is in the past
-                $dueDate = Carbon::parse($patchDay->start_date)
-                    ->addMonths($key * $patchDay->interval);
-                $done = Carbon::now()->gt($dueDate);
+            $firstDate = Carbon::createFromTimestamp($timestamp)->toDateString();
 
-                $protocol->patch_day_id = $patchDay->id;
+            $registeredPatchDays = \App\PatchDay::where('date', '>=',
+                $firstDate)
+                ->where('date', '<', $intervalEnd->toDateString())->get();
+
+            foreach ($registeredPatchDays as $patch_day) {
+                $protocol = factory(\App\Protocol::class)->create([
+                    'project_id' => $project->id,
+                    'patch_day_id' => $patch_day->id,
+                ]);
+                // protocol assumed done when in past
+                $done = Carbon::parse($patch_day->date)->lessThan(Carbon::now());
                 $protocol->done = $done;
                 $protocol->comment = $done ? $faker->sentence(10) : null;
-                $protocol->due_date = $dueDate;
                 $protocol->save();
-            });
+            }
         }
     }
 }

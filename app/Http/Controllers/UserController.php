@@ -8,32 +8,40 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @resource Users
+ * In order to view any content a visitor needs to have a registered User
+ * account. Users with the role of 'client' can view some resources that
+ * belong to their company. Users with the role of 'admin' can view all
+ * resources and can edit them aswell.
+ */
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of all users with their companies.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        $this->authorize('index', User::class);
+
+        $users = User::orderBy('id', 'DESC')->with('company')->get();
+
+        return $users;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  CreateUser $request
      * @return \Illuminate\Http\Response
      */
     public function store(CreateUser $request)
     {
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
-        return ['created' => true];
+        $request->merge(['password' => bcrypt($request->password)]);
+        $user = User::create($request->all());
+        return $user;
     }
 
     /**
@@ -77,11 +85,15 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param  User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $this->authorize('delete', $user);
+
+        $user->delete();
+
+        return ['sucess' => true];
     }
 }

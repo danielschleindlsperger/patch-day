@@ -1,21 +1,15 @@
 <template>
     <div>
         <v-container>
-            <div class="button-row">
-                <v-btn primary dark
-                       @click.native="openCreateCompanyModal">
-                    <v-icon class="white--text text--darken-2">
-                        add_circle
-                    </v-icon>
-                </v-btn>
-            </div>
-            <v-list>
-                <v-list-item v-for="company in companies"
-                             :key="company.id">
-                    <v-list-tile avatar router
-                                 :href="'/companies/' + company.id">
+            <h1 class="display-2 text-xs-center">Companies</h1>
+
+            <v-card>
+                <v-list>
+                    <v-list-tile avatar v-for="company in companies"
+                                 :key="company.id"
+                                 :to="'/companies/' + company.id">
                         <v-list-tile-avatar>
-                            <v-icon>business</v-icon>
+                            <img :src="company.logo" :alt="company.name">
                         </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title>{{ company.name }}
@@ -30,78 +24,64 @@
                             </v-btn>
                         </v-list-tile-action>
                     </v-list-tile>
-                </v-list-item>
-            </v-list>
+                </v-list>
+            </v-card>
         </v-container>
 
-        <delete-company></delete-company>
-        <create-company></create-company>
+        <fab :fabActions="fabActions" :show="showFab"></fab>
     </div>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
-
-  import DeleteCompany from 'pages/company/DeleteCompany'
-  import CreateCompany from 'pages/company/CreateCompany'
+  import repo from 'repository'
+  import Fab from 'pages/company/Fab'
 
   export default {
     components: {
-      DeleteCompany,
-      CreateCompany,
+      Fab,
     },
     data() {
       return {
+        fabActions: [
+          {
+            icon: 'add',
+            color: 'indigo',
+            event: 'company.create.modal',
+            tooltip: 'Create Company',
+          },
+        ],
+        showFab: false,
         companies: [],
-        deleteCompany: {},
         modalOpen: false,
       }
     },
-    mounted() {
-      this.getCompanies()
-
-      eventBus.$on('company.deleted', payload => {
-        const COMPANY_ID = payload[0].id
-        console.log(COMPANY_ID)
-        // remove deleted item from list
-        let newList = this.companies.filter((company) => {
-          return company.id !== COMPANY_ID
+    beforeRouteEnter (to, from, next) {
+      repo.company.getAll().then((companies) => {
+        next((vm) => {
+          vm.companies = companies
+          vm.showFab = true
         })
-        this.companies = newList
       })
-
-      eventBus.$on('company.created', () => {
+    },
+    mounted() {
+      eventBus.$on('company.deleted', payload => {
+        this.getCompanies()
+      }).$on('company.created', () => {
         this.getCompanies()
       })
     },
     methods: {
       getCompanies() {
-        this.$http.get('/companies')
-          .then(response => {
-            this.companies = response.data
-          })
-          .catch(error => {
-            error.response.data
-          })
+        repo.company.getAll().then((companies) => {
+          this.companies = companies
+        })
       },
       deleteItem(event, item) {
         event.preventDefault()
         event.stopPropagation()
         eventBus.$emit('company.delete.modal', item);
       },
-      openCreateCompanyModal() {
-        event.preventDefault()
-        event.stopPropagation()
-        eventBus.$emit('company.create.modal')
-      }
     }
   }
 </script>
-
-<style lang="scss" scoped>
-    .button-row {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: flex-end;
-    }
-</style>
