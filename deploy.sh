@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 # Don't need it anymore
 rm deploy-key.enc
 chmod 600 deploy-key
