@@ -3,77 +3,84 @@
 namespace App\Http\Controllers;
 
 use App\Company;
+use App\Http\Requests\Company\CreateCompany;
+use App\Http\Requests\Company\UpdateCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 /**
  * @resource Companies
- *
- * CRUD operations for companies.
  */
 class CompanyController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of all companies.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        if (Auth::user() && Auth::user()->isAdmin()) {
-            return Company::all();
-        } else {
-            abort(403, 'Not authorized.');
-        }
+        $this->authorize('index', Company::class);
+
+        return Company::orderBy('name', 'ASC')->get();
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new company.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  CreateCompany $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateCompany $request)
     {
-        $this->authorize('create', Company::class);
-
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-
-        $company = Company::create([
+        $attributes = [
             'name' => $request->name,
-        ]);
+        ];
 
-        if ($company) {
-            return ['created' => true];
+        if ($request->file('logo')) {
+            $attributes['logo'] = $this->storeLogo($request);
         }
+
+        $company = Company::create($attributes);
+
+        return $company;
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified company with its projects.
      *
-     * @param  int $id
+     * @param  Company $company
      * @return \Illuminate\Http\Response
      */
     public function show(Company $company)
     {
         $this->authorize('view', $company);
-        $company->load('projects', 'projects.patchDay');
+        $company->load('projects');
         return $company;
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified company.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param  UpdateCompany $request
+     * @param  Company $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(UpdateCompany $request, Company $company)
     {
-        $this->authorize('update', $company);
-        $company->update($request->all());
+        $attributes = [];
+
+        if ($request->file('logo')) {
+            $attributes['logo'] = $this->storeLogo($request, $company->name);
+        }
+
+        if ($request->name) {
+            $attributes['name'] = $request->name;
+        }
+
+        $company->update($attributes);
+
         return ['success' => true];
     }
 
@@ -88,5 +95,24 @@ class CompanyController extends Controller
         $this->authorize('delete', $company);
         $company->delete();
         return ['success' => true];
+    }
+
+    /**
+     * Store logo and return the saved path.
+     *
+     * @param Request $request
+     * @return false|string
+     */
+    private function storeLogo(Request $request, $name = null)
+    {
+        $name = is_null($name) ? $request->name : $name;
+
+        $ext = '.' . $request->file('logo')->getClientOriginalExtension();
+        $timestamp = (new \DateTime())->getTimestamp();
+        $filename = str_slug($name) . $timestamp . $ext;
+        $path = $request->file('logo')
+            ->storeAs('logos', $filename, ['disk' => 'public']);
+
+        return $path;
     }
 }

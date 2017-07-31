@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Protocol extends Model
 {
@@ -11,37 +12,128 @@ class Protocol extends Model
         'done' => false,
     ];
 
-    // protocol number is set in event listener
+    protected $appends = [
+        'date',
+        'price',
+        'technology_updates',
+    ];
+
     protected $fillable = [
-        'comment', 'done', 'due_date', 'protocol_number', 'patch_day_id',
+        'comment', 'done', 'patch_day_id', 'project_id',
+    ];
+
+    protected $with = [
+        'project',
+        'patch_day',
     ];
 
     protected $casts = [
         'done' => 'boolean',
-        'due_date' => 'date',
-        'protocol_number' => 'integer',
         'patch_day_id' => 'integer',
+        'project_id' => 'integer',
+        'date' => 'date',
     ];
-
-    /**
-     * Get the date in actual date format
-     *
-     * @param string $value
-     *
-     * @return string
-     */
-    public function getDueDateAttribute($value)
-    {
-        return Carbon::parse($value)->toDateString();
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      *
-     * return the protocol's patch day
+     * return the protocol's project
      */
-    public function patchDay()
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * get the protocol's patch-day
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function patch_day()
     {
         return $this->belongsTo(PatchDay::class);
+    }
+
+    /**
+     * Get the protocols date from it's patch-day
+     *
+     * @return string
+     */
+    public function getDateAttribute()
+    {
+        return $this->patch_day->date;
+    }
+
+    /**
+     * Determine the price for the protocol.
+     * Missed patch-days imply a penalty for each missed one.
+     *
+     * @return int price
+     */
+    public function getPriceAttribute()
+    {
+        $base_price = $this->project->base_price;
+        $penalty = $this->project->penalty;
+
+        // protocols that are older than this one
+        $protocols = $this->project->protocols()
+            ->orderBy('id', 'DESC')
+            ->where('id', '<', $this->id)
+            ->get();
+
+        $missedProtocols = 0;
+        $protocols->each(function ($protocol) use (&$missedProtocols) {
+            if ($protocol->done) {
+                return false;
+            }
+            $missedProtocols++;
+        });
+
+        $price = $base_price + ($penalty * $missedProtocols);
+
+        return $price;
+    }
+
+    /**
+     * Get all the Technologies that were upgraded with this protocol.
+     *
+     * @return mixed
+     */
+    public function getTechnologyUpdatesAttribute()
+    {
+        $protocolId = $this->id;
+        $projectId = $this->project->id;
+
+        $upgrades = Technology::whereIn('id',
+            function($query) use ($protocolId, $projectId) {
+                $query->select('technology_id')
+                    ->from('project_technology')
+                    ->where('protocol_id', '=', $protocolId)
+                    ->where('project_id', '=', $projectId);
+        })->get();
+
+        return $upgrades;
+    }
+
+    /**
+     * Set the projects technologies that are updated with this protocol.
+     *
+     * @param array $newTechs
+     */
+    public function syncTechnologies($newTechs)
+    {
+        $currentTechs = DB::table('project_technology')
+                            ->where('protocol_id', '=', $this->id)
+                            ->get();
+
+        $techIds = $currentTechs->map(function ($tech) {
+            return (int) $tech->technology_id;
+        });
+
+        $this->project->technologies()->detach($techIds);
+        $this->project->technologies()->attach($newTechs, [
+            'protocol_id' => $this->id,
+            'action' => 'update',
+        ]);
     }
 }

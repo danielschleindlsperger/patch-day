@@ -16,16 +16,20 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Project::class, function (Faker\Generator $faker) {
+    $basePrice = rand(10000, 80000);
+    $penalty = (int) $basePrice / 2;
     return [
         'name' => 'Fake Project',
+        'base_price' => $basePrice,
+        'penalty' => $penalty,
     ];
 });
 
 $factory->define(App\PatchDay::class, function (Faker\Generator $faker) {
+    $randomStart = Carbon::now()->toDateTimeString();
+    $randomEnd = Carbon::now()->addMonths(12)->toDateTimeString();
     return [
-        'cost' => 200,
-        'start_date' => new Carbon('now +2 weeks'),
-        'active' => true,
+        'date' => $faker->dateTimeBetween($randomStart, $randomEnd),
     ];
 });
 
@@ -40,7 +44,6 @@ $factory->define(App\Protocol::class, function (Faker\Generator $faker) {
     return [
         'comment' => $done ? $faker->sentence(10) : null,
         'done' => $done,
-        'due_date' => (new Carbon('now +1 week'))->toDateTimeString()
     ];
 });
 

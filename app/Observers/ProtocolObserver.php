@@ -7,18 +7,21 @@ use App\Protocol;
 class ProtocolObserver
 {
     /**
-     * Listen to the Prtocol created event.
+     * Listen to the Protocol created event.
      *
      * @param  Protocol $protocol
      * @return void
      */
-    public function created(Protocol $protocol)
+    public function updated(Protocol $protocol)
     {
-        if ($protocol->patchDay) {
-            // update the protocol with a count index inside the patch-day
-            $count = $protocol->patchDay->protocols()->count();
-            $protocol->protocol_number = $count;
-            $protocol->save();
+        // set patch-day status
+        $patch_day = $protocol->patch_day;
+        if (!$patch_day) return;
+
+        if ($patch_day->protocolsDone()) {
+            $patch_day->status = 'done';
         }
+
+        $patch_day->save();
     }
 }

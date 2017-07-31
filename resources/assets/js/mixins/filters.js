@@ -5,23 +5,22 @@ export default {
     Date(date) {
       return moment(date).format('DD.MM.YYYY')
     },
+    DateTime(date) {
+      return moment(date).format('DD.MM.YYYY k:mm')
+    },
     ISODate(date) {
       return moment(date).format('YYYY-MM-DD')
     },
-    DaysFromNow(date) {
+    HumanizeDate(date) {
       date = moment(date, 'YYYY-MM-DD')
       const now = moment()
       let diff = date.diff(now, 'days')
-      let str = '';
 
-      if (diff < 0) {
-        str = `${-diff} days ago`
-      } else if (diff === 0) {
-        str = 'today'
+      if (diff === 0) {
+        return 'today'
       } else {
-        str = `${diff} days from now`
+        return moment().to(date)
       }
-      return str
     },
     checkIcon(value) {
       if (typeof(value) !== 'boolean') {

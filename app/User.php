@@ -9,6 +9,10 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $attributes = [
+        'role' => 'client',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -40,5 +44,15 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->role === 'admin';
+    }
+
+    /**
+     * Route notifications for the Slack channel.
+     *
+     * @return string
+     */
+    public function routeNotificationForSlack()
+    {
+        return env('SLACK_WEBHOOK_URL');
     }
 }

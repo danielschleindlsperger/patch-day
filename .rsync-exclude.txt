@@ -9,6 +9,6 @@ storage/framework/*
 storage/logs/*
 phpunit.xml
 .env
-.env_example
+.env.example
 tests/
 node_modules/

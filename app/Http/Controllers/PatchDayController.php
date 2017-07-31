@@ -2,35 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PatchDay\CreatePatchDay;
 use App\Http\Requests\PatchDay\CreateProject;
 use App\Http\Requests\PatchDay\UpdatePatchDay;
 use App\PatchDay;
 use App\Project;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\ApacheRequest;
 
 /**
  * @resource PatchDays
+ * PatchDays are an extension of Projects with information about the
+ * recurring events that are then stored in the form of Protocols.
  */
 class PatchDayController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of all patch-days.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        if (Auth::user() && Auth::user()->isAdmin()) {
-            return PatchDay::all();
-        } else {
-            abort(403, 'Not authorized.');
-        }
+        return PatchDay::orderBy('date', 'DESC')->get();
     }
 
     /**
-     * Display the specified resource.
+     * Display a listing of all upcoming patch-days.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function upcoming()
+    {
+        $patch_days = PatchDay::where('status', '!=', 'done')
+            ->orderBy('date', 'ASC')->get();
+
+        return $patch_days;
+    }
+
+    /**
+     * Display the specified patch day.
      *
      * @param  PatchDay $patchDay
      * @return \Illuminate\Http\Response
@@ -38,11 +51,34 @@ class PatchDayController extends Controller
     public function show(PatchDay $patchDay)
     {
         $this->authorize('view', $patchDay);
+
+        if (request('todo')) {
+            // only load protocols that are not done
+            $patchDay->load(['protocols' => function($query) {
+                $query->where('protocols.done', '!=', true);
+            }, 'protocols.project', 'protocols.project.company']);
+        } else {
+            $patchDay->load('protocols', 'protocols.project', 'protocols.project.company');
+        }
+
         return $patchDay;
     }
 
     /**
-     * Update the specified resource in storage.
+     * Create new patch day.
+     *
+     * @param CreatePatchDay $request
+     * @return array
+     */
+    public function store(CreatePatchDay $request)
+    {
+        $patch_day = PatchDay::create($request->all());
+
+        return $patch_day;
+    }
+
+    /**
+     * Update the specified patch day.
      *
      * @param  UpdatePatchDay $request
      * @param  PatchDay $patchDay
@@ -50,17 +86,13 @@ class PatchDayController extends Controller
      */
     public function update(UpdatePatchDay $request, PatchDay $patchDay)
     {
-        if ($request->technologies) {
-            $patchDay->technologies()->sync($request->technologies);
-        }
-
         $patchDay->update($request->all());
 
         return ['updated' => true];
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified patch day.
      *
      * @param  PatchDay $patchDay
      * @return \Illuminate\Http\Response

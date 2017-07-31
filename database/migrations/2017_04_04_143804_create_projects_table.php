@@ -16,6 +16,8 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->integer('base_price')->nullable();
+            $table->integer('penalty')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

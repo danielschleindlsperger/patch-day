@@ -27,9 +27,10 @@ class UpdateProtocol extends FormRequest
     public function rules()
     {
         return [
-            'due_date' => 'date',
             'done' => 'boolean',
-            'comment' => 'string|nullable'
+            'comment' => 'string|nullable',
+            'technology_updates' => 'array',
+            'technology_updates.*' => 'integer|exists:technologies,id',
         ];
     }
 }

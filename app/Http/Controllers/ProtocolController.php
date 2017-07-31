@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Protocol\CreateProtocol;
 use App\Http\Requests\Protocol\UpdateProtocol;
 use App\Protocol;
+use Carbon\Carbon;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,18 +28,6 @@ class ProtocolController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  CreateProtocol $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(CreateProtocol $request)
-    {
-        Protocol::create($request->all());
-        return ['success' => true];
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  Protocol $protocol
@@ -47,56 +35,30 @@ class ProtocolController extends Controller
      */
     public function show(Protocol $protocol)
     {
-        $protocol->load(['patchDay', 'patchDay.project', 'patchDay.project.company']);
         $this->authorize('view', $protocol);
+
         return $protocol;
     }
-
-    /**
-     * Return upcoming patch-days for admins
-     *
-     * @param Request $request
-     * @return mixed
-     * @throws AuthenticationException
-     */
-    public function showUpcoming(Request $request)
-    {
-        $limit = $request->limit ?: 5;
-        if (Auth::user()->isAdmin()) {
-            $protocols = Protocol::with('patchDay', 'patchDay.project')
-                ->where('done', false)
-                ->orderBy('due_date', 'ASC')
-                ->take($limit)
-                ->get();
-            return $protocols;
-        } else {
-            throw new AuthenticationException();
-        }
-    }
-
+    
     /**
      * Update the specified resource in storage.
      *
      * @param  UpdateProtocol $request
-     * @param  Protocol $protocol
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProtocol $request, Protocol $protocol)
+    public function update(UpdateProtocol $request, $id)
     {
-        $protocol->update($request->all());
-        return ['updated' => true];
-    }
+        $protocol = Protocol::findOrFail($id);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Protocol $protocol
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Protocol $protocol)
-    {
-        $this->authorize('delete', $protocol);
-        $protocol->delete();
-        return ['success' => true];
+        if ($request->input('technology_updates')) {
+            $protocol->syncTechnologies($request->technology_updates);
+        }
+
+        $protocol->update($request->except(['technology_updates']));
+
+        $protocol->update($request->all());
+
+        return ['updated' => true];
     }
 }

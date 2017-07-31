@@ -9,10 +9,16 @@ Platform for management of periodic updates of software projects.
 - `$ mv .env.example .env`
 - set database credentials in the `.env` file
 - `$ php artisan key:generate`
-- `$ php artisan migrate`
-- `$ php artisan db:seed` to populate database for testing
+- `$ php artisan migrate --seed`
+-  link storage directories
+- `$ php artisan storage:link`
 - `$ phpunit`
 - Hopefully all green and ready to go :v:
+
+### Documentation
+- publish vendor files: `$ php artisan vendor:publish`
+- build docs: `$ php artisan api:gen --middleware="web" --actAsUserId=1`
+- docs for the API can be found at `/docs`
 
 ### Build commands
 - Development build `$ npm run dev`
@@ -22,10 +28,9 @@ Platform for management of periodic updates of software projects.
 production`
 
 ### Dependencies
-
 - Backend:
     - Laravel: https://laravel.com
-    - Laravel Passport: https://laravel.com/docs/5.4/passport
+    - API Generator: https://github.com/mpociot/laravel-apidoc-generator
 - Frontend:
     - vuejs: https://vuejs.org/v2/guide/
     - vue-router: https://router.vuejs.org/en/

@@ -1,0 +1,74 @@
+<template>
+    <div>
+        <v-fab-transition>
+            <v-speed-dial
+                    bottom
+                    right
+                    fixed
+                    transition="slide-y-reverse-transition"
+                    v-model="dialOpen"
+                    v-show="show"
+            >
+
+                <v-btn
+                        slot="activator"
+                        class="orange darken-2"
+                        dark
+                        fab
+                        hover
+                        v-model="dialOpen"
+                >
+                    <v-icon>menu</v-icon>
+                    <v-icon>close</v-icon>
+                </v-btn>
+
+                <v-btn v-for="action in fabActions"
+                       :key="action.icon"
+                       fab
+                       dark
+                       small
+                       :class="action.color"
+                       @click.native="openModal($event, action)"
+                       v-tooltip:left="{ html: tooltipHtml(action.tooltip), visible:
+                       tooltipVisible(action.tooltip) }"
+                >
+                    <v-icon>{{ action.icon }}</v-icon>
+                </v-btn>
+            </v-speed-dial>
+        </v-fab-transition>
+        <delete-company></delete-company>
+        <edit-company></edit-company>
+        <create-company></create-company>
+    </div>
+</template>
+
+<script>
+  import eventBus from 'components/event-bus'
+  import tooltip from 'mixins/tooltip'
+  import DeleteCompany from 'pages/company/DeleteCompany'
+  import EditCompany from 'pages/company/EditCompany'
+  import CreateCompany from 'pages/company/CreateCompany'
+
+  export default {
+    name: 'fab',
+    mixins: [tooltip],
+    data() {
+      return {
+        dialOpen: false,
+      }
+    },
+    props: ['fabActions', 'company', 'show'],
+    components: {
+      DeleteCompany,
+      EditCompany,
+      CreateCompany,
+    },
+    methods: {
+      openModal(event, action) {
+        event.preventDefault()
+        event.stopPropagation()
+        eventBus.$emit(action.event, this.company)
+      }
+    },
+  }
+</script>
