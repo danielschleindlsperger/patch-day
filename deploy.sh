@@ -1,5 +1,7 @@
 #!/bin/bash
 
+apt-get install openssl -y
+
 # Import the SSH deployment key
 openssl aes-256-cbc -K $encrypted_d987e996700e_key -iv $encrypted_d987e996700e_iv -in deploy-key.enc -out deploy-key -d
 
