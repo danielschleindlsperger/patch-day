@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Import the SSH deployment key
-openssl aes-256-cbc -K $encrypted_22009518e18d_key -iv $encrypted_22009518e18d_iv -in deploy-key.enc -out deploy-key -d
+openssl aes-256-cbc -K $encrypted_d987e996700e_key -iv $encrypted_d987e996700e_iv -in deploy-key.enc -out deploy-key -d
 
 # Don't need it anymore
 rm deploy-key.enc

@@ -1,1 +1,23 @@
-
+os:
+  - linux
+language: php
+php:
+  - 7.1
+before_script:
+  - chmod 777 -R storage
+  - cp .env.testing .env
+  - composer self-update
+  - composer install --no-interaction
+  - php artisan key:generate
+script:
+  - vendor/bin/phpunit
+before_deploy:
+  - nvm install stable
+  - npm install npm@latest -g
+  - npm install
+  - npm run production
+deploy:
+  - provider: script
+    script: bash ./deploy.sh
+    on:
+      branch: production
