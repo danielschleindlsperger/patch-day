@@ -132,7 +132,8 @@ class Protocol extends Model
 
         $this->project->technologies()->detach($techIds);
         $this->project->technologies()->attach($newTechs, [
-            'protocol_id' => $this->id
+            'protocol_id' => $this->id,
+            'action' => 'update',
         ]);
     }
 }

@@ -20,6 +20,7 @@ class Project extends Model
     ];
 
     protected $appends = [
+        'default_technologies',
         'current_technologies',
         'technology_history',
     ];
@@ -59,7 +60,8 @@ class Project extends Model
      */
     public function technologies()
     {
-        return $this->belongsToMany(Technology::class)->withPivot('protocol_id');
+        return $this->belongsToMany(Technology::class)
+            ->withPivot('action', 'protocol_id');
     }
 
     /**
@@ -82,7 +84,7 @@ class Project extends Model
     }
 
     /**
-     * return only the latest version for each technology for each unique
+     * return only the latest version for each technology for each
      * technlogy (based on name).
      *
      * @return Collection technologies
@@ -90,6 +92,7 @@ class Project extends Model
     public function getCurrentTechnologiesAttribute()
     {
         return $this->technologies()
+            ->whereIn('action', ['default', 'update'])
             ->orderBy('name', 'ASC')
             ->orderBy('protocol_id', 'DESC')
             ->get()
@@ -98,7 +101,7 @@ class Project extends Model
     }
 
     /**
-     * return all
+     * return all technologies the project has ever had.
      *
      * @return Collection technologies
      */
@@ -106,6 +109,20 @@ class Project extends Model
     {
         return $this->technologies()
             ->orderBy('protocol_id', 'DESC')
+            ->orderBy('name', 'ASC')
+            ->orderBy('version', 'DESC')
+            ->get();
+    }
+
+    /**
+     * The technologies the project has by default before all patches.
+     *
+     * @return mixed
+     */
+    public function getDefaultTechnologiesAttribute()
+    {
+        return $this->technologies()
+            ->where('action', '=', 'default')
             ->orderBy('name', 'ASC')
             ->orderBy('version', 'DESC')
             ->get();

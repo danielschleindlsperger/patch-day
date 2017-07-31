@@ -66,7 +66,14 @@ class ProjectController extends Controller
         $project = Project::create($request->all());
 
         if ($request->technologies) {
-            $project->technologies()->attach($request->technologies);
+
+            $tech = [];
+
+            foreach($request->technologies as $technology) {
+                $tech[$technology] = ['action' => 'default'];
+            }
+
+            $project->technologies()->attach($tech);
         }
 
         return $project;
@@ -86,7 +93,17 @@ class ProjectController extends Controller
         $project->update($request->except(['technologies']));
 
         if ($request->technologies) {
-            $project->technologies()->attach($request->technologies);
+
+            $project->technologies()->where('action', '=', 'default')
+                ->detach();
+
+            $tech = [];
+
+            foreach($request->technologies as $technology) {
+                $tech[$technology] = ['action' => 'default'];
+            }
+
+            $project->technologies()->attach($tech);
         }
 
         return ['success' => true];

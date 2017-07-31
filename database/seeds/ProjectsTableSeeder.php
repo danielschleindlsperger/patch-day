@@ -32,7 +32,7 @@ class ProjectsTableSeeder extends Seeder
 
             $technologies->unique('name')->shuffle()->splice(0,
                 rand(2, 5))->each(function ($tech) use (&$tech_ids) {
-                array_push($tech_ids, $tech->id);
+                $tech_ids[$tech->id] = ['action' => 'default'];
             });
 
             $project->technologies()->attach($tech_ids);

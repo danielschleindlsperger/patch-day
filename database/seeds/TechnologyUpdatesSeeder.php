@@ -34,7 +34,10 @@ class TechnologyUpdatesSeeder extends Seeder
                 $technology = factory(\App\Technology::class)->create([
                     'name' => $tech,
                 ]);
-                $protocol->project->technologies()->attach($technology->id, ['protocol_id' => $protocol->id]);
+                $protocol->project->technologies()->attach($technology->id, [
+                    'protocol_id' => $protocol->id,
+                    'action' => 'update',
+                ]);
             }
         }
     }

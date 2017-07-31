@@ -15,7 +15,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn class="green--text darken-1" flat="flat"
-                       @click.native="closeModal">Close
+                       @click.native="closeModal($event)">Close
                 </v-btn>
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="createTech()">Save
@@ -31,6 +31,7 @@
 
   export default {
     name: 'create-technology',
+    props: ['event'],
     data() {
       return {
         isOpen: false,
@@ -49,12 +50,14 @@
       createTech() {
         repo.technology.create(this.technology).then(() => {
           this.isOpen = false
-          eventBus.$emit('protocol.edit.modal')
+          eventBus.$emit(this.event)
         })
       },
-      closeModal() {
+      closeModal(event) {
+        event.preventDefault()
+        event.stopPropagation()
         this.isOpen = false
-        eventBus.$emit('protocol.edit.modal')
+        eventBus.$emit(this.event)
       }
     }
   }

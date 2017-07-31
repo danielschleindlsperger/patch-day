@@ -20,6 +20,7 @@
                             :rules="rules.company"
                     />
                     <v-layout>
+
                         <v-flex xs12 md6 mr-4>
                             <v-text-field
                                     name="cost"
@@ -30,6 +31,7 @@
                                     suffix="Cents"
                             ></v-text-field>
                         </v-flex>
+
                         <v-flex xs12 md6 ml-4>
                             <v-text-field
                                     name="cost"
@@ -42,6 +44,30 @@
                             </v-text-field>
                         </v-flex>
                     </v-layout>
+
+                    <div>
+                        <small>Technology not in list?</small>
+                        <v-btn @click.native="createTechnologyModal($event)">
+                            Create new Tech
+                        </v-btn>
+                    </div>
+
+                    <v-select
+                            label="Installed software"
+                            :items="technologies"
+                            v-model="defaultTech"
+                            item-value="id"
+                            item-text="canonical_name"
+                            multiple
+                            chips
+                            light
+                            max-height="500"
+                            autocomplete
+                            hint="Change default software versions."
+                            persistent-hint
+                    >
+                    </v-select>
+
                     <small>*indicates required field</small>
                 </v-container>
             </v-card-text>
@@ -71,6 +97,8 @@
           name: '',
           company_id: null,
           company: {},
+          base_price: 0,
+          penalty: 0,
         },
         companies: [],
         rules: {
@@ -81,16 +109,22 @@
                 || 'Please select an entry'
             },
           ]
-        }
+        },
+        technologies: [],
+        defaultTech: []
       }
     },
     mounted () {
-      repo.company.getAll().then((companies) => {
-        this.companies = companies
-      })
+      this.getCompanies()
+      this.getTechnologies()
 
       eventBus.$on('project.edit.modal', project => {
         this.project = JSON.parse(JSON.stringify(project))
+
+        project.current_technologies.forEach(tech => {
+          this.defaultTech.push(tech.id)
+        })
+
         this.isOpen = true
       })
     },
@@ -98,15 +132,32 @@
       editProject() {
         const payload = {
           name: this.project.name,
+          company_id: this.project.company_id,
           base_price: this.project.base_price,
           penalty: this.project.penalty,
-          company_id: this.project.company_id,
+          technologies: this.defaultTech
         }
 
         repo.project.edit(this.project.id, payload).then(() => {
           this.isOpen = false
         })
       },
+      getCompanies() {
+        repo.company.getAll().then((companies) => {
+          this.companies = companies
+        })
+      },
+      getTechnologies() {
+        repo.technology.getAll().then((technologies) => {
+          this.technologies = technologies
+        })
+      },
+      createTechnologyModal(event) {
+        event.preventDefault()
+        event.stopPropagation()
+        this.isOpen = false
+        eventBus.$emit('technology.create.modal')
+      }
     },
   }
 </script>

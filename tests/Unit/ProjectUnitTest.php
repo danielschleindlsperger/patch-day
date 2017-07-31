@@ -187,11 +187,14 @@ class ProjectUnitTest extends TestCase
         ]);
 
         // base technologies
-        $project->technologies()->attach([$this->vue->id, $this->laravel->id]);
+        $project->technologies()->attach([
+            $this->vue->id => ['action' => 'default'],
+            $this->laravel->id => ['action' => 'default']
+        ]);
 
         $current_techs = $project->current_technologies;
         $this->assertCount(2, $current_techs);
-        $this->assertInstanceOf(Technology::class, $current_techs[0]);
+        $this->assertContainsOnlyInstancesOf(Technology::class, $current_techs);
         $this->assertEquals('Laravel', $current_techs[0]->name);
         $this->assertEquals('5.4.1', $current_techs[0]->version);
 
@@ -212,11 +215,17 @@ class ProjectUnitTest extends TestCase
         ]);
 
         $project->technologies()->attach([
-            $this->laravel_2->id => ['protocol_id' => $protocol->id],
+            $this->laravel_2->id => [
+                'protocol_id' => $protocol->id,
+                'action' => 'update',
+            ],
         ]);
 
         $project->technologies()->attach([
-            $this->vue_2->id => ['protocol_id' => $protocol->id],
+            $this->vue_2->id => [
+                'protocol_id' => $protocol->id,
+                'action' => 'update',
+            ],
         ]);
 
         $current_techs = $project->current_technologies;
@@ -298,20 +307,56 @@ class ProjectUnitTest extends TestCase
         $this->assertEquals('2017-04-30', $history[0]->date);
     }
 
-    /** @test*/
+    /** @test */
     public function a_project_has_patch_days()
     {
         $project = factory(Project::class)->create();
         $patch_days = factory(PatchDay::class, 5)
-                        ->create()->each(function($patch_day) use ($project) {
-                            Protocol::create([
-                                'project_id' => $project->id,
-                                'patch_day_id' => $patch_day->id,
-                            ]);
-                        });
+            ->create()->each(function ($patch_day) use ($project) {
+                Protocol::create([
+                    'project_id' => $project->id,
+                    'patch_day_id' => $patch_day->id,
+                ]);
+            });
 
         $this->assertCount(5, $project->patchDays());
         $this->assertContainsOnlyInstancesOf(PatchDay::class,
             $project->patchDays());
+    }
+
+    /** @test */
+    public function a_project_has_default_technologies()
+    {
+        $project = factory(Project::class)->create();
+        $technology = factory(Technology::class)->create([
+            'name' => 'Laravel',
+            'version' => '5.4.3',
+        ]);
+
+        $patch_day = factory(PatchDay::class)->create();
+
+        $updateTechnology = factory(Technology::class)->create([
+            'name' => 'Laravel',
+            'version' => '5.5.5',
+        ]);
+
+        $protocol = factory(Protocol::class)->create([
+            'patch_day_id' => $patch_day->id,
+            'project_id' => $project->id,
+        ]);
+
+        $project->technologies()->attach([
+            $technology->id => ['action' => 'default']
+        ]);
+
+        $protocol->syncTechnologies([$updateTechnology->id]);
+
+        // should only contain the default tech, without the updated one
+
+        $this->assertNotNull($project->defaultTechnologies);
+        $this->assertCount(1, $project->defaultTechnologies);
+        $this->assertEquals($technology->id,
+            $project->defaultTechnologies->first()->id);
+
     }
 }

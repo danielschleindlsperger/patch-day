@@ -78,15 +78,20 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
+        <create-technology-modal :event="'project.create.modal'"></create-technology-modal>
     </v-dialog>
 </template>
 
 <script>
   import eventBus from 'components/event-bus'
   import repo from 'repository'
+  import CreateTechnologyModal from 'components/modals/CreateTechnologyModal'
 
   export default {
     name: 'create-project',
+    components: {
+      CreateTechnologyModal,
+    },
     data() {
       return {
         isOpen: false,
@@ -107,7 +112,7 @@
           ]
         },
         technologies: [],
-        defaultTech: []
+        defaultTech: [],
       }
     },
     mounted () {
@@ -124,6 +129,8 @@
         const payload = {
           name: this.project.name,
           company_id: this.project.company,
+          base_price: this.project.base_price,
+          penalty: this.project.penalty,
           technologies: this.defaultTech
         }
 

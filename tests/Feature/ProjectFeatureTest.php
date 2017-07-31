@@ -156,9 +156,9 @@ class ProjectFeatureTest extends TestCase
                 ]
             ]);
 
-        $project = Project::orderBy('id', 'desc')->first();
+        $project = Project::latest()->first();
 
-        $technologies = $project->technology_history;
+        $technologies = $project->default_technologies;
 
         $this->assertContainsOnlyInstancesOf(Technology::class, $technologies);
         $this->assertCount(2, $technologies);

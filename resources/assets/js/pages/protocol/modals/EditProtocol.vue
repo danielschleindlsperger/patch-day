@@ -58,7 +58,8 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-        <create-technology-modal></create-technology-modal>
+        <create-technology-modal
+                :event="'protocol.edit.modal'"></create-technology-modal>
     </div>
 </template>
 
