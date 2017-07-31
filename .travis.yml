@@ -16,6 +16,8 @@ before_deploy:
   - npm install npm@latest -g
   - npm install
   - npm run production
+  - sudo apt-get install openssl -y
+  - sudo apt-get install rsync -y
 deploy:
   - provider: script
     script: bash ./deploy.sh
