@@ -28,6 +28,6 @@ before_deploy:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: rsync -avzu --exclude-from=.rsync-exclude.txt --rsh="ssh -i /tmp/deploy_rsa" $TRAVIS_BUILD_DIR/ deploy@45.63.116.5:/var/www/patch-day
+    script: rsync -avzu --exclude-from="./.rsync-exclude.txt" --rsh="ssh -i /tmp/deploy_rsa" $TRAVIS_BUILD_DIR/ deploy@45.63.116.5:/var/www/patch-day
     on:
       branch: production
