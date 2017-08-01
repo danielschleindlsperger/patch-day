@@ -1,4 +1,9 @@
-deployment/
+./deploy.sh
+./deploy-key
+./deploy-key.enc
+./package.json
+./package-lock.json
+./travis.yml
 *.log
 .git/
 .gitignore
@@ -10,5 +15,6 @@ storage/logs/*
 phpunit.xml
 .env
 .env.example
+.env.testing
 tests/
 node_modules/
