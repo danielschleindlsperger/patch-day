@@ -96,4 +96,16 @@ class ProjectPolicy
         return $user->company && $project->company &&
             $user->company->id === $project->company->id;
     }
+
+    /**
+     * Determine whether the user can delete technologies from projects.
+     *
+     * @param  \App\User $user
+     * @param  \App\Project $project
+     * @return mixed
+     */
+    public function deleteProjectTech(User $user, Project $project)
+    {
+        return $user->isAdmin();
+    }
 }

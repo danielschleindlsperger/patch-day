@@ -8,6 +8,7 @@ use App\Http\Requests\Project\UpdateProject;
 use App\PatchDay;
 use App\Project;
 use App\Protocol;
+use App\Technology;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -69,7 +70,7 @@ class ProjectController extends Controller
 
             $tech = [];
 
-            foreach($request->technologies as $technology) {
+            foreach ($request->technologies as $technology) {
                 $tech[$technology] = ['action' => 'default'];
             }
 
@@ -99,7 +100,7 @@ class ProjectController extends Controller
 
             $tech = [];
 
-            foreach($request->technologies as $technology) {
+            foreach ($request->technologies as $technology) {
                 $tech[$technology] = ['action' => 'default'];
             }
 
@@ -119,6 +120,19 @@ class ProjectController extends Controller
     {
         $this->authorize('delete', $project);
         $project->delete();
+
+        return ['success' => true];
+    }
+
+    public function deleteTech(Project $project)
+    {
+        $this->authorize('deleteProjectTech', $project);
+
+        $tech = Technology::findOrFail(request('tech'));
+
+        $project->technologies()->attach($tech->id, [
+            'action' => 'deleted'
+        ]);
 
         return ['success' => true];
     }

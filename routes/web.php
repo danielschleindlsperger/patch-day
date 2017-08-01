@@ -19,6 +19,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     ]);
 
     // Project resource
+    Route::delete('projects/{project}/delete-technology', 'ProjectController@deleteTech');
     Route::resource('projects', 'ProjectController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);

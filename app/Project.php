@@ -91,13 +91,19 @@ class Project extends Model
      */
     public function getCurrentTechnologiesAttribute()
     {
+        $deletedTechs = $this->technologies()->where('action', '=', 'deleted')
+            ->groupBy('name')->get();
+
+        $deletedTechs = $deletedTechs->map(function ($tech) {
+            return $tech->name;
+        })->toArray();
+
         return $this->technologies()
-            ->whereIn('action', ['default', 'update'])
-            ->orderBy('name', 'ASC')
             ->orderBy('protocol_id', 'DESC')
-            ->get()
-            ->unique('name')
-            ->values();
+            ->groupBy('name')
+            ->whereNotIn('name', $deletedTechs)
+            ->orderBy('name', 'ASC')
+            ->get();
     }
 
     /**
