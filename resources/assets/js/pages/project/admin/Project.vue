@@ -81,6 +81,11 @@
         event.stopPropagation()
         eventBus.$emit('tech_history.view.modal', this.project.technology_history)
       },
+      getProject() {
+        repo.project.get(this.project.id).then((project) => {
+          this.project = project
+        })
+      }
     },
     mounted() {
       eventBus.$on('project.deleted', (id) => {
@@ -88,9 +93,9 @@
           this.$router.push('/projects')
         }
       }).$on('project.edited', () => {
-        repo.project.get(this.project.id).then((project) => {
-          this.project = project
-        })
+        this.getProject()
+      }).$on('technology.deleted', () => {
+        this.getProject()
       })
     }
   }

@@ -23,6 +23,9 @@
                             </v-btn>
                         </div>
 
+                        <delete-tech-from-project :project="protocol.project">
+                        </delete-tech-from-project>
+
                         <v-select
                                 label="Software updates"
                                 v-bind:items="technologies"
@@ -67,11 +70,13 @@
   import eventBus from 'components/event-bus'
   import repo from 'repository'
   import CreateTechnologyModal from 'components/modals/CreateTechnologyModal'
+  import DeleteTechFromProject from 'components/modals/DeleteTechFromProject'
 
   export default {
     name: 'edit-protocol',
     components: {
-      CreateTechnologyModal
+      CreateTechnologyModal,
+      DeleteTechFromProject,
     },
     data() {
       return {

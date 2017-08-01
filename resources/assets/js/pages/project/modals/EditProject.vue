@@ -52,6 +52,9 @@
                         </v-btn>
                     </div>
 
+                    <delete-tech-from-project
+                            :project="project"></delete-tech-from-project>
+
                     <v-select
                             label="Installed software"
                             :items="technologies"
@@ -85,11 +88,15 @@
 </template>
 
 <script>
+  import DeleteTechFromProject from 'components/modals/DeleteTechFromProject'
   import eventBus from 'components/event-bus'
   import repo from 'repository'
 
   export default {
     name: 'edit-project',
+    components: {
+      DeleteTechFromProject,
+    },
     data() {
       return {
         isOpen: false,
@@ -126,6 +133,8 @@
         })
 
         this.isOpen = true
+      }).$on('technology.deleted', () => {
+        this.getProject()
       })
     },
     methods: {
@@ -145,6 +154,16 @@
       getCompanies() {
         repo.company.getAll().then((companies) => {
           this.companies = companies
+        })
+      },
+      getProject() {
+        repo.project.get(this.project.id).then((project) => {
+          this.project = project
+
+          this.defaultTech = []
+          project.current_technologies.forEach(tech => {
+            this.defaultTech.push(tech.id)
+          })
         })
       },
       getTechnologies() {

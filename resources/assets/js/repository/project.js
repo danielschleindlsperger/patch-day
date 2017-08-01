@@ -114,6 +114,22 @@ export default {
           console.error(error.response.data)
           eventBus.$emit('info.snackbar', error.response.data.error)
         })
+    },
+    deleteTechnology(project, technology) {
+      return axios.delete(`projects/${project.id}/delete-technology`, {
+        data: {
+          tech: technology.id
+        }
+      })
+        .then(response => {
+          eventBus.$emit('info.snackbar', `Successfully deleted ${technology.name} from ${project.name}!`)
+          eventBus.$emit('technology.deleted', technology)
+          return response.data
+        })
+        .catch(error => {
+          console.error(error.response.data)
+          eventBus.$emit('info.snackbar', error.response.data.error)
+        })
     }
   }
 }
