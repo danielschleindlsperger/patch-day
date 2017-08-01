@@ -115,7 +115,14 @@ class ProtocolUnitTest extends TestCase
     public function
     a_protocol_has_a_price_that_increases_with_each_missed_patch_day()
     {
+        // see setup method for price and penalty
+
         $firstDate = '2017-01-30';
+
+        // patch-day that happened before first signup
+        $randomPatchDay = PatchDay::create([
+            'date' => Carbon::parse($firstDate)->subMonths(1)->toDateString(),
+        ]);
 
         $patch_day_1 = PatchDay::create([
             'date' => Carbon::parse($firstDate)->toDateString(),
@@ -128,29 +135,17 @@ class ProtocolUnitTest extends TestCase
         ]);
         $this->assertEquals(30000, $protocol_1->price);
 
+        // not signed up
         $patch_day_2 = PatchDay::create([
             'date' => Carbon::parse($firstDate)->addMonths(1)
                 ->toDateString(),
         ]);
-        $protocol_2 = Protocol::create([
-            'done' => false,
-            'comment' => 'blabla',
-            'patch_day_id' => $patch_day_2->id,
-            'project_id' => $this->project->id,
-        ]);
-        $this->assertEquals(30000, $protocol_2->price);
 
+        // not signed up
         $patch_day_3 = PatchDay::create([
             'date' => Carbon::parse($firstDate)->addMonths(2)
                 ->toDateString(),
         ]);
-        $protocol_3 = Protocol::create([
-            'done' => false,
-            'comment' => 'blabla',
-            'patch_day_id' => $patch_day_3->id,
-            'project_id' => $this->project->id,
-        ]);
-        $this->assertEquals(45000, $protocol_3->price);
 
         $patch_day_4 = PatchDay::create([
             'date' => Carbon::parse($firstDate)->addMonths(3)

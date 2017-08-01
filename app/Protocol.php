@@ -74,20 +74,42 @@ class Protocol extends Model
     {
         $base_price = $this->project->base_price;
         $penalty = $this->project->penalty;
+        $protocol = $this;
+        $protocolPatchDay = $this->patch_day;
 
-        // protocols that are older than this one
-        $protocols = $this->project->protocols()
-            ->orderBy('id', 'DESC')
-            ->where('id', '<', $this->id)
-            ->get();
+        $projectPreviousPatchDay =
+            $this->project->patchDays()
+                ->filter(function ($patch_day) use ($protocolPatchDay) {
+                    return $patch_day->date < $protocolPatchDay->date;
+                })
+                ->sortByDesc('date')
+                ->first();
 
         $missedProtocols = 0;
-        $protocols->each(function ($protocol) use (&$missedProtocols) {
-            if ($protocol->done) {
-                return false;
-            }
-            $missedProtocols++;
-        });
+
+        if ($projectPreviousPatchDay) {
+
+            // previous patch-days
+            $patch_days = PatchDay::whereDate('date', '<', $protocolPatchDay->date)
+                ->whereDate('date', '>', $projectPreviousPatchDay->date)
+                ->orderBy('id', 'DESC')
+                ->get();
+
+            $patch_days->each(function ($patch_day) use (&$missedProtocols, $protocol) {
+
+                $patchDayProtocols = $patch_day->protocols()->get();
+
+                $protocolInPatchDay = $patchDayProtocols->contains(function ($value, $key) use ($protocol) {
+                    return $value->id === $protocol->id;
+                });
+
+                if ($protocolInPatchDay) {
+                    return false;
+                } else {
+                    $missedProtocols++;
+                }
+            });
+        }
 
         $price = $base_price + ($penalty * $missedProtocols);
 
@@ -105,12 +127,12 @@ class Protocol extends Model
         $projectId = $this->project->id;
 
         $upgrades = Technology::whereIn('id',
-            function($query) use ($protocolId, $projectId) {
+            function ($query) use ($protocolId, $projectId) {
                 $query->select('technology_id')
                     ->from('project_technology')
                     ->where('protocol_id', '=', $protocolId)
                     ->where('project_id', '=', $projectId);
-        })->get();
+            })->get();
 
         return $upgrades;
     }
@@ -123,11 +145,11 @@ class Protocol extends Model
     public function syncTechnologies($newTechs)
     {
         $currentTechs = DB::table('project_technology')
-                            ->where('protocol_id', '=', $this->id)
-                            ->get();
+            ->where('protocol_id', '=', $this->id)
+            ->get();
 
         $techIds = $currentTechs->map(function ($tech) {
-            return (int) $tech->technology_id;
+            return (int)$tech->technology_id;
         });
 
         $this->project->technologies()->detach($techIds);
