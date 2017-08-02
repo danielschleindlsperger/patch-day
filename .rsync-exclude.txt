@@ -1,9 +1,9 @@
-./deploy.sh
-./deploy-key
-./deploy-key.enc
-./package.json
-./package-lock.json
-./travis.yml
+deploy.sh
+deploy-key
+deploy-key.enc
+package.json
+package-lock.json
+travis.yml
 *.log
 .git/
 .gitignore
