@@ -47,6 +47,7 @@
         isOpen: false,
         company: {},
         fileName: '',
+        file: null,
       }
     },
     mounted () {
@@ -59,7 +60,7 @@
       editCompany() {
         const payload = {
           name: this.company.name,
-          logo: this.company.logo,
+          logo: this.file,
         }
 
         repo.company.edit(this.company.id, payload).then(() => {
@@ -68,7 +69,7 @@
       },
       fileSelected(file) {
         if (file) {
-          this.company.logo = file
+          this.file = file
           this.fileName = file.name
         }
       }

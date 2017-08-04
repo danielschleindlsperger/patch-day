@@ -25,7 +25,9 @@ export default {
     },
     create(payload) {
       let data = new FormData()
-      data.append('logo', payload.logo)
+      if (payload.logo) {
+        data.append('logo', payload.logo)
+      }
       data.append('name', payload.name)
 
       return axios.post('/companies', data)
@@ -57,7 +59,9 @@ export default {
     },
     edit(id, payload) {
       let data = new FormData()
-      data.append('logo', payload.logo, payload.logo.name)
+      if (payload.logo) {
+        data.append('logo', payload.logo, payload.logo.name)
+      }
       data.append('name', payload.name)
 
       // can't send files with PUT method, so fake it with POST
