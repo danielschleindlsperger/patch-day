@@ -6,7 +6,7 @@
                 <h2 class="title ma-0">Create PatchDay</h2>
             </v-card-title>
 
-            <v-card-text>
+            <v-card-text v-if="last_patch_day">
                 Previous PatchDay was on {{ last_patch_day.date | Date }}
             </v-card-text>
 

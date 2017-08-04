@@ -3,7 +3,7 @@
         <v-container>
             <h1 class="display-2 text-xs-center">Companies</h1>
 
-            <v-card>
+            <v-card v-if="companies.length">
                 <v-list>
                     <v-list-tile avatar v-for="company in companies"
                                  :key="company.id"

@@ -3,7 +3,7 @@
         <v-container>
             <h1 class="display-2 text-xs-center">Projects</h1>
 
-            <v-card>
+            <v-card v-if="projects.length">
                 <v-list>
                     <v-list-tile avatar v-for="project in projects"
                                  :key="project.id"

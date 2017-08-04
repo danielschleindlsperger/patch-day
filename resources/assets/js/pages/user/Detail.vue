@@ -5,7 +5,7 @@
             <h1 class="display-1 text-xs-center flex">{{ user.name }}</h1>
 
             <div class="subheading">Company:
-                <router-link :to="'/companies/' + user.company.id">
+                <router-link v-if="user.company" :to="'/companies/' + user.company.id">
                     {{ user.company.name }}
                 </router-link>
             </div>

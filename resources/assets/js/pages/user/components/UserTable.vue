@@ -25,7 +25,7 @@
                         </router-link>
                     </td>
                     <td>
-                        <router-link
+                        <router-link v-if="props.item.company"
                                 :to="'/companies/' + props.item.company.id">
                             {{ props.item.company.name }}
                         </router-link>

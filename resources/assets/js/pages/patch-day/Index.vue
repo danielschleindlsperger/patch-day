@@ -3,7 +3,7 @@
         <v-container>
             <h1 class="display-2 text-xs-center">Patch Days</h1>
 
-            <v-card>
+            <v-card v-if="patch_days.length">
                 <v-list two-line>
                     <v-list-tile v-for="patch_day in patch_days"
                                  :key="patch_day.id"
