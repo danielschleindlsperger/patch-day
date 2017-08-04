@@ -19,10 +19,9 @@ before_deploy:
   - npm install
   # don't build for production for easier debugging
   - npm run dev
-  - chmod u+x deploy.sh
 deploy:
   - provider: script
     skip_cleanup: true
-    script: deploy.sh
+    script: chmod +x ./deploy.sh && bash ./deploy.sh
     on:
       branch: staging
