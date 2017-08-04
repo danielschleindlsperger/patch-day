@@ -26,6 +26,7 @@ before_deploy:
   - rm deploy-key.enc
   - chmod 600 /tmp/deploy_rsa
   - ssh-add /tmp/deploy_rsa
+  - chmod u+x deploy.sh
 deploy:
   - provider: script
     skip_cleanup: true
