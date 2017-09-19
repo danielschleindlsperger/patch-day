@@ -5,6 +5,9 @@ namespace App\Http\Requests\User;
 use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property mixed password
+ */
 class CreateUser extends FormRequest
 {
     /**

@@ -2,10 +2,6 @@
 
 Auth::routes();
 
-//Route::get('/login', ['uses' => 'Auth\AuthController@login']);
-//Route::post('/login', ['uses' => 'Auth\AuthController@authenticate']);
-//Route::post('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@logout']);
-
 Route::group(['middleware' => ['web', 'auth']], function () {
 
     // serve app entry point

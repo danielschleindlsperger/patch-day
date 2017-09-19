@@ -6,7 +6,6 @@ use App\Http\Requests\User\CreateUser;
 use App\Http\Requests\User\UpdateUser;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @resource Users
@@ -48,7 +47,7 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  User $user
-     * @return \Illuminate\Http\Response
+     * @return User
      */
     public function show(User $user)
     {
@@ -74,7 +73,7 @@ class UserController extends Controller
      *
      * @param  UpdateUser $request
      * @param  User $user
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function update(UpdateUser $request, User $user)
     {
@@ -86,7 +85,7 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  User $user
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function destroy(User $user)
     {
