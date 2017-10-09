@@ -8,7 +8,7 @@
         <v-spacer></v-spacer>
 
         <v-toolbar-items class="hidden-sm-and-down">
-            <v-btn flat ripple to="/">Dashboard</v-btn>
+            <v-btn flat ripple to="/" exact>Dashboard</v-btn>
             <v-btn flat ripple to="/companies">Companies</v-btn>
             <v-btn flat ripple to="/projects">Projects</v-btn>
             <v-btn flat ripple to="/patch-days">Patch Days</v-btn>
