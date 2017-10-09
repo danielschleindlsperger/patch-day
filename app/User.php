@@ -41,6 +41,11 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
+    /**
+     * Determine if the user has elevated admin rights.
+     *
+     * @return bool
+     */
     public function isAdmin()
     {
         return $this->role === 'admin';

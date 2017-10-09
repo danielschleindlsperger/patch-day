@@ -4,7 +4,7 @@
                          persistent light clipped
                          enable-resize-watcher>
         <v-list>
-            <v-list-tile :to="item.href" v-for="(item,i) in items" :key="i">
+            <v-list-tile :to="item.href" v-for="(item, i) in items" :key="i">
                 <v-list-tile-title v-text="item.title"/>
             </v-list-tile>
         </v-list>

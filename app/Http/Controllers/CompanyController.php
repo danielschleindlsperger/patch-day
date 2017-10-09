@@ -51,7 +51,7 @@ class CompanyController extends Controller
      * Display the specified company with its projects.
      *
      * @param  Company $company
-     * @return \Illuminate\Http\Response
+     * @return Company $company
      */
     public function show(Company $company)
     {
