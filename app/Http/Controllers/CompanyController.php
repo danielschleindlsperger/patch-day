@@ -6,8 +6,6 @@ use App\Company;
 use App\Http\Requests\Company\CreateCompany;
 use App\Http\Requests\Company\UpdateCompany;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 
 /**
  * @resource Companies
@@ -18,6 +16,7 @@ class CompanyController extends Controller
      * Display a listing of all companies.
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index()
     {
@@ -42,9 +41,7 @@ class CompanyController extends Controller
             $attributes['logo'] = $this->storeLogo($request);
         }
 
-        $company = Company::create($attributes);
-
-        return $company;
+        return Company::create($attributes);
     }
 
     /**
@@ -52,6 +49,7 @@ class CompanyController extends Controller
      *
      * @param  Company $company
      * @return Company $company
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Company $company)
     {
@@ -65,7 +63,7 @@ class CompanyController extends Controller
      *
      * @param  UpdateCompany $request
      * @param  Company $company
-     * @return \Illuminate\Http\Response
+     * @return array
      */
     public function update(UpdateCompany $request, Company $company)
     {
@@ -87,8 +85,10 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param  Company $company
+     * @return array
+     * @throws \Exception
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(Company $company)
     {
@@ -101,6 +101,7 @@ class CompanyController extends Controller
      * Store logo and return the saved path.
      *
      * @param Request $request
+     * @param string|null
      * @return false|string
      */
     private function storeLogo(Request $request, $name = null)

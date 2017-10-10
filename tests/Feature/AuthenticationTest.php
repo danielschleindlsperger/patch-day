@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 

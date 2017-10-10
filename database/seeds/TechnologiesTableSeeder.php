@@ -22,7 +22,7 @@ class TechnologiesTableSeeder extends Seeder
         ];
 
         foreach ($techs as $tech) {
-            factory(\App\Technology::class, rand(1, 10))->create([
+            factory(\App\Technology::class, mt_rand(1, 10))->create([
                 'name' => $tech,
             ]);
         }

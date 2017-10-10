@@ -55,12 +55,14 @@ class CompanyFeatureTest extends TestCase
         $response = $this->json('GET', '/companies');
         $response
             ->assertStatus(200)
-            ->assertJsonFragment(
+            ->assertJson(
                 [
-                    'name' => $company_2->name,
-                ],
-                [
-                    'name' => $company->name,
+                    [
+                        'name' => $company_2->name,
+                    ],
+                    [
+                        'name' => $company->name,
+                    ]
                 ]
             );
     }

@@ -5,7 +5,6 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class Project extends Model
 {
@@ -54,9 +53,9 @@ class Project extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     *
      * return the project's technologies
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
     public function technologies()
     {
@@ -85,7 +84,7 @@ class Project extends Model
 
     /**
      * return only the latest version for each technology for each
-     * technlogy (based on name).
+     * technology (based on name).
      *
      * @return Collection technologies
      */

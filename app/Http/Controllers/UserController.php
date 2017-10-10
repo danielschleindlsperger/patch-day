@@ -6,14 +6,13 @@ use App\Http\Requests\User\CreateUser;
 use App\Http\Requests\User\UpdateUser;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @resource Users
  * In order to view any content a visitor needs to have a registered User
  * account. Users with the role of 'client' can view some resources that
  * belong to their company. Users with the role of 'admin' can view all
- * resources and can edit them aswell.
+ * resources and can edit them as well.
  */
 class UserController extends Controller
 {
@@ -21,14 +20,13 @@ class UserController extends Controller
      * Display a listing of all users with their companies.
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index()
     {
         $this->authorize('index', User::class);
 
-        $users = User::orderBy('id', 'DESC')->with('company')->get();
-
-        return $users;
+        return User::orderBy('id', 'DESC')->with('company')->get();
     }
 
     /**
@@ -40,15 +38,15 @@ class UserController extends Controller
     public function store(CreateUser $request)
     {
         $request->merge(['password' => bcrypt($request->password)]);
-        $user = User::create($request->all());
-        return $user;
+
+        return User::create($request->all());
     }
 
     /**
      * Display the specified resource.
      *
      * @param  User $user
-     * @return \Illuminate\Http\Response
+     * @return User|\Illuminate\Http\Response
      */
     public function show(User $user)
     {
@@ -74,7 +72,7 @@ class UserController extends Controller
      *
      * @param  UpdateUser $request
      * @param  User $user
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function update(UpdateUser $request, User $user)
     {
@@ -86,7 +84,9 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  User $user
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Exception
      */
     public function destroy(User $user)
     {
@@ -94,6 +94,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return ['sucess' => true];
+        return ['success' => true];
     }
 }

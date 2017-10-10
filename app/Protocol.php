@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -99,21 +98,19 @@ class Protocol extends Model
 
                 $patchDayProtocols = $patch_day->protocols()->get();
 
-                $protocolInPatchDay = $patchDayProtocols->contains(function ($value, $key) use ($protocol) {
+                $protocolInPatchDay = $patchDayProtocols->contains(function ($value) use ($protocol) {
                     return $value->id === $protocol->id;
                 });
 
                 if ($protocolInPatchDay) {
                     return false;
-                } else {
-                    $missedProtocols++;
                 }
+
+                $missedProtocols++;
             });
         }
 
-        $price = $base_price + ($penalty * $missedProtocols);
-
-        return $price;
+        return $base_price + ($penalty * $missedProtocols);
     }
 
     /**

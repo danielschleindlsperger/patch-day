@@ -12,10 +12,10 @@ class UserPolicy
     /**
      * Admins can do anything.
      *
-     * @param $requestee
+     * @param User $requestee
      * @return bool
      */
-    public function before($requestee)
+    public function before(User $requestee)
     {
         if ($requestee->isAdmin()) {
             return true;
@@ -24,12 +24,11 @@ class UserPolicy
 
     /**
      * Determine whether the user can view the user index.
-     *
-     * @param  \App\User  $requestee
-     * @param  \App\User  $user
      * @return bool
+     * @internal param User $requestee
+     * @internal param User $user
      */
-    public function index(User $requestee)
+    public function index()
     {
         return false;
     }

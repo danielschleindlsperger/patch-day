@@ -13,10 +13,10 @@ class ProjectPolicy
     /**
      * Admins can do anything.
      *
-     * @param $user
+     * @param User $user
      * @return bool
      */
-    public function before($user)
+    public function before(User $user)
     {
         if ($user->isAdmin()) {
             return true;
@@ -39,13 +39,14 @@ class ProjectPolicy
      *
      * @param  \App\User $user
      * @param  \App\Project $project
-     * @return mixed
+     * @return bool
      */
     public function view(User $user, Project $project)
     {
         if ($user->company && $project->company) {
             return $user->company->id === $project->company->id;
         }
+
         return false;
     }
 
@@ -64,10 +65,10 @@ class ProjectPolicy
      * Determine whether the user can update the project.
      *
      * @param  \App\User $user
-     * @param  \App\Project $project
      * @return mixed
+     * @internal param Project $project
      */
-    public function update(User $user, Project $project)
+    public function update(User $user)
     {
         return $user->isAdmin();
     }
@@ -76,10 +77,10 @@ class ProjectPolicy
      * Determine whether the user can delete the project.
      *
      * @param  \App\User $user
-     * @param  \App\Project $project
      * @return mixed
+     * @internal param Project $project
      */
-    public function delete(User $user, Project $project)
+    public function delete(User $user)
     {
         return $user->isAdmin();
     }
@@ -101,10 +102,10 @@ class ProjectPolicy
      * Determine whether the user can delete technologies from projects.
      *
      * @param  \App\User $user
-     * @param  \App\Project $project
      * @return mixed
+     * @internal param Project $project
      */
-    public function deleteProjectTech(User $user, Project $project)
+    public function deleteProjectTech(User $user)
     {
         return $user->isAdmin();
     }

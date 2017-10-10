@@ -11,16 +11,6 @@ class TechnologyUpdatesSeeder extends Seeder
      */
     public function run()
     {
-        $techs = [
-            'Vue.js',
-            'Laravel',
-            'Node.js',
-            'Wordpress',
-            'jQuery',
-            'php',
-            'Bootstrap',
-        ];
-
         $protocols = \App\Protocol::with('project', 'project.technologies')
             ->get();
 
@@ -28,7 +18,7 @@ class TechnologyUpdatesSeeder extends Seeder
             $techs = $protocol->project->technologies->unique('name')->pluck('name');
             $maxUpdates = $techs->count() - 1;
 
-            $updatedTechs = $techs->shuffle()->splice(0, rand(1, $maxUpdates));
+            $updatedTechs = $techs->shuffle()->splice(0, mt_rand(1, $maxUpdates));
 
             foreach ($updatedTechs as $tech) {
                 $technology = factory(\App\Technology::class)->create([

@@ -49,6 +49,8 @@ class Company extends Model
     /**
      * Prepend relevant folder names
      *
+     * @param string
+     *
      * @return string
      */
     public function getLogoAttribute($path)

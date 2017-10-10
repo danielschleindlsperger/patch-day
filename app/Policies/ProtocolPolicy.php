@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Company;
 use App\User;
 use App\Protocol;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -14,10 +13,10 @@ class ProtocolPolicy
     /**
      * Admins can do anything.
      *
-     * @param $user
+     * @param User $user
      * @return bool
      */
-    public function before($user)
+    public function before(User $user)
     {
         if ($user->isAdmin()) {
             return true;
@@ -55,10 +54,10 @@ class ProtocolPolicy
      * Determine whether the user can update the protocol.
      *
      * @param  \App\User $user
-     * @param  \App\Protocol $protocol
      * @return mixed
+     * @internal param Protocol $protocol
      */
-    public function update(User $user, Protocol $protocol)
+    public function update(User $user)
     {
         return $user->isAdmin();
     }

@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\User;
-use App\Technology;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TechnologyPolicy
@@ -13,10 +12,10 @@ class TechnologyPolicy
     /**
      * Admins can do anything.
      *
-     * @param $user
+     * @param User $user
      * @return bool
      */
-    public function before($user)
+    public function before(User $user)
     {
         if ($user->isAdmin()) {
             return true;
@@ -36,12 +35,11 @@ class TechnologyPolicy
 
     /**
      * Determine whether the user can view the technology.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Technology  $technology
      * @return mixed
+     * @internal param User $user
+     * @internal param Technology $technology
      */
-    public function view(User $user, Technology $technology)
+    public function view()
     {
         return true;
     }
@@ -60,11 +58,11 @@ class TechnologyPolicy
     /**
      * Determine whether the user can update the technology.
      *
-     * @param  \App\User  $user
-     * @param  \App\Technology  $technology
+     * @param  \App\User $user
      * @return mixed
+     * @internal param Technology $technology
      */
-    public function update(User $user, Technology $technology)
+    public function update(User $user)
     {
         return $user->isAdmin();
     }
@@ -72,11 +70,11 @@ class TechnologyPolicy
     /**
      * Determine whether the user can delete the technology.
      *
-     * @param  \App\User  $user
-     * @param  \App\Technology  $technology
+     * @param  \App\User $user
      * @return mixed
+     * @internal param Technology $technology
      */
-    public function delete(User $user, Technology $technology)
+    public function delete(User $user)
     {
         return $user->isAdmin();
     }
