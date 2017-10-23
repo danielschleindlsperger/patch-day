@@ -14,7 +14,6 @@ class ProjectPatchDaySignup extends FormRequest
      */
     public function authorize()
     {
-
         return (bool) $this->user();
     }
 

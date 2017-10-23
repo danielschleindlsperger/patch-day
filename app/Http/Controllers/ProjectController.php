@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Project\CreateProject;
-use App\Http\Requests\Project\ProjectPatchDaySignup;
 use App\Http\Requests\Project\UpdateProject;
-use App\PatchDay;
 use App\Project;
-use App\Protocol;
 use App\Technology;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +19,7 @@ class ProjectController extends Controller
      * If the user is a client, only show their companies projects.
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function index(Request $request)
     {
@@ -31,21 +27,23 @@ class ProjectController extends Controller
 
         if ($user->isAdmin()) {
             return Project::orderBy('name', 'ASC')->get();
-        } elseif (isset($user->company)) {
-            return $user->company->projects()->get();
-        } else {
-            return [];
         }
+
+        if (isset($user->company)) {
+            return $user->company->projects()->get();
+        }
+
+        return [];
     }
 
     /**
-     * @param Request $request
      * @param Project $project
      * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * Return specified project
      */
-    public function show(Request $request, Project $project)
+    public function show(Project $project)
     {
         $this->authorize('view', $project);
 
@@ -113,6 +111,8 @@ class ProjectController extends Controller
     /**
      * @param Project $project
      * @return array
+     * @throws \Exception
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      * Delete specified project
      */

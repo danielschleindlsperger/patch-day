@@ -5,6 +5,9 @@ namespace App\Http\Requests\Company;
 use App\Company;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @property mixed name
+ */
 class CreateCompany extends FormRequest
 {
     /**

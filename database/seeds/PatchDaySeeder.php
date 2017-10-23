@@ -31,7 +31,7 @@ class PatchDaySeeder extends Seeder
             $intervalStart = Carbon::now()->subMonths(6);
             $intervalEnd = Carbon::now()->addMonths(2);
 
-            $timestamp = rand($intervalStart->timestamp,
+            $timestamp = mt_rand($intervalStart->timestamp,
                 $intervalEnd->timestamp);
 
             $firstDate = Carbon::createFromTimestamp($timestamp)->toDateString();

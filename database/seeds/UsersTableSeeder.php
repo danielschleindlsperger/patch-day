@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UsersTableSeeder extends Seeder
 {
@@ -47,7 +48,7 @@ class UsersTableSeeder extends Seeder
         )->get();
 
         foreach($companies as $company) {
-            factory(\App\User::class, rand(1, 5))->create([
+            factory(\App\User::class, mt_rand(1, 5))->create([
                 'role' => 'client',
                 'company_id' => $company->id,
             ]);

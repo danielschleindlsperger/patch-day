@@ -5,7 +5,7 @@
                          enable-resize-watcher>
         <v-list>
             <v-list-tile v-for="(item,i) in items" :key="i"
-                         :to="item.href">
+                         :to="item.href" exact>
                 <v-list-tile-title v-text="item.title"/>
             </v-list-tile>
         </v-list>

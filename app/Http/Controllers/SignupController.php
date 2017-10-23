@@ -7,7 +7,7 @@ use App\PatchDay;
 use App\Project;
 use App\Protocol;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class SignupController extends Controller
 {
@@ -17,6 +17,7 @@ class SignupController extends Controller
      * @param ProjectPatchDaySignup $request
      * @param Project $project
      * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function signup(ProjectPatchDaySignup $request, Project $project)
     {
@@ -46,6 +47,7 @@ class SignupController extends Controller
      * @param Project $project
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function cancel(Project $project)
     {

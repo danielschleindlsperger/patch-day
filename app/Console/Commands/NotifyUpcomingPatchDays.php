@@ -26,19 +26,9 @@ class NotifyUpcomingPatchDays extends Command
     protected $description = 'Send out emails to notify about upcoming patch-days';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {

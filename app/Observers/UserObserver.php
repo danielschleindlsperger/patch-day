@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Notifications\UserSignedUp;
 use App\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 
 class UserObserver
@@ -18,6 +17,7 @@ class UserObserver
     public function created(User $user)
     {
         $admins = User::where('role', 'admin')->get();
+
         Notification::send($admins, new UserSignedUp($user));
     }
 }

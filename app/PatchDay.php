@@ -2,9 +2,9 @@
 
 namespace App;
 
-use App\Project;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class PatchDay extends Model
 {

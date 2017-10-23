@@ -17,8 +17,8 @@ class UserSignedUp extends Notification
      */
     public function __construct($user)
     {
-        $this->user = $user;
         $user->load('company');
+        $this->user = $user;
     }
 
     /**

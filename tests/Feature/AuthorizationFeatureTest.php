@@ -7,9 +7,9 @@ use App\Protocol;
 use App\User;
 use App\Company;
 use App\Project;
-use Carbon\Carbon;
+
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
+
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -136,7 +136,7 @@ class AuthorizationFeatureTest extends TestCase
 
 
         // CANNOT UPDATE PROJECT
-        $response = $this->json('PUT', '/projects/' . $this->project->id, [
+        $this->json('PUT', '/projects/' . $this->project->id, [
             'name' => 'Updated Project'
         ])->assertStatus(403);
         $project = Project::find($this->project->id);
@@ -200,7 +200,7 @@ class AuthorizationFeatureTest extends TestCase
     }
 
     /** @test */
-    public function client_can_see_their_companys_projects_protocols()
+    public function client_can_see_their_companies_projects_protocols()
     {
         $protocol = factory(Protocol::class)->create([
             'comment' => 'It was good.',

@@ -13,12 +13,14 @@ class PatchDayPolicy
     /**
      * Admins can do anything.
      *
-     * @param $user
+     * @param User $user
      * @return bool
      */
-    public function before($user)
+    public function before(User $user)
     {
-        return $user->isAdmin();
+        if ($user->isAdmin()) {
+            return true;
+        }
     }
 
     /**
@@ -51,10 +53,10 @@ class PatchDayPolicy
      * Determine whether the user can update the patchDay.
      *
      * @param  \App\User $user
-     * @param  \App\PatchDay $patchDay
      * @return mixed
+     * @internal param PatchDay $patchDay
      */
-    public function update(User $user, PatchDay $patchDay)
+    public function update(User $user)
     {
         return $user->isAdmin();
     }
@@ -63,10 +65,10 @@ class PatchDayPolicy
      * Determine whether the user can delete the patchDay.
      *
      * @param  \App\User $user
-     * @param  \App\PatchDay $patchDay
      * @return mixed
+     * @internal param PatchDay $patchDay
      */
-    public function delete(User $user, PatchDay $patchDay)
+    public function delete(User $user)
     {
         return $user->isAdmin();
     }

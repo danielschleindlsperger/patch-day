@@ -4,10 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Protocol\UpdateProtocol;
 use App\Protocol;
-use Carbon\Carbon;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @resource Protocols
@@ -31,7 +27,8 @@ class ProtocolController extends Controller
      * Display the specified resource.
      *
      * @param  Protocol $protocol
-     * @return \Illuminate\Http\Response
+     * @return Protocol|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Protocol $protocol)
     {
@@ -45,7 +42,7 @@ class ProtocolController extends Controller
      *
      * @param  UpdateProtocol $request
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function update(UpdateProtocol $request, $id)
     {

@@ -6,7 +6,7 @@
         <v-spacer></v-spacer>
 
         <v-toolbar-items class="hidden-sm-and-down">
-            <v-btn flat ripple to="/">Dashboard</v-btn>
+            <v-btn flat ripple to="/" exact>Dashboard</v-btn>
             <v-btn flat ripple to="/projects">My Projects</v-btn>
         </v-toolbar-items>
         <v-menu left bottom offset-y>

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Technology\CreateTechnology;
 use App\Http\Requests\Technology\UpdateTechnology;
 use App\Technology;
-use Illuminate\Http\Request;
 
 /**
  * @resource Technologies
@@ -20,6 +19,7 @@ class TechnologyController extends Controller
      * Display a listing of all technologies.
      *
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index()
     {
@@ -35,6 +35,7 @@ class TechnologyController extends Controller
      *
      * @param $name
      * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function showVersionsForTech($name)
     {
@@ -53,8 +54,7 @@ class TechnologyController extends Controller
      */
     public function store(CreateTechnology $request)
     {
-        $tech = Technology::create($request->all());
-        return $tech;
+        return Technology::create($request->all());
     }
 
     /**
@@ -62,7 +62,7 @@ class TechnologyController extends Controller
      *
      * @param  UpdateTechnology $request
      * @param  Technology $technology
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function update(UpdateTechnology $request, Technology $technology)
     {
@@ -74,7 +74,9 @@ class TechnologyController extends Controller
      * Remove the Technology from storage.
      *
      * @param  Technology $technology
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
+     * @throws \Exception
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(Technology $technology)
     {

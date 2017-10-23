@@ -15,7 +15,7 @@ class ProjectsTableSeeder extends Seeder
         $companies = \App\Company::all();
 
         foreach ($companies as $company) {
-            factory(\App\Project::class, rand(1, 5))->create([
+            factory(\App\Project::class, mt_rand(1, 5))->create([
                 'company_id' => $company->id,
             ])->each(function ($project) use ($faker) {
                 $project->name = $faker->words(2, true);
@@ -31,7 +31,7 @@ class ProjectsTableSeeder extends Seeder
             $tech_ids = [];
 
             $technologies->unique('name')->shuffle()->splice(0,
-                rand(2, 5))->each(function ($tech) use (&$tech_ids) {
+                mt_rand(2, 5))->each(function ($tech) use (&$tech_ids) {
                 $tech_ids[$tech->id] = ['action' => 'default'];
             });
 

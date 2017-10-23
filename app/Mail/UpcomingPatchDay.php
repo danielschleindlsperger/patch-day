@@ -7,7 +7,6 @@ use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class UpcomingPatchDay extends Mailable
 {
@@ -18,8 +17,8 @@ class UpcomingPatchDay extends Mailable
 
     /**
      * Create a new message instance.
-     *
-     * @return void
+     * @param PatchDay $patch_day
+     * @param User $user
      */
     public function __construct(PatchDay $patch_day, User $user)
     {

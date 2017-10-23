@@ -3,14 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PatchDay\CreatePatchDay;
-use App\Http\Requests\PatchDay\CreateProject;
 use App\Http\Requests\PatchDay\UpdatePatchDay;
 use App\PatchDay;
-use App\Project;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Symfony\Component\HttpFoundation\ApacheRequest;
 
 /**
  * @resource PatchDays
@@ -46,7 +40,8 @@ class PatchDayController extends Controller
      * Display the specified patch day.
      *
      * @param  PatchDay $patchDay
-     * @return \Illuminate\Http\Response
+     * @return PatchDay
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(PatchDay $patchDay)
     {
@@ -72,9 +67,7 @@ class PatchDayController extends Controller
      */
     public function store(CreatePatchDay $request)
     {
-        $patch_day = PatchDay::create($request->all());
-
-        return $patch_day;
+        return PatchDay::create($request->all());
     }
 
     /**
@@ -82,7 +75,7 @@ class PatchDayController extends Controller
      *
      * @param  UpdatePatchDay $request
      * @param  PatchDay $patchDay
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function update(UpdatePatchDay $request, PatchDay $patchDay)
     {
@@ -95,7 +88,9 @@ class PatchDayController extends Controller
      * Remove the specified patch day.
      *
      * @param  PatchDay $patchDay
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
+     * @throws \Exception
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(PatchDay $patchDay)
     {
