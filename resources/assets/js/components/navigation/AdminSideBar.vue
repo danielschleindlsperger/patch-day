@@ -1,14 +1,16 @@
 <template>
-    <v-navigation-drawer v-model="sidebarOpen"
-                         :close-on-click="true"
-                         persistent light clipped
-                         enable-resize-watcher>
+    <v-navigation-drawer
+            app persistent clipped light enable-resize-watcher
+            v-model="sidebarOpen">
         <v-list>
-            <v-list-tile :to="item.href" v-for="(item, i) in items" :key="i" exact>
-                <v-list-tile-title v-text="item.title"/>
-            </v-list-tile>
+            <template v-for="(item, i) in items">
+                <v-list-tile :to="item.href" :key="i" exact>
+                    <v-list-tile-title v-text="item.title"/>
+                </v-list-tile>
+            </template>
         </v-list>
     </v-navigation-drawer>
+
 </template>
 
 <script>
@@ -34,14 +36,3 @@
     },
   }
 </script>
-
-<style lang="scss" scoped>
-    .list__tile {
-        color: darken(white, 25%);
-        &.list__tile--active {
-            > .list__tile__title {
-                font-weight: bold;
-            }
-        }
-    }
-</style>

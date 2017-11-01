@@ -14,7 +14,7 @@
             </v-list>
         </v-menu>
 
-        <v-dialog v-model="promptDialog">
+        <v-dialog v-model="promptDialog" max-width="640">
             <v-card>
                 <v-card-title class="pa-4">
                     <h2 class="title ma-0">Delete {{ deleteTech.name
@@ -29,7 +29,7 @@
                     <v-btn class="green--text darken-1" flat="flat"
                            @click.native="promptDialog = false">Don't Delete
                     </v-btn>
-                    <v-btn error class="darken-1" flat="flat"
+                    <v-btn color="red" class="darken-1" flat="flat"
                            @click.native="deleteForReal()">Delete
                     </v-btn>
                 </v-card-actions>

@@ -1,7 +1,7 @@
 <template>
-    <v-toolbar class="primary" dark fixed>
+    <v-toolbar class="primary" dark app clipped-left fixed>
 
-        <v-toolbar-side-icon light @click.native.stop="toggleSidebar()"/>
+        <v-toolbar-side-icon dark @click.stop="toggleSidebar()"/>
 
         <v-toolbar-title>PatchDay</v-toolbar-title>
 
@@ -16,13 +16,12 @@
         </v-toolbar-items>
 
         <v-menu left bottom offset-y>
-            <v-btn icon="icon" slot="activator" light>
+            <v-btn icon="icon" slot="activator" dark>
                 <v-icon>more_vert</v-icon>
             </v-btn>
             <v-list>
                 <v-list-tile>
-                    <v-list-tile-title @click="logout">Logout
-                    </v-list-tile-title>
+                    <v-list-tile-title @click.stop="logout">Logout</v-list-tile-title>
                 </v-list-tile>
             </v-list>
         </v-menu>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-dialog v-model="isOpen" width="640" persistent>
+        <v-dialog v-model="isOpen" max-width="640" persistent>
             <v-card>
 
                 <v-card-title class="pa-4">

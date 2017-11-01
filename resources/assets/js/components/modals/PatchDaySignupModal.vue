@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="isOpen" width="640">
+    <v-dialog v-model="isOpen" max-width="640">
 
         <v-card>
             <v-card-title class="pa-4">

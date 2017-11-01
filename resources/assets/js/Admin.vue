@@ -14,9 +14,6 @@
   import InfoBar from 'components/InfoBar'
 
   export default {
-    data() {
-      return {}
-    },
     components: {
       PageWrapper,
       ToolBar,

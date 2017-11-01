@@ -1,5 +1,5 @@
 <template>
-    <v-dialog persistent v-model="isOpen" width="640"
+    <v-dialog persistent v-model="isOpen" max-width="640"
               class="create-patch-day-modal">
         <v-card>
             <v-card-title class="pa-4">

@@ -5,8 +5,7 @@
                 <div class="logo-mask">
                     <img :src="company.logo" alt="" class="logo">
                 </div>
-                <h1 class="display-2 text-xs-center mb-0">{{ company.name }}
-                </h1>
+                <h1 class="display-2 text-xs-center mb-0">{{ company.name }}</h1>
             </v-layout>
             <h3 class="headline">Projects</h3>
             <v-card>
@@ -15,13 +14,11 @@
                                  :key="item.id"
                                  :to="'/projects/' + item.id">
                         <v-list-tile-content>
-                            <v-list-tile-title>{{ item.name }}
-                            </v-list-tile-title>
+                            <v-list-tile-title>{{ item.name }}</v-list-tile-title>
                         </v-list-tile-content>
                         <v-list-tile-action>
                             <v-btn icon ripple
-                                   @click.native="deleteCompanyModal($event,
-                                           item)">
+                                   @click.stop.prevent="deleteProjectModal(item)">
                                 <v-icon class="grey--text">
                                     delete
                                 </v-icon>
@@ -69,12 +66,11 @@
         ],
         showFab: false,
         company: {},
-        projects: [],
       }
     },
     beforeRouteEnter (to, from, next) {
-      repo.company.get(to.params.id).then((company) => {
-        next((vm) => {
+      repo.company.get(to.params.id).then(company => {
+        next(vm => {
           vm.company = company
           vm.showFab = true
         })
@@ -86,7 +82,16 @@
         if (id === this.company.id) {
           this.$router.push('/companies')
         }
+      }).$on('project.deleted', id => {
+        repo.company.get(this.company.id).then(company => {
+          this.company = company
+        })
       })
+    },
+    methods: {
+      deleteProjectModal(item) {
+        eventBus.$emit('project.delete.modal', item)
+      }
     }
   }
 </script>

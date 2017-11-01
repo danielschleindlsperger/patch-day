@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="isOpen">
+    <v-dialog v-model="isOpen" max-width="640">
         <v-card>
             <v-card-title class="pa-4">
                 <h2 class="title ma-0">Delete {{ project.name }} ?</h2>
@@ -13,7 +13,7 @@
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="isOpen = false">Cancel
                 </v-btn>
-                <v-btn error flat="flat"
+                <v-btn color="error" flat="flat"
                        @click.native="deleteProject">Delete
                 </v-btn>
             </v-card-actions>

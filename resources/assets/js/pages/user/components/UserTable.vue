@@ -18,7 +18,7 @@
                     hide-actions
                     class="elevation-1"
             >
-                <template slot="items" scope="props">
+                <template slot="items" slot-scope="props">
                     <td>
                         <router-link :to="'/users/' + props.item.id">
                             {{ props.item.name }}

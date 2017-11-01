@@ -1,5 +1,5 @@
 <template>
-    <v-btn primary class="jbtn-file">
+    <v-btn color="primary" class="jbtn-file">
         {{ title }}<input id="selectFile" type="file"
                           v-on:change="fileSelected">
     </v-btn>

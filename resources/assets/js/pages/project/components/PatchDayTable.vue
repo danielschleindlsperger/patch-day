@@ -9,7 +9,7 @@
                     :items="protocols"
                     hide-actions
             >
-                <template slot="items" scope="props">
+                <template slot="items" slot-scope="props">
                     <td>
                         <router-link
                                 :to="'/protocols/' + props.item.id">

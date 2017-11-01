@@ -17,7 +17,7 @@
                         </v-list-tile-content>
                         <v-list-tile-action>
                             <v-btn icon ripple
-                                   @click.native="deleteItem($event, company)">
+                                   @click.stop="deleteItem($event, company)">
                                 <v-icon class="grey--text">
                                     delete
                                 </v-icon>

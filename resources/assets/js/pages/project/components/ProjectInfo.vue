@@ -26,7 +26,7 @@
                         </v-chip>
                     </div>
                     <div>
-                        <v-btn primary default
+                        <v-btn color="primary" default
                                @click.native="techHistoryModal($event)">
                             History
                         </v-btn>

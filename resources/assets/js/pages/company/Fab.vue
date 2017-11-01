@@ -36,9 +36,10 @@
                 </v-btn>
             </v-speed-dial>
         </v-fab-transition>
-        <delete-company></delete-company>
-        <edit-company></edit-company>
-        <create-company></create-company>
+        <delete-company />
+        <edit-company />
+        <create-company />
+        <delete-project />
     </div>
 </template>
 
@@ -48,6 +49,7 @@
   import DeleteCompany from 'pages/company/DeleteCompany'
   import EditCompany from 'pages/company/EditCompany'
   import CreateCompany from 'pages/company/CreateCompany'
+  import DeleteProject from 'pages/project/modals/DeleteProject'
 
   export default {
     name: 'fab',
@@ -62,6 +64,7 @@
       DeleteCompany,
       EditCompany,
       CreateCompany,
+      DeleteProject,
     },
     methods: {
       openModal(event, action) {

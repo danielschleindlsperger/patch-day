@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="isOpen">
+    <v-dialog v-model="isOpen" max-width="640">
         <v-card>
             <v-card-title class="pa-4">
                 <h2 class="title ma-0">Edit Company</h2>

@@ -1,9 +1,9 @@
 <template>
-    <v-dialog persistent v-model="isOpen" width="640">
+    <v-dialog persistent v-model="isOpen" max-width="640">
         <v-card>
             <v-card-title class="pa-4">
                 <h2 class="title ma-0">Create Technology</h2>
-            </v-card-title>
+            </v-card-title>^
 
             <v-card-text>
                 <v-text-field label="Name" required

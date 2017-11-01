@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="isOpen" width="640" class="create-project-modal">
+    <v-dialog v-model="isOpen" max-width="640" class="create-project-modal">
         <v-card>
             <v-card-title class="pa-4">
                 <h2 class="title ma-0">Create Project</h2>
