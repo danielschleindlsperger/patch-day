@@ -1,13 +1,13 @@
 <template>
     <div>
         <v-container>
-            <v-layout justify-center align-center class="mb-2">
+            <v-layout justify-center align-center class="mb-4">
                 <div class="logo-mask">
                     <img :src="company.logo" alt="" class="logo">
                 </div>
                 <h1 class="display-2 text-xs-center mb-0">{{ company.name }}</h1>
             </v-layout>
-            <h3 class="headline">Projects</h3>
+            <h3 class="headline mb-2">Projects</h3>
             <v-card>
                 <v-list>
                     <v-list-tile v-for="item in company.projects"

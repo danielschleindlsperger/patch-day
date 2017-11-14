@@ -2,7 +2,7 @@
     <div>
         <v-container>
             <v-layout justify-center child-flex[-sm]>
-                <h1 class="display-1 text-xs-center flex">
+                <h1 class="display-1 text-xs-center flex mb-4">
                     PatchDay #{{ patch_day.id }}
                 </h1>
             </v-layout>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-container>
-            <h1 class="display-2 text-xs-center">Patch Days</h1>
+            <h1 class="display-2 text-xs-center mb-4">Patch Days</h1>
 
             <v-card v-if="patch_days.length">
                 <v-list two-line>

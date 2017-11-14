@@ -2,7 +2,7 @@
     <div>
         <v-container>
 
-            <h1 class="display-1 text-xs-center mb-5">
+            <h1 class="display-1 text-xs-center mb-4">
                 {{ project.name }}
             </h1>
 

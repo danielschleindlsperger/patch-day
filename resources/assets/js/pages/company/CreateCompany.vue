@@ -10,11 +10,12 @@
                                   v-model="company.name"/>
                     <v-layout row justify-space-between align-baseline
                               class="logo-upload-wrapper mb-4">
-                        <span class="file-name" v-if="fileName">{{ fileName }}
+                        <span class="file-name" v-if="fileName">
+                            {{ fileName }}
                         </span>
                         <upload-button title="Select Logo"
                                        :selectedCallback="fileSelected"
-                                        :class="{ green : fileName }">
+                                       :class="{ green : fileName }">
                         </upload-button>
                     </v-layout>
                     <small>*indicates required field</small>

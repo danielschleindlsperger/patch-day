@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-container>
-            <h1 class="display-2 text-xs-center">Projects</h1>
+            <h1 class="display-2 text-xs-center mb-4">Projects</h1>
 
             <v-card v-if="projects.length">
                 <v-list>

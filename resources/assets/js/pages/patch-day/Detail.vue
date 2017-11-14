@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-container>
-            <h1 class="display-1 text-xs-center">{{ patch_day.name }}</h1>
+            <h1 class="display-1 text-xs-center mb-4">{{ patch_day.name }}</h1>
 
             <h2 class="headline text-xs-center">
                 {{ patch_day.date | Date }}

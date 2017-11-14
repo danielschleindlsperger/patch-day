@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-container>
-            <h1 class="display-2 text-xs-center">Users</h1>
+            <h1 class="display-2 text-xs-center mb-4">Users</h1>
             <user-table v-if="users.length" :users="users"></user-table>
         </v-container>
         <fab :fabActions="fabActions" :show="showFab"></fab>

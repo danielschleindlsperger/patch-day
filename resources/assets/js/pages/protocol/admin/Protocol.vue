@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-container>
-            <h1 class="display-1 text-xs-center flex">
+            <h1 class="display-1 text-xs-center flex mb-4">
                 {{ patch_day.name }}
             </h1>
 
