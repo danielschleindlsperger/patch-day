@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer
-            app persistent clipped light enable-resize-watcher
+            app clipped light fixed
             v-model="sidebarOpen">
         <v-list>
             <template v-for="(item, i) in items">

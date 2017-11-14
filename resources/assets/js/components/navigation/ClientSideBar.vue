@@ -1,8 +1,7 @@
 <template>
-    <v-navigation-drawer v-model="sidebarOpen"
-                         :close-on-click="true"
-                         persistent light clipped
-                         enable-resize-watcher>
+    <v-navigation-drawer
+            app clipped light fixed
+            v-model="sidebarOpen">
         <v-list>
             <v-list-tile v-for="(item,i) in items" :key="i"
                          :to="item.href" exact>
