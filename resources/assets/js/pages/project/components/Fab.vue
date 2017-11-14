@@ -22,18 +22,24 @@
                     <v-icon>close</v-icon>
                 </v-btn>
 
-                <v-btn v-for="action in fabActions"
-                       :key="action.icon"
-                       fab
-                       dark
-                       small
-                       :class="action.color"
-                       @click.native="openModal($event, action)"
-                       v-tooltip:left="{ html: tooltipHtml(action.tooltip), visible:
-                       tooltipVisible(action.tooltip) }"
-                >
-                    <v-icon>{{ action.icon }}</v-icon>
-                </v-btn>
+                <v-tooltip
+                        v-for="action in fabActions"
+                        :key="action.icon"
+                        left>
+                    <v-btn
+                            fab
+                            dark
+                            small
+                            icon
+                            :class="action.color"
+                            slot="activator"
+                            @click.native="openModal($event, action)"
+                    >
+                        <v-icon>{{ action.icon }}</v-icon>
+                    </v-btn>
+                    <span>{{ action.tooltip }}</span>
+                </v-tooltip>
+
             </v-speed-dial>
         </v-fab-transition>
 

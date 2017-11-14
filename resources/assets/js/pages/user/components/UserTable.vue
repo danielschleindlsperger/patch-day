@@ -1,7 +1,6 @@
 <template>
     <div>
-        <!-- TODO: fix search for company name -->
-        <div class="action-wrapper">
+        <div class="action-wrapper mb-3">
             <v-text-field
                     append-icon="search"
                     label="Search"

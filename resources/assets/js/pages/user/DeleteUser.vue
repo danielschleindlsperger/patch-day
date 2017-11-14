@@ -13,8 +13,8 @@
                 <v-btn class="green--text darken-1" flat="flat"
                        @click.native="isOpen = false">Cancel
                 </v-btn>
-                <v-btn color=error" flat="flat"
-                       @click.native="deleteProject">Delete
+                <v-btn color="error" flat
+                       @click.native="deleteUser">Delete
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -40,7 +40,7 @@
       })
     },
     methods: {
-      deleteProject() {
+      deleteUser() {
         this.isOpen = false
         repo.user.delete(this.user.id)
       }
