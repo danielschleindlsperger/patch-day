@@ -1,24 +1,22 @@
 <template>
-    <main>
-        <v-content>
-            <v-container fluid class="page-wrapper">
-                <transition name="page">
-                    <v-progress-circular
-                            v-show="loading"
-                            indeterminate
-                            :size="80"
-                            :width="2"
-                            class="primary--text"
-                    ></v-progress-circular>
-                </transition>
+    <v-content>
+        <v-container fluid class="page-wrapper">
+            <transition name="page">
+                <v-progress-circular
+                        v-show="loading"
+                        indeterminate
+                        :size="80"
+                        :width="2"
+                        class="primary--text"
+                ></v-progress-circular>
+            </transition>
 
-                <transition name="page">
-                    <router-view v-show="!loading"></router-view>
-                </transition>
+            <transition name="page">
+                <router-view v-show="!loading"></router-view>
+            </transition>
 
-            </v-container>
-        </v-content>
-    </main>
+        </v-container>
+    </v-content>
 </template>
 
 <script>
