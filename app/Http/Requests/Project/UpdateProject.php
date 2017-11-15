@@ -29,8 +29,8 @@ class UpdateProject extends FormRequest
         return [
             'name' => 'string',
             'company_id' => 'integer|exists:companies,id',
-            'base_price' => 'integer',
-            'penalty' => 'integer',
+            'base_price' => 'numeric',
+            'penalty' => 'numeric',
             'technologies.*' => 'integer|exists:technologies,id',
         ];
     }

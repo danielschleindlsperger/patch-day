@@ -16,7 +16,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Project::class, function (Faker\Generator $faker) {
-    $basePrice = rand(10000, 80000);
+    $basePrice = rand(10000, 80000) / 100;
     $penalty = $basePrice / 2;
     return [
         'name' => 'Fake Project',

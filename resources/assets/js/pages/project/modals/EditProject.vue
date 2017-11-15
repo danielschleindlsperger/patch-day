@@ -25,10 +25,11 @@
                             <v-text-field
                                     name="cost"
                                     label="Base price/PatchDay*"
-                                    v-model="project.base_price"
+                                    v-model.number="project.base_price"
                                     type="number"
                                     min="0"
-                                    suffix="Cents"
+                                    step="0.01"
+                                    prepend-icon="euro_symbol"
                             ></v-text-field>
                         </v-flex>
 
@@ -36,10 +37,11 @@
                             <v-text-field
                                     name="cost"
                                     label="Penalty for missed PatchDays*"
-                                    v-model="project.penalty"
+                                    v-model.number="project.penalty"
                                     type="number"
                                     min="0"
-                                    suffix="Cents"
+                                    step="0.01"
+                                    prepend-icon="euro_symbol"
                             >
                             </v-text-field>
                         </v-flex>

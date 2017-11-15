@@ -30,9 +30,7 @@ export default {
       // return icon based on truthiness
       return value ? 'check_circle' : 'close'
     },
-    currency(value, currency, isCents) {
-      // convert from cents if specified
-      value = isCents ? value / 100 : value
+    currency(value, currency) {
       return value.toLocaleString('arab', {
         style: 'currency',
         currency,
