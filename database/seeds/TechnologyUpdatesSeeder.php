@@ -11,7 +11,7 @@ class TechnologyUpdatesSeeder extends Seeder
      */
     public function run()
     {
-        $protocols = \App\Protocol::with('project', 'project.technologies')
+        $protocols = \App\Protocol::with('project', 'project.technologies', 'patch_day')
             ->get();
 
         foreach ($protocols as $protocol) {
@@ -27,6 +27,8 @@ class TechnologyUpdatesSeeder extends Seeder
                 $protocol->project->technologies()->attach($technology->id, [
                     'protocol_id' => $protocol->id,
                     'action' => 'update',
+                    'created_at' => $protocol->patch_day->date,
+                    'updated_at' => $protocol->patch_day->date,
                 ]);
             }
         }
