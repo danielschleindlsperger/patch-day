@@ -1,5 +1,6 @@
-const {mix} = require('laravel-mix');
+const { mix } = require('laravel-mix');
 const path = require('path');
+const webpack = require('webpack');
 
 mix.webpackConfig({
   resolve: {
@@ -9,7 +10,11 @@ mix.webpackConfig({
       mixins: path.resolve(__dirname, 'resources/assets/js/mixins'),
       repository: path.resolve(__dirname, 'resources/assets/js/repository'),
     }
-  }
+  },
+  plugins: [
+    // reduce bundle size by ignoring most unused locales
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /de|en/)
+  ]
 });
 
 mix
