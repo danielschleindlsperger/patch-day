@@ -22,12 +22,12 @@
 
                         <v-card-text>
 
-                            <v-btn primary
+                            <v-btn color="primary"
                                    @click.native="signupModal($event)">
                                 Sign up for PatchDay
                             </v-btn>
 
-                            <v-btn primary
+                            <v-btn class="primary"
                                    @click.native="cancelModal($event)">
                                 Cancel PatchDay
                             </v-btn>
@@ -37,7 +37,8 @@
                 </v-flex>
             </v-layout>
 
-            <patch-day-table :protocols="project.protocols"></patch-day-table>
+            <patch-day-table v-if="project.protocols.length"
+                             :protocols="project.protocols" />
         </v-container>
         <tech-history-modal></tech-history-modal>
         <patch-day-signup-modal></patch-day-signup-modal>
@@ -73,6 +74,7 @@
           company: {
             name: ''
           },
+          protocols: []
         },
       }
     },

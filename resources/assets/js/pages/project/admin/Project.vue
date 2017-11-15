@@ -9,7 +9,9 @@
                 <project-info :project="project"
                               class="mb-4"></project-info>
             </v-layout>
-            <patch-day-table :protocols="project.protocols"></patch-day-table>
+
+            <patch-day-table v-if="project.protocols.length"
+                             :protocols="project.protocols" />
 
         </v-container>
         <tech-history-modal></tech-history-modal>
@@ -64,6 +66,7 @@
           company: {
             name: ''
           },
+          protocols: [],
         },
       }
     },

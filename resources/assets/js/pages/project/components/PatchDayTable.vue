@@ -6,7 +6,7 @@
         <v-card-text>
             <v-data-table
                     :headers="tableHeaders"
-                    :items="protocols"
+                    :items="orderedProtocols"
                     hide-actions
             >
                 <template slot="items" slot-scope="props">
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+  import { orderBy } from 'lodash'
   import filters from 'mixins/filters'
 
   export default {
@@ -39,14 +40,6 @@
     mixins: [filters],
     data() {
       return {
-        project: {
-          base_price: 0,
-          penalty: 0,
-          name: '',
-          company: {
-            name: ''
-          },
-        },
         tableHeaders: [
           {
             text: 'Name',
@@ -66,5 +59,10 @@
         ]
       }
     },
+    computed: {
+      orderedProtocols() {
+        return orderBy(this.protocols, 'date', 'asc')
+      }
+    }
   }
 </script>
