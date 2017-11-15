@@ -9,11 +9,11 @@
             <div class="info-wrapper">
                 <div class="headline">
                     Price/PatchDay:
-                    {{ project.base_price | currency('EUR', true) }}
+                    {{ project.base_price | currency('EUR') }}
                 </div>
                 <div class="headline mb-4">
                     Penalty:
-                    {{ project.penalty | currency('EUR', true) }}
+                    {{ project.penalty | currency('EUR') }}
                 </div>
 
                 <div class="mb-5">

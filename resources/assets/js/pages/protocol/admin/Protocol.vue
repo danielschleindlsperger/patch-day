@@ -20,7 +20,7 @@
                 </v-icon>
             </div>
             <div class="info-item">
-                Price: {{ protocol.price | currency('EUR', true) }}
+                Price: {{ protocol.price | currency('EUR') }}
             </div>
             <div class="info-item">
                 Date: {{ protocol.date | Date }}

@@ -24,13 +24,16 @@ export default {
     },
     checkIcon(value) {
       if (typeof(value) !== 'boolean') {
-        console.warn('Type of value should be Boolean to avoid conversion' +
-          ' errors')
+        console.warn('Type of value should be Boolean to avoid conversion errors')
       }
       // return icon based on truthiness
       return value ? 'check_circle' : 'close'
     },
     currency(value, currency) {
+      if (typeof value === 'undefined') {
+        return ''
+      }
+
       return value.toLocaleString('arab', {
         style: 'currency',
         currency,
