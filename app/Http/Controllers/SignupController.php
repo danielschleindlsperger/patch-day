@@ -60,7 +60,11 @@ class SignupController extends Controller
         $this->authorize('delete', $protocol);
 
         if ($this->patchDayIsOver($patch_day)) {
-            abort(422, 'Too late to delete this PatchDay.');
+            abort(422, 'Too late to cancel this PatchDay.');
+        }
+
+        if ($protocol->done) {
+            abort(422, 'Already carried out.');
         }
 
         $protocol->delete();
