@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="isOpen" max-width="640" class="create-project-modal">
+    <v-dialog v-model="isOpen" max-width="640" class="create-project-modal" persistent>
         <v-card>
             <v-card-title class="pa-4">
                 <h2 class="title ma-0">Create Project</h2>
@@ -71,10 +71,12 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn class="green--text darken-1" flat="flat"
-                       @click.native="isOpen = false">Close
+                       @click.prevent.stop="closeModal">
+                    Close
                 </v-btn>
                 <v-btn class="green--text darken-1" flat="flat"
-                       @click.native="createProject()">Save
+                       @click.prevent.stop="createProject()">
+                    Save
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -93,32 +95,12 @@
       CreateTechnologyModal,
     },
     data() {
-      return {
-        isOpen: false,
-        project: {
-          name: '',
-          company: null,
-          base_price: 20000,
-          penalty: 10000,
-        },
-        companies: [],
-        rules: {
-          company: [
-            () => {
-              return this.project.company &&
-                Number.isInteger(this.project.company)
-                || 'Please select an entry'
-            },
-          ]
-        },
-        technologies: [],
-        defaultTech: [],
-      }
+      return this.defaultState()
     },
     mounted () {
-      this.getCompanies()
-      this.getTechnologies()
       eventBus.$on('project.create.modal', () => {
+        this.getCompanies()
+        this.getTechnologies()
         this.isOpen = true
       })
     },
@@ -157,6 +139,33 @@
         event.stopPropagation()
         this.isOpen = false
         eventBus.$emit('technology.create.modal')
+      },
+      defaultState() {
+        return {
+          isOpen: false,
+          project: {
+            name: '',
+            company: null,
+            base_price: 20000,
+            penalty: 10000,
+          },
+          companies: [],
+          rules: {
+            company: [
+              () => {
+                if (!this.project.company) {
+                  return true
+                }
+                return Number.isInteger(this.project.company)
+              },
+            ]
+          },
+          technologies: [],
+          defaultTech: [],
+        }
+      },
+      closeModal() {
+        Object.assign(this.$data, this.defaultState())
       }
     }
   }
