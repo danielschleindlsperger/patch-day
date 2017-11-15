@@ -15,7 +15,7 @@ class UpdatePatchDay extends FormRequest
      */
     public function authorize()
     {
-        $patch_day = PatchDay::find($this->route('patch_day'));
+        $patch_day = PatchDay::findOrFail($this->route('patch_day'))->first();
 
         return $patch_day && $this->user()->can('update', $patch_day);
     }

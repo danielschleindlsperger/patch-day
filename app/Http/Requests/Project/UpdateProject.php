@@ -14,7 +14,7 @@ class UpdateProject extends FormRequest
      */
     public function authorize()
     {
-        $project = Project::find($this->route('project'));
+        $project = Project::findOrFail($this->route('project'))->first();
 
         return $project && $this->user()->can('update', $project);
     }

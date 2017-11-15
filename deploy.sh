@@ -13,6 +13,6 @@ rsync -avzu --dry-run --exclude-from="/var/www/patch-day/.rsync-exclude.txt" --r
 rsync -avzu --exclude-from="/var/www/patch-day/.rsync-exclude.txt" --rsh="ssh -i /tmp/deploy_rsa" ./ deploy@45.63.116.5:/var/www/patch-day
 
 # some optimization and migrations
-ssh -i /tmp/deploy_rsa deploy@45.63.116.5 'cd /var/www/patch-day &&  php artisan cache:clear && php artisan route:clear && php artisan route:cache && php artisan view:clear && php artisan optimize && php artisan migrate'
+ssh -i /tmp/deploy_rsa deploy@45.63.116.5 'cd /var/www/patch-day &&  php artisan cache:clear && php artisan route:clear && php artisan route:cache && php artisan view:clear && php artisan migrate'
 
 exit 0

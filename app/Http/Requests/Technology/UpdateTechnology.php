@@ -14,7 +14,7 @@ class UpdateTechnology extends FormRequest
      */
     public function authorize()
     {
-        $tech = Technology::find($this->route('technology'));
+        $tech = Technology::findOrFail($this->route('technology'))->first();
 
         return $tech && $this->user()->can('update', $tech);
     }

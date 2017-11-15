@@ -14,7 +14,7 @@ class UpdateProtocol extends FormRequest
      */
     public function authorize()
     {
-        $protocol = Protocol::find($this->route('protocol'));
+        $protocol = Protocol::findOrFail($this->route('protocol'))->first();
 
         return $protocol && $this->user()->can('update', $protocol);
     }
