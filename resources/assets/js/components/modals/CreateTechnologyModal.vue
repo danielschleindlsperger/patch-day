@@ -3,7 +3,7 @@
         <v-card>
             <v-card-title class="pa-4">
                 <h2 class="title ma-0">Create Technology</h2>
-            </v-card-title>^
+            </v-card-title>
 
             <v-card-text>
                 <v-text-field label="Name" required
@@ -13,12 +13,16 @@
                 <small>*indicates required field</small>
             </v-card-text>
             <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <v-btn class="green--text darken-1" flat="flat"
-                       @click.native="closeModal($event)">Close
+                       @click.stop.prevent="closeModal($event)"
+                >
+                    Close
                 </v-btn>
                 <v-btn class="green--text darken-1" flat="flat"
-                       @click.native="createTech()">Save
+                       @click.stop.prevent="createTech()"
+                >
+                    Save
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -33,13 +37,7 @@
     name: 'create-technology',
     props: ['event'],
     data() {
-      return {
-        isOpen: false,
-        technology: {
-          name: '',
-          version: '',
-        },
-      }
+      return Object.assign({}, this.emptyState())
     },
     mounted () {
       eventBus.$on('technology.create.modal', () => {
@@ -47,16 +45,26 @@
       })
     },
     methods: {
+      emptyState() {
+        return {
+          isOpen: false,
+          technology: {
+            name: '',
+            version: '',
+          }
+        }
+      },
+      resetState() {
+        Object.assign(this.$data, this.emptyState())
+      },
       createTech() {
         repo.technology.create(this.technology).then(() => {
-          this.isOpen = false
+          this.resetState()
           eventBus.$emit(this.event)
         })
       },
-      closeModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        this.isOpen = false
+      closeModal() {
+        this.resetState()
         eventBus.$emit(this.event)
       }
     }
