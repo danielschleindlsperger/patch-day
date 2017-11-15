@@ -22,7 +22,7 @@
                                 <v-list-tile-content>
                                     <v-list-tile-title>
                                         <span>{{ version.version }}</span>
-                                        <small class="update-date">
+                                        <small v-if="isUpdate(version)" class="update-date">
                                             {{ version.pivot.updated_at | Date }}
                                             ({{ version.pivot.updated_at | HumanizeDate }})
                                         </small>
@@ -96,6 +96,9 @@
         } else {
           this.$router.push(`/projects/${version.pivot.project_id}`)
         }
+      },
+      isUpdate(version) {
+        return version.pivot.action === 'update'
       }
     }
   }
