@@ -24,7 +24,7 @@ class Technology extends Model
      */
     public function projects()
     {
-        return $this->belongsToMany(Project::class)->withPivot('protocol_id');
+        return $this->belongsToMany(Project::class)->withPivot('protocol_id')->withTimestamps();
     }
 
     public function getDateAttribute()

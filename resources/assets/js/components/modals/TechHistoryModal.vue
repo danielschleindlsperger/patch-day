@@ -17,10 +17,15 @@
                             <v-list-tile v-for="version in tech"
                                          :key="version.id"
                                          @click.native="protocolDetail($event,
-                                            version)">
+                                            version)"
+                                         class="protocol-link">
                                 <v-list-tile-content>
                                     <v-list-tile-title>
-                                        {{ version.version }}
+                                        <span>{{ version.version }}</span>
+                                        <small class="update-date">
+                                            {{ version.pivot.updated_at | Date }}
+                                            ({{ version.pivot.updated_at | HumanizeDate }})
+                                        </small>
                                     </v-list-tile-title>
                                 </v-list-tile-content>
                                 <v-list-tile-action
@@ -48,8 +53,11 @@
 
 <script>
   import eventBus from 'components/event-bus'
+  import filters from 'mixins/filters'
+
   export default {
     name: 'tech-history-modal',
+    mixins: [filters],
     data() {
       return {
         isOpen: false,
@@ -68,7 +76,6 @@
           } else {
             items[item.name].push(item)
           }
-
         })
 
         this.items = items
@@ -94,5 +101,16 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+    .protocol-link {
+        &:hover:not(:last-child) {
+            cursor: pointer;
+            background: darken(white, 10%);
+        }
+        .update-date {
+            margin-left: 2em;
+            color: lighten(black, 35%);
+        }
+    }
+
 </style>
