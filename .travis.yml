@@ -14,7 +14,7 @@ script:
 addons:
   ssh_known_hosts: 45.63.116.5
 before_deploy:
-  - nvm install stable
+  - nvm install --lts
   - npm install npm@latest -g
   - npm install
   # don't build for production for easier debugging
