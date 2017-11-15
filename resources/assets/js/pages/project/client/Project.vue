@@ -1,12 +1,12 @@
 <template>
     <div>
-        <v-container>
+        <v-container grid-list-md>
 
             <h1 class="display-1 text-xs-center mb-4">
                 {{ project.name }}
             </h1>
 
-            <v-layout mb-5>
+            <v-layout mb-5 row wrap>
 
                 <v-flex xs12 lg6>
                     <project-info :project="project"></project-info>
@@ -35,10 +35,12 @@
                         </v-card-text>
                     </v-card>
                 </v-flex>
-            </v-layout>
 
-            <patch-day-table v-if="project.protocols.length"
-                             :protocols="project.protocols" />
+                <v-flex xs12>
+                    <patch-day-table v-if="project.protocols.length"
+                                     :protocols="project.protocols" />
+                </v-flex>
+            </v-layout>
         </v-container>
         <tech-history-modal></tech-history-modal>
         <patch-day-signup-modal></patch-day-signup-modal>

@@ -1,6 +1,6 @@
 <template>
-    <v-container>
-        <v-layout>
+    <v-container grid-list-md>
+        <v-layout row wrap>
             <v-flex xs12 lg6>
                 Client Dashboard
             </v-flex>
