@@ -32,7 +32,7 @@ class Project extends Model
     protected $casts = [
         'company_id' => 'integer',
         'base_price' => 'double',
-        'penalty' => 'double',
+        'penalty'    => 'double',
     ];
 
     /**

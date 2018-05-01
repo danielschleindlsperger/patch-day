@@ -14,13 +14,11 @@ class PatchDayPolicy
      * Admins can do anything.
      *
      * @param User $user
-     * @return bool
+     * @return bool|null
      */
     public function before(User $user)
     {
-        if ($user->isAdmin()) {
-            return true;
-        }
+        return $user->isAdmin() ?: null;
     }
 
     /**
@@ -30,7 +28,7 @@ class PatchDayPolicy
      * @param  \App\PatchDay $patchDay
      * @return mixed
      */
-    public function view(User $user, PatchDay $patchDay)
+    public function view(User $user, PatchDay $patchDay): bool
     {
         if ($user->company) {
             return $user->company->id === $patchDay->project->company->id;
@@ -44,7 +42,7 @@ class PatchDayPolicy
      * @param  \App\User $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -56,7 +54,7 @@ class PatchDayPolicy
      * @return mixed
      * @internal param PatchDay $patchDay
      */
-    public function update(User $user)
+    public function update(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -68,7 +66,7 @@ class PatchDayPolicy
      * @return mixed
      * @internal param PatchDay $patchDay
      */
-    public function delete(User $user)
+    public function delete(User $user): bool
     {
         return $user->isAdmin();
     }

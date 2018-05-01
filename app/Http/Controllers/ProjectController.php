@@ -7,7 +7,6 @@ use App\Http\Requests\Project\UpdateProject;
 use App\Project;
 use App\Technology;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @resource Projects
@@ -80,7 +79,7 @@ class ProjectController extends Controller
 
     /**
      * @param UpdateProject $request
-     * @param int $id
+     * @param int           $id
      * @return array
      *
      * Update specified projects properties
@@ -131,7 +130,7 @@ class ProjectController extends Controller
         $tech = Technology::findOrFail(request('tech'));
 
         $project->technologies()->attach($tech->id, [
-            'action' => 'deleted'
+            'action' => 'deleted',
         ]);
 
         return ['success' => true];

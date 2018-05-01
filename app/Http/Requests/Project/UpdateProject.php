@@ -27,10 +27,10 @@ class UpdateProject extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'string',
-            'company_id' => 'integer|exists:companies,id',
-            'base_price' => 'numeric',
-            'penalty' => 'numeric',
+            'name'           => 'string',
+            'company_id'     => 'integer|exists:companies,id',
+            'base_price'     => 'numeric',
+            'penalty'        => 'numeric',
             'technologies.*' => 'integer|exists:technologies,id',
         ];
     }

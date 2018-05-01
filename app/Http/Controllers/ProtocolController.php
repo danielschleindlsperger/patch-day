@@ -36,12 +36,12 @@ class ProtocolController extends Controller
 
         return $protocol;
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
      * @param  UpdateProtocol $request
-     * @param  int $id
+     * @param  int            $id
      * @return array|\Illuminate\Http\Response
      */
     public function update(UpdateProtocol $request, $id)

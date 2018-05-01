@@ -72,11 +72,7 @@ class UserController extends Controller
      *
      * @param  UpdateUser $request
      * @param  User $user
-<<<<<<< HEAD
-     * @return array
-=======
      * @return array|\Illuminate\Http\Response
->>>>>>> a1b96389aa6cb230a674aa22abb1e2b713ac8282
      */
     public function update(UpdateUser $request, User $user)
     {
@@ -88,13 +84,8 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  User $user
-<<<<<<< HEAD
-     * @return array
-=======
      * @return array|\Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Exception
->>>>>>> a1b96389aa6cb230a674aa22abb1e2b713ac8282
      */
     public function destroy(User $user)
     {

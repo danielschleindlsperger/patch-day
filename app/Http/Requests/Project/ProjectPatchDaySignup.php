@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Project;
 
-use App\Project;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProjectPatchDaySignup extends FormRequest
@@ -25,7 +24,7 @@ class ProjectPatchDaySignup extends FormRequest
     public function rules()
     {
         return [
-            'patch_day_id' => 'required|exists:patch_days,id'
+            'patch_day_id' => 'required|exists:patch_days,id',
         ];
     }
 }

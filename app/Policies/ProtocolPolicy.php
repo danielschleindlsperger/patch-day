@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\User;
 use App\Protocol;
+use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ProtocolPolicy
@@ -14,25 +14,23 @@ class ProtocolPolicy
      * Admins can do anything.
      *
      * @param User $user
-     * @return bool
+     * @return bool|null
      */
     public function before(User $user)
     {
-        if ($user->isAdmin()) {
-            return true;
-        }
+        return $user->isAdmin() ?: null;
     }
 
     /**
      * Determine whether the user can view the protocol.
      *
-     * @param  \App\User $user
+     * @param  \App\User     $user
      * @return mixed
      * @param  \App\Protocol $protocol
      */
-    public function view(User $user, Protocol $protocol)
+    public function view(User $user, Protocol $protocol): bool
     {
-        $userCompany = $user->company;
+        $userCompany     = $user->company;
         $protocolCompany = $protocol->project->company;
 
         return $userCompany && $protocolCompany &&
@@ -45,7 +43,7 @@ class ProtocolPolicy
      * @param  \App\User $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -57,7 +55,7 @@ class ProtocolPolicy
      * @return mixed
      * @internal param Protocol $protocol
      */
-    public function update(User $user)
+    public function update(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -65,14 +63,14 @@ class ProtocolPolicy
     /**
      * Determine whether the user can delete the protocol.
      *
-     * @param  \App\User $user
+     * @param  \App\User     $user
      * @param  \App\Protocol $protocol
      * @return mixed
      */
-    public function delete(User $user, Protocol $protocol)
+    public function delete(User $user, Protocol $protocol): bool
     {
         $protocolCompany = $protocol->project->company;
-        $userCompany = $user->company;
+        $userCompany     = $user->company;
 
         return $protocolCompany && $userCompany &&
             $protocolCompany->id === $userCompany->id;

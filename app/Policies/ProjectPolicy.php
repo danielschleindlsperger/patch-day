@@ -14,13 +14,11 @@ class ProjectPolicy
      * Admins can do anything.
      *
      * @param User $user
-     * @return bool
+     * @return bool|null
      */
     public function before(User $user)
     {
-        if ($user->isAdmin()) {
-            return true;
-        }
+        return $user->isAdmin() ?: null;
     }
 
     /**
@@ -29,7 +27,7 @@ class ProjectPolicy
      * @param  \App\User $user
      * @return mixed
      */
-    public function index(User $user)
+    public function index(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -41,7 +39,7 @@ class ProjectPolicy
      * @param  \App\Project $project
      * @return bool
      */
-    public function view(User $user, Project $project)
+    public function view(User $user, Project $project): bool
     {
         if ($user->company && $project->company) {
             return $user->company->id === $project->company->id;
@@ -56,7 +54,7 @@ class ProjectPolicy
      * @param  \App\User $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -68,7 +66,7 @@ class ProjectPolicy
      * @return mixed
      * @internal param Project $project
      */
-    public function update(User $user)
+    public function update(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -80,7 +78,7 @@ class ProjectPolicy
      * @return mixed
      * @internal param Project $project
      */
-    public function delete(User $user)
+    public function delete(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -92,7 +90,7 @@ class ProjectPolicy
      * @param  \App\Project $project
      * @return mixed
      */
-    public function signup(User $user, Project $project)
+    public function signup(User $user, Project $project): bool
     {
         return $user->company && $project->company &&
             $user->company->id === $project->company->id;
@@ -105,7 +103,7 @@ class ProjectPolicy
      * @return mixed
      * @internal param Project $project
      */
-    public function deleteProjectTech(User $user)
+    public function deleteProjectTech(User $user): bool
     {
         return $user->isAdmin();
     }

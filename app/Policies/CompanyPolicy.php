@@ -14,13 +14,11 @@ class CompanyPolicy
      * Admins can do anything.
      *
      * @param User $user
-     * @return bool
+     * @return bool|null
      */
     public function before(User $user)
     {
-        if ($user->isAdmin()) {
-            return true;
-        }
+        return $user->isAdmin() ?: null;
     }
 
     /**
@@ -29,7 +27,7 @@ class CompanyPolicy
      * @param  \App\User $user
      * @return mixed
      */
-    public function index(User $user)
+    public function index(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -41,7 +39,7 @@ class CompanyPolicy
      * @param  \App\Company $company
      * @return mixed
      */
-    public function view(User $user, Company $company)
+    public function view(User $user, Company $company): bool
     {
         if ($user->company) {
             return $user->company->id === $company->id;
@@ -55,7 +53,7 @@ class CompanyPolicy
      * @param  \App\User $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -66,7 +64,7 @@ class CompanyPolicy
      * @param  \App\User $user
      * @return mixed
      */
-    public function update(User $user)
+    public function update(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -78,7 +76,7 @@ class CompanyPolicy
      * @return mixed
      * @internal param Company $company
      */
-    public function delete(User $user)
+    public function delete(User $user): bool
     {
         return $user->isAdmin();
     }

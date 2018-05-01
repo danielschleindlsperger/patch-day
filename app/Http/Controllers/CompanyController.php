@@ -62,7 +62,7 @@ class CompanyController extends Controller
      * Update the specified company.
      *
      * @param  UpdateCompany $request
-     * @param  Company $company
+     * @param  Company       $company
      * @return array
      */
     public function update(UpdateCompany $request, Company $company)
@@ -108,11 +108,11 @@ class CompanyController extends Controller
     {
         $name = is_null($name) ? $request->name : $name;
 
-        $ext = '.' . $request->file('logo')->getClientOriginalExtension();
+        $ext       = '.' . $request->file('logo')->getClientOriginalExtension();
         $timestamp = (new \DateTime())->getTimestamp();
-        $filename = str_slug($name) . $timestamp . $ext;
-        $path = $request->file('logo')
-            ->storeAs('logos', $filename, ['disk' => 'public']);
+        $filename  = str_slug($name) . $timestamp . $ext;
+        $path      = $request->file('logo')
+                        ->storeAs('logos', $filename, ['disk' => 'public']);
 
         return $path;
     }

@@ -27,10 +27,10 @@ class Protocol extends Model
     ];
 
     protected $casts = [
-        'done' => 'boolean',
+        'done'         => 'boolean',
         'patch_day_id' => 'integer',
-        'project_id' => 'integer',
-        'date' => 'date',
+        'project_id'   => 'integer',
+        'date'         => 'date',
     ];
 
     /**
@@ -71,9 +71,9 @@ class Protocol extends Model
      */
     public function getPriceAttribute()
     {
-        $base_price = $this->project->base_price;
-        $penalty = $this->project->penalty;
-        $protocol = $this;
+        $base_price       = $this->project->base_price;
+        $penalty          = $this->project->penalty;
+        $protocol         = $this;
         $protocolPatchDay = $this->patch_day;
 
         $projectPreviousPatchDay =
@@ -121,7 +121,7 @@ class Protocol extends Model
     public function getTechnologyUpdatesAttribute()
     {
         $protocolId = $this->id;
-        $projectId = $this->project->id;
+        $projectId  = $this->project->id;
 
         $upgrades = Technology::whereIn('id',
             function ($query) use ($protocolId, $projectId) {
@@ -146,13 +146,13 @@ class Protocol extends Model
             ->get();
 
         $techIds = $currentTechs->map(function ($tech) {
-            return (int)$tech->technology_id;
+            return (int) $tech->technology_id;
         });
 
         $this->project->technologies()->detach($techIds);
         $this->project->technologies()->attach($newTechs, [
             'protocol_id' => $this->id,
-            'action' => 'update',
+            'action'      => 'update',
         ]);
     }
 }

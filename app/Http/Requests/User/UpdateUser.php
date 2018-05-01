@@ -27,9 +27,9 @@ class UpdateUser extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'max:255',
-            'email' => 'email|max:255|unique:users,email,' . $this->user->id,
-            'password' => 'min:6',
+            'name'       => 'max:255',
+            'email'      => 'email|max:255|unique:users,email,' . $this->user->id,
+            'password'   => 'min:6',
             'company_id' => 'exists:companies,id',
         ];
     }

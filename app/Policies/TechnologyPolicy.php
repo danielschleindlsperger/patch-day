@@ -13,13 +13,11 @@ class TechnologyPolicy
      * Admins can do anything.
      *
      * @param User $user
-     * @return bool
+     * @return bool|null
      */
     public function before(User $user)
     {
-        if ($user->isAdmin()) {
-            return true;
-        }
+        return $user->isAdmin() ?: null;
     }
 
     /**
@@ -28,7 +26,7 @@ class TechnologyPolicy
      * @param  \App\User $user
      * @return mixed
      */
-    public function index(User $user)
+    public function index(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -39,7 +37,7 @@ class TechnologyPolicy
      * @internal param User $user
      * @internal param Technology $technology
      */
-    public function view()
+    public function view(): bool
     {
         return true;
     }
@@ -47,10 +45,10 @@ class TechnologyPolicy
     /**
      * Determine whether the user can create technologies.
      *
-     * @param  \App\User  $user
+     * @param  \App\User $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -62,7 +60,7 @@ class TechnologyPolicy
      * @return mixed
      * @internal param Technology $technology
      */
-    public function update(User $user)
+    public function update(User $user): bool
     {
         return $user->isAdmin();
     }
@@ -74,7 +72,7 @@ class TechnologyPolicy
      * @return mixed
      * @internal param Technology $technology
      */
-    public function delete(User $user)
+    public function delete(User $user): bool
     {
         return $user->isAdmin();
     }

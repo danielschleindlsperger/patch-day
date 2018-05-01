@@ -18,12 +18,12 @@ class UpcomingPatchDay extends Mailable
     /**
      * Create a new message instance.
      * @param PatchDay $patch_day
-     * @param User $user
+     * @param User     $user
      */
     public function __construct(PatchDay $patch_day, User $user)
     {
         $this->patch_day = $patch_day;
-        $this->user = $user;
+        $this->user      = $user;
     }
 
     /**

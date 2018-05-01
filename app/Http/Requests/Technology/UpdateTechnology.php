@@ -27,7 +27,7 @@ class UpdateTechnology extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'string',
+            'name'    => 'string',
             'version' => 'string',
         ];
     }

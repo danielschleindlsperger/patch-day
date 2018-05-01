@@ -28,7 +28,7 @@ class UpdatePatchDay extends FormRequest
     public function rules()
     {
         return [
-            'date' => 'date',
+            'date'   => 'date',
             'status' => Rule::in(config('enums.patch_day_status')),
         ];
     }

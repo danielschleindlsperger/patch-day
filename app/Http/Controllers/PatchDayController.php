@@ -49,7 +49,7 @@ class PatchDayController extends Controller
 
         if (request('todo')) {
             // only load protocols that are not done
-            $patchDay->load(['protocols' => function($query) {
+            $patchDay->load(['protocols' => function ($query) {
                 $query->where('protocols.done', '!=', true);
             }, 'protocols.project', 'protocols.project.company']);
         } else {
@@ -74,7 +74,7 @@ class PatchDayController extends Controller
      * Update the specified patch day.
      *
      * @param  UpdatePatchDay $request
-     * @param  PatchDay $patchDay
+     * @param  PatchDay       $patchDay
      * @return array|\Illuminate\Http\Response
      */
     public function update(UpdatePatchDay $request, PatchDay $patchDay)

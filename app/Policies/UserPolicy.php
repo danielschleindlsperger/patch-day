@@ -13,13 +13,11 @@ class UserPolicy
      * Admins can do anything.
      *
      * @param User $requestee
-     * @return bool
+     * @return bool|null
      */
     public function before(User $requestee)
     {
-        if ($requestee->isAdmin()) {
-            return true;
-        }
+        return $requestee->isAdmin() ?: null;
     }
 
     /**
@@ -28,7 +26,7 @@ class UserPolicy
      * @internal param User $requestee
      * @internal param User $user
      */
-    public function index()
+    public function index(): bool
     {
         return false;
     }
@@ -36,11 +34,11 @@ class UserPolicy
     /**
      * Determine whether the user can view the user.
      *
-     * @param  \App\User  $requestee
-     * @param  \App\User  $user
+     * @param  \App\User $requestee
+     * @param  \App\User $user
      * @return bool
      */
-    public function view(User $requestee, User $user)
+    public function view(User $requestee, User $user): bool
     {
         return $requestee->id === $user->id;
     }
@@ -48,10 +46,10 @@ class UserPolicy
     /**
      * Determine whether the user can create users.
      *
-     * @param  \App\User  $requestee
+     * @param  \App\User $requestee
      * @return bool
      */
-    public function create(User $requestee)
+    public function create(User $requestee): bool
     {
         return $requestee->isAdmin();
     }
@@ -59,11 +57,11 @@ class UserPolicy
     /**
      * Determine whether the user can update the user.
      *
-     * @param  \App\User  $requestee
-     * @param  \App\User  $user
+     * @param  \App\User $requestee
+     * @param  \App\User $user
      * @return bool
      */
-    public function update(User $requestee, User $user)
+    public function update(User $requestee, User $user): bool
     {
         return $requestee->id === $user->id;
     }
@@ -71,10 +69,10 @@ class UserPolicy
     /**
      * Determine whether the user can delete the user.
      *
-     * @param  \App\User  $requestee
+     * @param  \App\User $requestee
      * @return mixed
      */
-    public function delete(User $requestee)
+    public function delete(User $requestee): bool
     {
         return $requestee->isAdmin();
     }

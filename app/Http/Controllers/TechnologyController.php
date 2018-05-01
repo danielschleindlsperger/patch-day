@@ -61,7 +61,7 @@ class TechnologyController extends Controller
      * Update the specified Technology in storage.
      *
      * @param  UpdateTechnology $request
-     * @param  Technology $technology
+     * @param  Technology       $technology
      * @return array|\Illuminate\Http\Response
      */
     public function update(UpdateTechnology $request, Technology $technology)

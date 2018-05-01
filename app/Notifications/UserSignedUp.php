@@ -3,8 +3,8 @@
 namespace App\Notifications;
 
 use App\User;
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\SlackMessage;
+use Illuminate\Notifications\Notification;
 
 class UserSignedUp extends Notification
 {
@@ -50,9 +50,9 @@ class UserSignedUp extends Notification
 
                 $attachment->title('User', $url)
                     ->fields([
-                        'Name' => $user->name,
-                        'E-Mail' => $user->email,
-                        'Role' => $user->role,
+                        'Name'    => $user->name,
+                        'E-Mail'  => $user->email,
+                        'Role'    => $user->role,
                         'Company' => $user->company->name,
                     ]);
             })
@@ -69,10 +69,10 @@ class UserSignedUp extends Notification
     {
         return [
             'content' => 'New user signed up!',
-            'url' => url('/') . '/#/users/' . $this->user->id,
-            'name' => $this->user->name,
-            'email' => $this->user->email,
-            'role' => $this->user->role,
+            'url'     => url('/') . '/#/users/' . $this->user->id,
+            'name'    => $this->user->name,
+            'email'   => $this->user->email,
+            'role'    => $this->user->role,
             'company' => $this->user->company->name,
         ];
     }

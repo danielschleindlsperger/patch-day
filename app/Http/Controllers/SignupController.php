@@ -15,7 +15,7 @@ class SignupController extends Controller
      * Sign a project up for a patch_day. Return the resulting protocol.
      *
      * @param ProjectPatchDaySignup $request
-     * @param Project $project
+     * @param Project               $project
      * @return mixed
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -34,7 +34,7 @@ class SignupController extends Controller
         }
 
         $protocol = Protocol::create([
-            'project_id' => $project->id,
+            'project_id'   => $project->id,
             'patch_day_id' => $patch_day->id,
         ]);
 
@@ -54,8 +54,8 @@ class SignupController extends Controller
         $patch_day = PatchDay::findOrFail(request('patch_day_id'));
 
         $protocol = Protocol::where('project_id', '=', $project->id)
-                        ->where('patch_day_id', '=', $patch_day->id)
-                        ->firstOrFail();
+            ->where('patch_day_id', '=', $patch_day->id)
+            ->firstOrFail();
 
         $this->authorize('delete', $protocol);
 
@@ -91,7 +91,7 @@ class SignupController extends Controller
     public function possibleSignups(Project $project)
     {
         $patch_days = PatchDay::all();
-        $keys = $project->patchDays()->pluck('id')->toArray();
+        $keys       = $project->patchDays()->pluck('id')->toArray();
 
         $patch_days = $patch_days->filter(function ($patch_day) use ($keys) {
             return !in_array($patch_day->id, $keys) &&
@@ -108,13 +108,13 @@ class SignupController extends Controller
     private function patchDayIsOver($patch_day)
     {
         $today = Carbon::now()->endOfDay();
-        $date = Carbon::parse($patch_day->date)->endOfDay();
+        $date  = Carbon::parse($patch_day->date)->endOfDay();
 
         return !$date->greaterThan($today) || $patch_day->done;
     }
 
     /**
-     * @param Project $project
+     * @param Project  $project
      * @param PatchDay $patchDay
      * @return bool
      */

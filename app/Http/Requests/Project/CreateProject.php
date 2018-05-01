@@ -25,10 +25,10 @@ class CreateProject extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'company_id' => 'required|integer|exists:companies,id',
-            'base_price' => 'numeric',
-            'penalty' => 'numeric',
+            'name'           => 'required|string',
+            'company_id'     => 'required|integer|exists:companies,id',
+            'base_price'     => 'numeric',
+            'penalty'        => 'numeric',
             'technologies.*' => 'integer|exists:technologies,id',
         ];
     }

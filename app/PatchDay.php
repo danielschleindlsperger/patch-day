@@ -61,8 +61,8 @@ class PatchDay extends Model
     public function getNameAttribute()
     {
         $carbon = Carbon::parse($this->date);
-        $month = $carbon->format('F');
-        $year = $carbon->format('Y');
+        $month  = $carbon->format('F');
+        $year   = $carbon->format('Y');
 
         return "PatchDay {$month} {$year}";
     }
